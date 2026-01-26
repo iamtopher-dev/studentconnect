@@ -1,0 +1,17 @@
+@import "tailwindcss";
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.ts';
+@source '../**/*.tsx';
+
+@plugin "flowbite/plugin";
+@source "../node_modules/flowbite";
+
+@theme {
+    --color-primary: #307358; /* green */
+    --color-secondary: #1b2c45; /* navy */
+    --color-accent: #4db6e2; /* cyan */
+    --color-background: #f8f9fa; /* light gray */
+    --color-gray: #2e2e2e; /* dark gray */
+}
