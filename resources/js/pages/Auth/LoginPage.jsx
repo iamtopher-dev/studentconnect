@@ -115,7 +115,7 @@ const LoginPage = () => {
                         <p className="text-sm text-center">
                             Don't have an account?{" "}
                             <NavLink to="/register" className="text-primary">
-                                Sign up
+                                Sign ups
                             </NavLink>
                         </p>
                     </div>
