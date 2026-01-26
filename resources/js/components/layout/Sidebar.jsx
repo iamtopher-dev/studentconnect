@@ -111,7 +111,7 @@ const Sidebar = ({ userRole }) => {
                 />
 
                 <SiderBarLinkSingle
-                  url="/staff/student-request-update-information"
+                  url="/staff/request-update-information"
                   label="Request Update Information"
                   icon={<UserCheck size={20} />}
                 />

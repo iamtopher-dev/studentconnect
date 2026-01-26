@@ -19,6 +19,7 @@ import StudentPage from "../pages/Staff/StudentPage.jsx";
 import StudentGradingPage from "../pages/Staff/StudentGradingPage.jsx";
 import SchedulePage from "../pages/Staff/SchedulePage.jsx";
 import StudentSchedulePage from "../pages/Student/StudentSchedulePage.jsx";
+import RequestUpdateInformationPage from "../pages/Staff/RequestUpdateInformationPage.jsx";
 const AppRoutes = () => {
     return (
         <Suspense fallback={<PageLoader />}>
@@ -44,6 +45,7 @@ const AppRoutes = () => {
                             element={<StudentGradingPage />}
                         />
                         <Route path="schedule" element={<SchedulePage />} />
+                        <Route path="request-update-information" element={<RequestUpdateInformationPage />} />
                     </Route>
                 </Route>
 
