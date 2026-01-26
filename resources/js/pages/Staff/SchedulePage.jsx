@@ -21,11 +21,11 @@ const SchedulePage = () => {
             .then((res) => {
                 const pdf_url = res.data.data.pdf_file;
                 setPdfPreviewUrl(pdf_url);
+                setLoadingScreen(false)
             })
             .catch((err) => {
                 console.error("Something went wrong!", err);
             })
-            .finally(() => setLoadingScreen(false));
     };
 
     const openModal = () => {
@@ -75,7 +75,7 @@ const SchedulePage = () => {
             setLoading(false);
         }
     };
-    if (loading) {
+    if (loadingScreen) {
         return (
             <div className="min-h-screen flex items-center justify-center text-gray-500">
                 Loading schedule...
