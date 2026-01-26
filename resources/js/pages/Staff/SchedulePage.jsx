@@ -9,6 +9,7 @@ const SchedulePage = () => {
     const [selectedFile, setSelectedFile] = useState(null);
     const [pdfPreviewUrl, setPdfPreviewUrl] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [loadingScreen, setLoadingScreen] = useState(true);
 
     useEffect(() => {
         read_schedule_pdf("COLLEGE");
@@ -24,7 +25,7 @@ const SchedulePage = () => {
             .catch((err) => {
                 console.error("Something went wrong!", err);
             })
-            .finally(() => setLoading(false));
+            .finally(() => setLoadingScreen(false));
     };
 
     const openModal = () => {
@@ -74,7 +75,13 @@ const SchedulePage = () => {
             setLoading(false);
         }
     };
-
+    if (loading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center text-gray-500">
+                Loading schedule...
+            </div>
+        );
+    }
     return (
         <div className="min-h-screen bg-slate-50 p-4 sm:p-8">
             {/* HEADER */}

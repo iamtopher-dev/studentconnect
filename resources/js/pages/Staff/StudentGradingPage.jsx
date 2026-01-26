@@ -10,6 +10,7 @@ const StudentGradingPage = () => {
     const [students, setStudents] = useState([]);
     const [modalOpen, setModalOpen] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [loadingScreen, setLoadingScreen] = useState(true);
 
     const [editModalOpen, setEditModalOpen] = useState(false);
     const [selectedStudent, setSelectedStudent] = useState(null);
@@ -22,32 +23,34 @@ const StudentGradingPage = () => {
     }, []);
 
     const getStudents = () => {
-        apiService.get("staff/student").then((response) => {
+        apiService
+            .get("staff/student")
+            .then((response) => {
+                console.log("API response:", response);
+                const formattedStudents = response.data.data.map((student) => {
+                    const info = student.student_information || {};
 
-            console.log("API response:", response);
-            const formattedStudents = response.data.data.map((student) => {
-                const info = student.student_information || {};
-
-                return {
-                    id: student.id,
-                    fullName: `${info.family_name || ""}, ${
-                        info.first_name || ""
-                    } ${info.middle_name || ""}`.trim(),
-                    studentId: student.student_no || "N/A",
-                    major: info.major || "N/A",
-                    year_level: info.year_level || "N/A",
-                    enrolled_subjects: student.enrolled_subjects || [],
-                };
-            });
-            setStudents(formattedStudents);
-        });
+                    return {
+                        id: student.id,
+                        fullName: `${info.family_name || ""}, ${
+                            info.first_name || ""
+                        } ${info.middle_name || ""}`.trim(),
+                        studentId: student.student_no || "N/A",
+                        major: info.major || "N/A",
+                        year_level: info.year_level || "N/A",
+                        enrolled_subjects: student.enrolled_subjects || [],
+                    };
+                });
+                setStudents(formattedStudents);
+            })
+            .finally(() => setLoadingScreen(false));
     };
 
     const filteredStudents = useMemo(() => {
         return students.filter(
             (s) =>
                 s.fullName.toLowerCase().includes(search.toLowerCase()) ||
-                s.studentId.toLowerCase().includes(search.toLowerCase())
+                s.studentId.toLowerCase().includes(search.toLowerCase()),
         );
     }, [students, search]);
 
@@ -128,7 +131,7 @@ const StudentGradingPage = () => {
                         setSelectedFile(null);
                         document.getElementById("excelInput").value = null;
                         setLoading(false);
-                        getStudents(); 
+                        getStudents();
                     })
                     .catch((err) => {
                         console.error(err);
@@ -160,7 +163,7 @@ const StudentGradingPage = () => {
             student.enrolled_subjects.map((s) => ({
                 ...s,
                 grades: s.grades ?? "",
-            }))
+            })),
         );
         setEditModalOpen(true);
     };
@@ -168,8 +171,8 @@ const StudentGradingPage = () => {
     const handleGradeChange = (id, value) => {
         setEditableSubjects((prev) =>
             prev.map((s) =>
-                s.student_subject_id === id ? { ...s, grades: value } : s
-            )
+                s.student_subject_id === id ? { ...s, grades: value } : s,
+            ),
         );
     };
 
@@ -195,8 +198,8 @@ const StudentGradingPage = () => {
                 prev.map((s) =>
                     s.id === selectedStudent.id
                         ? { ...s, enrolled_subjects: editableSubjects }
-                        : s
-                )
+                        : s,
+                ),
             );
 
             setEditModalOpen(false);
@@ -209,7 +212,13 @@ const StudentGradingPage = () => {
             alert("Failed to save grades. Please try again.");
         }
     };
-
+    if (loadingScreen) {
+        return (
+            <div className="min-h-screen flex items-center justify-center text-gray-500">
+                Loading student grading...
+            </div>
+        );
+    }
     return (
         <div className="min-h-screen bg-slate-50 p-4 sm:p-8">
             <div className="mb-6 sm:mb-8">
@@ -326,7 +335,7 @@ const StudentGradingPage = () => {
                                         onChange={(e) =>
                                             handleGradeChange(
                                                 sub.student_subject_id,
-                                                e.target.value
+                                                e.target.value,
                                             )
                                         }
                                         className="w-16 sm:w-24 text-center bg-slate-100 rounded-xl py-1 sm:py-2 text-xs sm:text-sm outline-none focus:ring-2"

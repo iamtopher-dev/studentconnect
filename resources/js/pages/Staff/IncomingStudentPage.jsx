@@ -5,10 +5,8 @@ import apiService from "../../services/apiService";
 
 /* Constants */
 const yearLevels = ["1st Year", "2nd Year", "3rd Year", "4th Year"];
-const gradeLevels = ["Grade 11","Grade 12"]
+const gradeLevels = ["Grade 11", "Grade 12"];
 const sections = ["A", "B", "C"];
-
-
 
 const semesters = ["1st Semester", "2nd Semester"];
 const studentTypes = ["Regular", "Irregular"];
@@ -17,7 +15,7 @@ const IncomingStudentPage = () => {
     const [incomingStudents, setIncomingStudents] = useState([]);
     const [curriculumSubjects, setCurriculumSubjects] = useState([]);
     const [selectedStudent, setSelectedStudent] = useState(null);
-
+    const [loading, setLoading] = useState(true);
     const [formData, setFormData] = useState({
         family_name: "",
         first_name: "",
@@ -44,12 +42,10 @@ const IncomingStudentPage = () => {
         selectedSubjects: [],
     });
 
-const filteredSections =
-  formData.applicant_type === "SHS"
-    ? sections.filter(section => section !== "C")
-    : sections;
-    
-    
+    const filteredSections =
+        formData.applicant_type === "SHS"
+            ? sections.filter((section) => section !== "C")
+            : sections;
 
     const fetchIncomingStudents = () => {
         apiService
@@ -58,7 +54,8 @@ const filteredSections =
                 setIncomingStudents(res.data.data);
                 console.log(res.data.data);
             })
-            .catch(console.log);
+            .catch(console.log)
+            .finally(() => setLoading(false));
     };
 
     const fetchCurriculum = (major) => {
@@ -144,7 +141,13 @@ const filteredSections =
             })
             .catch(() => alert("Failed to accept student."));
     };
-
+    if (loading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center text-gray-500">
+                Loading incoming students...
+            </div>
+        );
+    }
     return (
         <div className="p-8 bg-gray-50 min-h-screen font-poppins">
             {/* HEADER */}
@@ -272,7 +275,11 @@ const filteredSections =
                                         label="Year Level"
                                         name="year_level"
                                         value={formData.year_level}
-                                        options={formData.applicant_type === "SHS" ? gradeLevels : yearLevels}
+                                        options={
+                                            formData.applicant_type === "SHS"
+                                                ? gradeLevels
+                                                : yearLevels
+                                        }
                                         onChange={handleChange}
                                         required
                                     />

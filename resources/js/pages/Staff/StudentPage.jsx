@@ -13,7 +13,7 @@ const StudentPage = () => {
     const [curriculumSubjects, setCurriculumSubjects] = useState([]);
     const [openModalIrregular, setOpenModalIrregular] = useState(false);
     const [selectedStudent, setSelectedStudent] = useState(null);
-
+    const [loadingScreen, setLoadingScreen] = useState(true);
     const [formData, setFormData] = useState({
         selectedSubjects: [],
     });
@@ -69,7 +69,8 @@ const StudentPage = () => {
             })
             .catch((error) => {
                 console.error("Error fetching students:", error);
-            });
+            })
+            .finally(() => setLoadingScreen(false));
     };
 
     const reEnrollStudent = (student) => {
@@ -117,7 +118,7 @@ const StudentPage = () => {
             })
             .then((response) => {
                 alert("Student re-enrolled successfully");
-                console.log(response)
+                console.log(response);
                 closeModal();
                 getStudents();
             })
@@ -131,20 +132,26 @@ const StudentPage = () => {
         return students.filter(
             (s) =>
                 (s.fullName?.toLowerCase() || "").includes(
-                    search.toLowerCase()
+                    search.toLowerCase(),
                 ) ||
                 (s.studentId?.toLowerCase() || "").includes(
-                    search.toLowerCase()
-                )
+                    search.toLowerCase(),
+                ),
         );
     }, [students, search]);
 
     const totalPages = Math.ceil(filteredStudents.length / ITEMS_PER_PAGE);
     const paginatedStudents = filteredStudents.slice(
         (page - 1) * ITEMS_PER_PAGE,
-        page * ITEMS_PER_PAGE
+        page * ITEMS_PER_PAGE,
     );
-
+    if (loadingScreen) {
+        return (
+            <div className="min-h-screen flex items-center justify-center text-gray-500">
+                Loading student...
+            </div>
+        );
+    }
     return (
         <div className="p-4 sm:p-6 bg-gray-50 min-h-screen">
             {/* HEADER */}
