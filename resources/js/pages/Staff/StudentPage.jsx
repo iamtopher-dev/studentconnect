@@ -52,6 +52,8 @@ const StudentPage = () => {
                         student_type: info.student_type,
                         student_information_id: info.student_information_id,
                         fullName,
+                        year_level: info.year_level,
+                        semester: info.semester,
                         studentId: student.student_no || "N/A",
                         address: `${info.street || ""}, ${
                             info.barangay || ""
@@ -213,18 +215,32 @@ const StudentPage = () => {
                                 <tr key={s.id}>
                                     <td className="py-4">{s.fullName}</td>
                                     <td className="py-4">{s.studentId}</td>
-                                    <td className="py-4">{s.address}</td>
+                                    <td
+                                        className="py-4 truncate max-w-xs"
+                                        title={s.address}
+                                    >
+                                        {s.address}
+                                    </td>
                                     <td className="py-4">{s.section}</td>
                                     <td className="py-4">{s.major}</td>
                                     <td className="py-4">{s.dob}</td>
                                     <td className="py-4">{s.phone}</td>
                                     <td className="py-4">
-                                        <button
-                                            onClick={() => reEnrollStudent(s)}
-                                            className="bg-green-500 text-white px-3 py-1 rounded-md text-sm"
-                                        >
-                                            Re-enroll
-                                        </button>
+                                        {s.year_level != "4th Year" &&
+                                        s.semester != "2nd Semester" ? (
+                                            <button
+                                                onClick={() =>
+                                                    reEnrollStudent(s)
+                                                }
+                                                className="bg-green-500 text-white px-3 py-1 rounded-md text-sm"
+                                            >
+                                                Re-enroll
+                                            </button>
+                                        ) : (
+                                            <span className="inline-block px-3 py-1 rounded-full bg-blue-100 text-blue-800 text-xs font-semibold">
+                                                Graduating
+                                            </span>
+                                        )}
                                     </td>
                                 </tr>
                             ))}

@@ -53,6 +53,21 @@ const RequestUpdateInformationPage = () => {
         setIsOpen(false);
         setSelectedRequest(null);
     };
+    const filteredRequests = useMemo(() => {
+        if (!search) return request;
+
+        const lowerSearch = search.toLowerCase();
+        return request.filter((item) => {
+            const fullName =
+                `${item.student.first_name} ${item.student.middle_name} ${item.student.family_name}`.toLowerCase();
+            const studentId = item.user.student_no.toLowerCase();
+
+            return (
+                fullName.includes(lowerSearch) ||
+                studentId.includes(lowerSearch)
+            );
+        });
+    }, [search, request]);
     if (loadingScreen) {
         return (
             <div className="min-h-screen flex items-center justify-center text-gray-500">
@@ -88,7 +103,7 @@ const RequestUpdateInformationPage = () => {
                         />
                         <input
                             value={search}
-                            onChange={(e) => {}}
+                            onChange={(e) => setSearch(e.target.value)}
                             placeholder="Search by name or student id"
                             className="pl-9 sm:pl-10 pr-3 sm:pr-4 py-2.5 text-sm sm:text-base rounded-xl w-full focus:outline-none"
                             style={{
@@ -112,10 +127,10 @@ const RequestUpdateInformationPage = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {request.map((data) => (
-                                <tr>
+                            {filteredRequests.map((data) => (
+                                <tr key={data.user.student_no}>
                                     <td className="py-4">
-                                        {data.student.family_name} ,{" "}
+                                        {data.student.family_name},{" "}
                                         {data.student.first_name}{" "}
                                         {data.student.middle_name}
                                     </td>
