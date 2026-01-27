@@ -3,9 +3,11 @@ import apiService from "../../services/apiService";
 
 const StudentEnrolledSubjects = () => {
     const [student, setStudent] = React.useState([null]);
+
     useEffect(() => {
         getEnrolledSubjects();
     }, []);
+
     const getEnrolledSubjects = () => {
         apiService
             .get("student/get-student-information")
@@ -17,8 +19,16 @@ const StudentEnrolledSubjects = () => {
                 console.log(error);
             });
     };
+
+    const totalUnits = student.enrolled_subjects
+        ? student.enrolled_subjects.reduce(
+              (sum, sub) => sum + Number(sub.subject_units),
+              0
+          )
+        : 0;
+
     return (
-        <div className="min-h-screen  p-6">
+        <div className="min-h-screen p-6">
             <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div className="bg-white rounded-2xl shadow-md p-6">
                     <h2 className="text-lg font-semibold text-gray-800 mb-5">
@@ -30,9 +40,7 @@ const StudentEnrolledSubjects = () => {
                             ["Student Number", student?.student_no || "—"],
                             [
                                 "Student Name",
-                                `${student.student_information?.family_name}, 
-                                ${student.student_information?.first_name} 
-                                ${student.student_information?.middle_name}`,
+                                `${student.student_information?.family_name}, ${student.student_information?.first_name} ${student.student_information?.middle_name}`,
                             ],
                             [
                                 "School Year",
@@ -41,22 +49,16 @@ const StudentEnrolledSubjects = () => {
                             ],
                             [
                                 "Semester",
-                                `${student.student_information?.semester}` ||
-                                    "—",
+                                `${student.student_information?.semester}` || "—",
                             ],
-                            [
-                                "Course",
-                                `${student.student_information?.major}` || "—",
-                            ],
+                            ["Course", `${student.student_information?.major}` || "—"],
                             [
                                 "Year Level",
-                                `${student.student_information?.year_level}` ||
-                                    "—",
+                                `${student.student_information?.year_level}` || "—",
                             ],
                             [
                                 "Section",
-                                `${student.student_information?.section}` ||
-                                    "—",
+                                `${student.student_information?.section}` || "—",
                             ],
                         ].map(([label, value]) => (
                             <div key={label} className="flex justify-between">
@@ -79,23 +81,20 @@ const StudentEnrolledSubjects = () => {
                         <table className="w-full text-sm">
                             <thead>
                                 <tr className="text-gray-500 text-left">
-                                    <th className="px-3 py-2 font-medium">
-                                        Course Code
-                                    </th>
-                                    <th className="px-3 py-2 font-medium">
-                                        Course Title
-                                    </th>
-                                    <th className="px-3 py-2 font-medium text-center">
-                                        Units
-                                    </th>
+                                    <th className="px-3 py-2 font-medium">Course Code</th>
+                                    <th className="px-3 py-2 font-medium">Course Title</th>
+                                    <th className="px-3 py-2 font-medium text-center">Units</th>
                                 </tr>
                             </thead>
 
                             <tbody className="text-gray-700">
                                 {student.enrolled_subjects &&
                                 student.enrolled_subjects.length > 0 ? (
-                                    student.enrolled_subjects.map((subject) => (
-                                        <tr className="hover:bg-gray-50 rounded-lg transition">
+                                    student.enrolled_subjects.map((subject, i) => (
+                                        <tr
+                                            key={i}
+                                            className="hover:bg-gray-50 rounded-lg transition"
+                                        >
                                             <td className="px-3 py-3">{subject.subject_code}</td>
                                             <td className="px-3 py-3 text-gray-400">
                                                 {subject.subject_name}
@@ -111,12 +110,24 @@ const StudentEnrolledSubjects = () => {
                                         <td className="px-3 py-3 text-gray-400">
                                             No enrolled subjects
                                         </td>
-                                        <td className="px-3 py-3 text-center">
-                                            —
-                                        </td>
+                                        <td className="px-3 py-3 text-center">—</td>
                                     </tr>
                                 )}
                             </tbody>
+
+                            {student.enrolled_subjects &&
+                                student.enrolled_subjects.length > 0 && (
+                                    <tfoot>
+                                        <tr className="bg-gray-100 font-medium">
+                                            <td colSpan={2} className="px-3 py-3 text-right">
+                                                Total Units:
+                                            </td>
+                                            <td className="px-3 py-3 text-center">
+                                                {totalUnits}
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                )}
                         </table>
                     </div>
                 </div>
