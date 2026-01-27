@@ -24,4 +24,9 @@ class StudentUpdateRequests extends Model
     {
         return $this->belongsTo(StudentInformation::class, 'student_information_id');
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, "student_information_id",'student_information_id');
+    }
 }

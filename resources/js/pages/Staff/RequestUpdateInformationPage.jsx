@@ -5,7 +5,24 @@ import apiService from "../../services/apiService";
 
 const ITEMS_PER_PAGE = 10;
 const PRIMARY_COLOR = "#307358";
-
+const KEY_MAPPING = {
+    student: {
+        firstName: "first_name",
+        middleName: "middle_name",
+        lastName: "family_name",
+    },
+    personal: {
+        street: "street",
+        barangay: "barangay",
+        municipality: "municipality",
+        province: "province",
+        dob: "dob",
+        sex: "sex",
+        civilStatus: "civil_status",
+        nationality: "nationality",
+        religion: "religion",
+    },
+};
 const RequestUpdateInformationPage = () => {
     const [search, setSearch] = useState("");
     const [request, setRequest] = useState([]);
@@ -103,7 +120,7 @@ const RequestUpdateInformationPage = () => {
                                         {data.student.middle_name}
                                     </td>
                                     <td className="py-4">
-                                        {data.data.studentNumber}
+                                        {data.user.student_no}
                                     </td>
                                     <td className="py-4">
                                         {data.type} Information
@@ -139,7 +156,8 @@ const RequestUpdateInformationPage = () => {
                         </h2>
 
                         {selectedRequest && (
-                            <div className="space-y-3 text-sm">
+                            <div className="space-y-4 text-sm">
+                                {/* STUDENT INFO */}
                                 <div>
                                     <p className="text-gray-500">
                                         Student Name
@@ -154,7 +172,7 @@ const RequestUpdateInformationPage = () => {
                                 <div>
                                     <p className="text-gray-500">Student ID</p>
                                     <p className="font-medium">
-                                        {selectedRequest.data.studentNumber}
+                                        {selectedRequest.user.student_no}
                                     </p>
                                 </div>
 
@@ -167,17 +185,115 @@ const RequestUpdateInformationPage = () => {
                                     </span>
                                 </div>
 
+                                {/* REQUESTED CHANGES */}
                                 <div>
-                                    <p className="text-gray-500">
-                                        Requested Data
-                                    </p>
-                                    <pre className="bg-gray-100 rounded-lg p-3 text-xs overflow-auto">
-                                        {JSON.stringify(
-                                            selectedRequest.data,
-                                            null,
-                                            2,
+                                    <div className="space-y-2">
+                                        {selectedRequest && (
+                                            <div className="space-y-4 text-sm">
+                                                {/* STUDENT INFO */}
+
+                                                {/* REQUESTED CHANGES */}
+                                                <div>
+                                                    <p className="text-gray-500 mb-2">
+                                                        Requested Changes
+                                                    </p>
+
+                                                    <div className="space-y-2">
+                                                        {JSON.stringify(
+                                                            selectedRequest.data,
+                                                        )}
+                                                        {Object.entries(
+                                                            selectedRequest.data,
+                                                        )
+                                                            .filter(
+                                                                ([_, value]) =>
+                                                                    value !==
+                                                                        null &&
+                                                                    value !==
+                                                                        "" &&
+                                                                    value !==
+                                                                        undefined,
+                                                            )
+                                                            .map(
+                                                                ([
+                                                                    key,
+                                                                    newValue,
+                                                                ]) => {
+                                                                    const studentKey =
+                                                                        KEY_MAPPING[
+                                                                            selectedRequest
+                                                                                .type
+                                                                        ]?.[
+                                                                            key
+                                                                        ];
+
+                                                                    const oldValue =
+                                                                        studentKey
+                                                                            ? selectedRequest
+                                                                                  .student?.[
+                                                                                  studentKey
+                                                                              ]
+                                                                            : "—";
+
+                                                                    if (
+                                                                        oldValue ===
+                                                                        newValue
+                                                                    )
+                                                                        return null;
+
+                                                                    return (
+                                                                        <div
+                                                                            key={
+                                                                                key
+                                                                            }
+                                                                            className="flex items-center justify-between gap-4 bg-gray-50 p-3 rounded-lg"
+                                                                        >
+                                                                            <div className="flex-1">
+                                                                                <p className="text-gray-400 text-xs">
+                                                                                    {key
+                                                                                        .replace(
+                                                                                            /([A-Z])/g,
+                                                                                            " $1",
+                                                                                        )
+                                                                                        .replace(
+                                                                                            /^./,
+                                                                                            (
+                                                                                                str,
+                                                                                            ) =>
+                                                                                                str.toUpperCase(),
+                                                                                        )}{" "}
+                                                                                    (Current)
+                                                                                </p>
+                                                                                <p className="font-medium text-gray-700">
+                                                                                    {
+                                                                                        oldValue
+                                                                                    }
+                                                                                </p>
+                                                                            </div>
+
+                                                                            <div className="text-gray-400 font-semibold">
+                                                                                →
+                                                                            </div>
+
+                                                                            <div className="flex-1 text-right">
+                                                                                <p className="text-gray-400 text-xs">
+                                                                                    Requested
+                                                                                </p>
+                                                                                <p className="font-medium text-green-700">
+                                                                                    {
+                                                                                        newValue
+                                                                                    }
+                                                                                </p>
+                                                                            </div>
+                                                                        </div>
+                                                                    );
+                                                                },
+                                                            )}
+                                                    </div>
+                                                </div>
+                                            </div>
                                         )}
-                                    </pre>
+                                    </div>
                                 </div>
                             </div>
                         )}

@@ -307,7 +307,7 @@ class StaffController extends Controller
 
     public function get_request_update_information_student()
     {
-        $all_request = StudentUpdateRequests::with(['student'])->get();
+        $all_request = StudentUpdateRequests::with(['student','user'])->get();
         return response()->json([
             'success' => true,
             'data' => $all_request

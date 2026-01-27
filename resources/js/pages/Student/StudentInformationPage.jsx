@@ -36,7 +36,7 @@ const StudentInformationPage = () => {
         dob: "",
         sex: "-",
         civilStatus: "-",
-        citizenship: "-",
+        nationality: "-",
         religion: "-",
     });
 
@@ -67,7 +67,7 @@ const StudentInformationPage = () => {
             dob: info?.dob || "",
             sex: info?.sex || "-",
             civilStatus: info?.civil_status || "-",
-            citizenship: info?.nationality || "-",
+            nationality: info?.nationality || "-",
             religion: info?.religion || "-",
         });
 
@@ -94,32 +94,49 @@ const StudentInformationPage = () => {
     const Modal = ({ title, data, type }) => {
         const fields =
             type === "student"
-                ? ["firstName", "middleName", "lastName"] // Only keep these three
+                ? ["firstName", "middleName", "lastName"]
                 : Object.keys(data);
 
+        // 🔹 FILTER DATA BEFORE SENDING
+        const getFilteredData = () => {
+            return fields.reduce((acc, key) => {
+                if (
+                    data[key] !== undefined &&
+                    data[key] !== null &&
+                    data[key] !== ""
+                ) {
+                    acc[key] = data[key];
+                }
+                return acc;
+            }, {});
+        };
+
         const handleRequestUpdate = () => {
+            const filteredData = getFilteredData();
+
             apiService
                 .post("student/update-information", {
                     type,
-                    data,
+                    data: filteredData, // ✅ ONLY ALLOWED FIELDS
                 })
                 .then((response) => {
                     console.log(response);
-                    // alert("success");
                     setOpenModal("");
                 })
                 .catch(console.error);
-            setOpenModal("");
         };
 
         return (
             <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
+                {/* BACKDROP */}
                 <div
                     className="absolute inset-0 backdrop-blur-sm bg-black/30"
                     onClick={() => setOpenModal("")}
                 />
 
+                {/* MODAL */}
                 <div className="relative bg-white rounded-2xl shadow-xl p-6 w-full max-w-lg z-10">
+                    {/* CLOSE */}
                     <button
                         className="absolute top-4 right-4 text-gray-400 hover:text-gray-700"
                         onClick={() => setOpenModal("")}
@@ -127,25 +144,28 @@ const StudentInformationPage = () => {
                         <X size={20} />
                     </button>
 
+                    {/* TITLE */}
                     <h3 className="text-lg font-semibold mb-6">{title}</h3>
 
+                    {/* FORM */}
                     <div className="space-y-4 max-h-[60vh] overflow-y-auto">
                         {fields.map((key) => (
                             <div key={key}>
                                 <label className="text-sm font-medium block mb-1">
                                     {key
-                                        .replace(/([A-Z])/g, " $1") 
+                                        .replace(/([A-Z])/g, " $1")
                                         .split(" ")
                                         .map(
                                             (word) =>
                                                 word.charAt(0).toUpperCase() +
-                                                word.slice(1)
-                                        ) 
+                                                word.slice(1),
+                                        )
                                         .join(" ")}
                                 </label>
+
                                 <input
                                     name={key}
-                                    value={data[key]}
+                                    value={data[key] ?? ""}
                                     onChange={(e) => handleChange(e, type)}
                                     className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
                                 />
@@ -153,6 +173,7 @@ const StudentInformationPage = () => {
                         ))}
                     </div>
 
+                    {/* ACTION */}
                     <div className="mt-6 text-right">
                         <button
                             onClick={handleRequestUpdate}
@@ -196,8 +217,8 @@ const StudentInformationPage = () => {
                                         .map(
                                             (word) =>
                                                 word.charAt(0).toUpperCase() +
-                                                word.slice(1)
-                                        ) 
+                                                word.slice(1),
+                                        )
                                         .join(" ")}
                                     :
                                 </span>{" "}
@@ -215,8 +236,8 @@ const StudentInformationPage = () => {
                         openModal === "student"
                             ? studentInfo
                             : openModal === "personal"
-                            ? personalInfo
-                            : guardianInfo
+                              ? personalInfo
+                              : guardianInfo
                     }
                     type={openModal}
                 />
