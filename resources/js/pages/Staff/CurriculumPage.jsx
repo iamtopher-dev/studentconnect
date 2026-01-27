@@ -255,9 +255,9 @@ const CurriculumPage = () => {
                                         </td>
                                         <td className="px-4 sm:px-6 py-3 text-right">
                                             <div className="inline-flex gap-2 sm:gap-3">
-                                                <button className="p-2 rounded-lg text-blue-600 hover:bg-blue-50">
+                                                {/* <button className="p-2 rounded-lg text-blue-600 hover:bg-blue-50">
                                                     <Pencil size={16} />
-                                                </button>
+                                                </button> */}
                                                 <button
                                                     onClick={() =>
                                                         handleDeleteSubject(
