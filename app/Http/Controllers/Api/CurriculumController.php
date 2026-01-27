@@ -19,7 +19,7 @@ class CurriculumController extends Controller
 
         /* PROGRAMS */
         $collegePrograms = ["BSIT", "BSCPE", "BSBA"];
-        $shsPrograms = ["ICT", "ABM", "HE"];
+        $shsPrograms = ["ICT", "ABM", "HE","IA"];
 
         /* EMPTY STRUCTURES */
         $emptyCollegeYears = [

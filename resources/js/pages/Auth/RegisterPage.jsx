@@ -205,6 +205,9 @@ const RegisterPage = () => {
                                                 Accountancy, Business, and
                                                 Management
                                             </option>
+                                            <option value="IA">
+                                                Industrial Arts
+                                            </option>
                                         </>
                                     )}
 

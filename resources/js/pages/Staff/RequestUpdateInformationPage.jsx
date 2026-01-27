@@ -19,7 +19,6 @@ const RequestUpdateInformationPage = () => {
     }
     return (
         <div className="p-4 sm:p-6 bg-gray-50 min-h-screen">
-            {/* HEADER */}
 
             <div className="mb-6 sm:mb-8">
                 <h1 className="text-2xl sm:text-3xl font-semibold text-slate-800">

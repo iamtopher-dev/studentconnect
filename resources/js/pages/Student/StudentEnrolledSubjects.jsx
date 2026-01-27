@@ -20,7 +20,6 @@ const StudentEnrolledSubjects = () => {
     return (
         <div className="min-h-screen  p-6">
             <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
-                {/* Student Information */}
                 <div className="bg-white rounded-2xl shadow-md p-6">
                     <h2 className="text-lg font-semibold text-gray-800 mb-5">
                         Student Information

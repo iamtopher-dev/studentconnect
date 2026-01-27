@@ -6,7 +6,7 @@ const COLLEGE_PROGRAMS = ["BSIT", "BSCPE", "BSBA"];
 const COLLEGE_YEARS = ["1st Year", "2nd Year", "3rd Year", "4th Year"];
 const COLLEGE_SEMESTERS = ["1st Semester", "2nd Semester"];
 
-const SHS_PROGRAMS = ["ICT", "ABM", "HE"];
+const SHS_PROGRAMS = ["ICT", "ABM", "HE","IA"];
 const SHS_YEARS = ["Grade 11", "Grade 12"];
 const SHS_SEMESTERS = ["1st Semester", "2nd Semester"];
 
@@ -37,6 +37,7 @@ const CurriculumPage = () => {
             ICT: emptyCurriculumSHS,
             ABM: emptyCurriculumSHS,
             HE: emptyCurriculumSHS,
+            IA: emptyCurriculumSHS,
         },
     });
     const [openModal, setOpenModal] = useState(false);
