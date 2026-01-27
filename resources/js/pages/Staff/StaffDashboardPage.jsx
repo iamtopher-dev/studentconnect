@@ -1,10 +1,5 @@
-import React from "react";
-import {
-    Users,
-    UserPlus,
-    BookOpen,
-    Calendar,
-} from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { Users, UserPlus, BookOpen, Calendar } from "lucide-react";
 
 import {
     LineChart,
@@ -15,33 +10,7 @@ import {
     ResponsiveContainer,
     CartesianGrid,
 } from "recharts";
-
-const stats = [
-    {
-        label: "Total Students",
-        value: "0",
-        icon: Users,
-        bg: "from-green-500 to-emerald-500",
-    },
-    {
-        label: "New Incoming Students",
-        value: "0",
-        icon: UserPlus,
-        bg: "from-blue-500 to-sky-500",
-    },
-    // {
-    //     label: "Total Curriculum",
-    //     value: "12",
-    //     icon: BookOpen,
-    //     bg: "from-purple-500 to-violet-500",
-    // },
-    // {
-    //     label: "Total Student This year",
-    //     value: "24",
-    //     icon: Calendar,
-    //     bg: "from-orange-500 to-amber-500",
-    // },
-];
+import apiService from "../../services/apiService";
 
 const incomingStudentsByYear = [
     { year: "2021", students: 320 },
@@ -52,34 +21,57 @@ const incomingStudentsByYear = [
 ];
 
 const StaffDashboardPage = () => {
+    const [data, setData] = useState([]);
+    useEffect(() => {
+        get_dashboard_data();
+    }, []);
+
+    const get_dashboard_data = () => {
+        apiService
+            .get("staff/dashboard")
+            .then((res) => {
+                console.log(res);
+                setData(res.data);
+            })
+            .catch((err) => {
+                console.error("Error", err);
+            });
+    };
+
     return (
         <div className="space-y-8">
-            <h1 className="text-2xl font-semibold text-gray-800">
-                Dashboard
-            </h1>
+            <h1 className="text-2xl font-semibold text-gray-800">Dashboard</h1>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                {stats.map((item, index) => (
-                    <div
-                        key={index}
-                        className="group bg-white rounded-2xl p-5 shadow-sm hover:shadow-xl transition-all duration-300 flex items-center justify-between"
-                    >
-                        <div>
-                            <p className="text-sm text-gray-500">
-                                {item.label}
-                            </p>
-                            <h2 className="text-2xl font-bold text-gray-800 mt-1">
-                                {item.value}
-                            </h2>
-                        </div>
-
-                        <div
-                            className={`p-4 rounded-xl bg-gradient-to-br ${item.bg} text-white group-hover:scale-110 transition-transform`}
-                        >
-                            <item.icon size={26} />
-                        </div>
+                <div className="group bg-white rounded-2xl p-5 shadow-sm hover:shadow-xl transition-all duration-300 flex items-center justify-between">
+                    <div>
+                        <p className="text-sm text-gray-500">Total Students</p>
+                        <h2 className="text-2xl font-bold text-gray-800 mt-1">
+                            {data.total_students}
+                        </h2>
                     </div>
-                ))}
+
+                    <div
+                        className={`p-4 rounded-xl bg-gradient-to-br from-green-500 to-emerald-500 text-white group-hover:scale-110 transition-transform`}
+                    >
+                        <Users size={26} />
+                    </div>
+                </div>
+
+                <div className="group bg-white rounded-2xl p-5 shadow-sm hover:shadow-xl transition-all duration-300 flex items-center justify-between">
+                    <div>
+                        <p className="text-sm text-gray-500">New Incoming Students</p>
+                        <h2 className="text-2xl font-bold text-gray-800 mt-1">
+                             {data.total_incoming_students}
+                        </h2>
+                    </div>
+
+                    <div
+                        className={`p-4 rounded-xl bg-gradient-to-br from-blue-500 to-sky-500 text-white group-hover:scale-110 transition-transform`}
+                    >
+                        <UserPlus size={26} />
+                    </div>
+                </div>
             </div>
 
             {/* <div className="bg-white rounded-2xl shadow-sm p-6">

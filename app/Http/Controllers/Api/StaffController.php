@@ -12,6 +12,16 @@ use Illuminate\Support\Facades\Hash;
 
 class StaffController extends Controller
 {
+    public function dashboard()
+    {
+        $totalStudents = User::where('role', 'STUDENT')->count();
+        $totalIncomingStudents = StudentInformation::where('isAccept', false)->count();
+
+        return response()->json([
+            "total_students" => $totalStudents,
+            "total_incoming_students" => $totalIncomingStudents
+        ]);
+    }
     public function getIncomingStudents()
     {
         $students = StudentInformation::where('isAccept', false)->get();

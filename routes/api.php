@@ -28,6 +28,8 @@ Route::post('student/generate-grade-report', [StudentController::class, 'generat
 Route::post('student/update-information', [StudentController::class, 'updateInformation'])->middleware('auth:sanctum');
 
 
+Route::get('staff/dashboard', [StaffController::class, 'dashboard'])->middleware('auth:sanctum');
+
 Route::get('staff/student', [StaffController::class, 'getStudents'])->middleware('auth:sanctum');
 Route::post('staff/save-student-grades', [StaffController::class, 'saveStudentsGrades'])->middleware('auth:sanctum');
 Route::post('staff/save-student-grades-by-excel', [StaffController::class, 'saveStudentGradesByExcel'])->middleware('auth:sanctum');
