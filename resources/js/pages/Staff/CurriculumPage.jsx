@@ -6,7 +6,7 @@ const COLLEGE_PROGRAMS = ["BSIT", "BSCPE", "BSBA"];
 const COLLEGE_YEARS = ["1st Year", "2nd Year", "3rd Year", "4th Year"];
 const COLLEGE_SEMESTERS = ["1st Semester", "2nd Semester"];
 
-const SHS_PROGRAMS = ["ICT", "ABM", "HE","IA"];
+const SHS_PROGRAMS = ["ICT", "ABM", "HE", "IA"];
 const SHS_YEARS = ["Grade 11", "Grade 12"];
 const SHS_SEMESTERS = ["1st Semester", "2nd Semester"];
 
@@ -49,7 +49,7 @@ const CurriculumPage = () => {
             .then((res) => {
                 setData((prev) => ({
                     ...prev,
-                    ...res.data, 
+                    ...res.data,
                 }));
             })
             .catch((err) => {
@@ -323,6 +323,7 @@ const CurriculumPage = () => {
                     <AddSubjectModal
                         onClose={() => setOpenModal(false)}
                         onSave={handleAddSubject}
+                        level_txt={level === "College" ? "Units" : "Number of Hours"}
                     />
                 )}
             </div>
@@ -331,7 +332,7 @@ const CurriculumPage = () => {
 };
 
 /* ---------------- MODAL ---------------- */
-const AddSubjectModal = ({ onClose, onSave }) => {
+const AddSubjectModal = ({ onClose, onSave, level_txt }) => {
     const [form, setForm] = useState({ code: "", name: "", units: "" });
 
     const submit = () => {
@@ -370,7 +371,7 @@ const AddSubjectModal = ({ onClose, onSave }) => {
                     />
                     <ModernInput
                         type="number"
-                        placeholder="Units"
+                        placeholder={level_txt}
                         onChange={(e) =>
                             setForm({ ...form, units: e.target.value })
                         }
