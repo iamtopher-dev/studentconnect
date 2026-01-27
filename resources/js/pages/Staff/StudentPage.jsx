@@ -154,7 +154,6 @@ const StudentPage = () => {
     }
     return (
         <div className="p-4 sm:p-6 bg-gray-50 min-h-screen">
-            {/* HEADER */}
             <div className="mb-6">
                 <h1 className="text-2xl sm:text-3xl font-semibold text-gray-800">
                     Students List
@@ -165,7 +164,6 @@ const StudentPage = () => {
             </div>
 
             <div className="bg-white rounded-2xl shadow-md p-4 sm:p-6">
-                {/* SEARCH */}
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6 gap-3 sm:gap-0">
                     <h2
                         className="font-semibold text-lg sm:text-xl"
@@ -196,7 +194,6 @@ const StudentPage = () => {
                     </div>
                 </div>
 
-                {/* TABLE */}
                 <div className="overflow-x-auto sm:overflow-x-hidden">
                     <table className="w-full text-sm hidden sm:table">
                         <thead>
@@ -236,7 +233,6 @@ const StudentPage = () => {
                 </div>
             </div>
 
-            {/* IRREGULAR MODAL (UNCHANGED UI) */}
             {openModalIrregular && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
                     <div className="bg-white w-full max-w-3xl rounded-3xl shadow-2xl p-8 overflow-y-auto max-h-[90vh]">

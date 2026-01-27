@@ -357,7 +357,6 @@ const StudentGradingPage = () => {
                 </div>
             )}
 
-            {/* UPLOAD EXCEL MODAL */}
             {modalOpen && (
                 <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
                     <div className="bg-white rounded-3xl w-full max-w-sm sm:max-w-md p-5 sm:p-6 relative shadow-xl">
@@ -416,7 +415,6 @@ const StudentGradingPage = () => {
                             />
                         </div>
 
-                        {/* CONFIRM BUTTON */}
                         <button
                             onClick={confirmUpload}
                             disabled={!selectedFile}

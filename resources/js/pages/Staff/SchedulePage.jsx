@@ -42,7 +42,6 @@ const SchedulePage = () => {
         if (input) input.value = null;
     };
 
-    // Upload PDF to Laravel
     const handleConfirmUpload = async () => {
         if (!selectedFile) return;
 
@@ -95,7 +94,6 @@ const SchedulePage = () => {
                 </p>
             </div>
 
-            {/* ACTION */}
             <div className="bg-white rounded-2xl p-4 shadow-sm mb-6">
                 <button
                     onClick={openModal}
@@ -107,7 +105,6 @@ const SchedulePage = () => {
                 </button>
             </div>
 
-            {/* PDF PREVIEW */}
             {pdfPreviewUrl && (
                 <div
                     className="mt-4 border rounded-xl overflow-hidden sm:h-80 "
@@ -126,7 +123,6 @@ const SchedulePage = () => {
                 </div>
             )}
 
-            {/* MODAL */}
             {modalOpen && (
                 <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
                     <div className="bg-white rounded-3xl w-full max-w-md sm:max-w-lg p-5 sm:p-6 relative shadow-xl">

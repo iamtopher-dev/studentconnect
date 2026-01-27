@@ -77,10 +77,6 @@ const RequestUpdateInformationPage = () => {
                                 <td className="py-4">dwa</td>
                                 <td className="py-4">dwa</td>
                                 <td className="py-4">dwa</td>
-                                <td className="py-4">dwa</td>
-                                <td className="py-4">fwa</td>
-                                <td className="py-4">fwa</td>
-                                <td className="py-4">fwa</td>
                                 <td className="py-4">
                                     <button
                                         className="bg-green-500 text-white px-3 py-1 rounded-md text-sm"

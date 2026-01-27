@@ -23,7 +23,6 @@ const StudentGradesPage = () => {
             })
             .then((res) => {
                 setStudent(res.data.data);
-                // You can now store it in state to display in your UI
                 // setGrades(res.data.data);
             })
             .catch((err) => {
@@ -56,9 +55,7 @@ const StudentGradesPage = () => {
         <div className="min-h-screen bg-gray-50 p-6">
             <div className="max-w-[1400px] mx-auto space-y-6">
                 <div className="grid grid-cols-12 gap-6">
-                    {/* LEFT COLUMN */}
                     <div className="col-span-12 lg:col-span-4 space-y-6">
-                        {/* Navigation */}
                         <div className="bg-white rounded-2xl shadow-lg">
                             <div className="px-6 py-4 border-b border-gray-100">
                                 <h2 className="font-semibold text-gray-700 text-lg">
@@ -123,7 +120,6 @@ const StudentGradesPage = () => {
                             </div>
                         </div>
 
-                        {/* Student Information */}
                         <div className="bg-white rounded-2xl shadow-lg">
                             <div className="px-6 py-4 border-b border-gray-100">
                                 <h2 className="font-semibold text-gray-700 text-lg">
@@ -193,7 +189,6 @@ const StudentGradesPage = () => {
                         </div>
                     </div>
 
-                    {/* RIGHT COLUMN */}
                     <div className="col-span-12 lg:col-span-8">
                         <div className="bg-white rounded-2xl shadow-lg h-full">
                             <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
@@ -312,7 +307,6 @@ const StudentGradesPage = () => {
                     </div>
                 </div>
 
-                {/* FOOTER */}
                 <div className="mt-10 text-center text-xs text-gray-400">
                     Student Connect – Alabang
                 </div>

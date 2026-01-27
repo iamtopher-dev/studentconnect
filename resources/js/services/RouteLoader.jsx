@@ -11,7 +11,7 @@ const RouteLoader = () => {
 
         const timer = setTimeout(() => {
             setLoading(false);
-        }, 300); // smooth transition
+        }, 300); 
 
         return () => clearTimeout(timer);
     }, [location.pathname]);

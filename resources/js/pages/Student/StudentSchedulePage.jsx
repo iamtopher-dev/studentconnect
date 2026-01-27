@@ -37,9 +37,6 @@ const StudentSchedulePage = () => {
                 </p>
             </div>
 
-            {/* ACTION */}
-
-            {/* PDF PREVIEW */}
             {pdfPreviewUrl && (
                 <div
                     className="mt-4 border rounded-xl overflow-hidden sm:h-80 "

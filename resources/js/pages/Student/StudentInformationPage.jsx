@@ -7,7 +7,6 @@ const StudentInformationPage = () => {
     const [student, setStudent] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    // ---------------- FETCH DATA ----------------
     useEffect(() => {
         apiService
             .get("student/get-student-information")
@@ -19,7 +18,6 @@ const StudentInformationPage = () => {
             .finally(() => setLoading(false));
     }, []);
 
-    // ---------------- STATES ----------------
     const [studentInfo, setStudentInfo] = useState({
         firstName: "-",
         middleName: "-",
@@ -47,7 +45,6 @@ const StudentInformationPage = () => {
         guardianContact: "-",
     });
 
-    // ---------------- MAP API → STATE ----------------
     useEffect(() => {
         if (!student) return;
 
@@ -80,12 +77,10 @@ const StudentInformationPage = () => {
         });
     }, [student]);
 
-    // ---------------- BODY SCROLL LOCK ----------------
     useEffect(() => {
         document.body.style.overflow = openModal ? "hidden" : "auto";
     }, [openModal]);
 
-    // ---------------- INPUT HANDLER ----------------
     const handleChange = (e, type) => {
         const { name, value } = e.target;
         if (type === "student")
@@ -96,8 +91,6 @@ const StudentInformationPage = () => {
             setGuardianInfo({ ...guardianInfo, [name]: value });
     };
 
-    // ---------------- MODAL ----------------
-    // ---------------- MODAL ----------------
     const Modal = ({ title, data, type }) => {
         const fields =
             type === "student"
@@ -112,7 +105,7 @@ const StudentInformationPage = () => {
                 })
                 .then((response) => {
                     console.log(response);
-                    // alert("Update request submitted");
+                    // alert("success");
                     setOpenModal("");
                 })
                 .catch(console.error);
@@ -121,15 +114,12 @@ const StudentInformationPage = () => {
 
         return (
             <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
-                {/* Backdrop */}
                 <div
                     className="absolute inset-0 backdrop-blur-sm bg-black/30"
                     onClick={() => setOpenModal("")}
                 />
 
-                {/* Modal Card */}
                 <div className="relative bg-white rounded-2xl shadow-xl p-6 w-full max-w-lg z-10">
-                    {/* Close Button */}
                     <button
                         className="absolute top-4 right-4 text-gray-400 hover:text-gray-700"
                         onClick={() => setOpenModal("")}
@@ -137,22 +127,20 @@ const StudentInformationPage = () => {
                         <X size={20} />
                     </button>
 
-                    {/* Title */}
                     <h3 className="text-lg font-semibold mb-6">{title}</h3>
 
-                    {/* Form Fields */}
                     <div className="space-y-4 max-h-[60vh] overflow-y-auto">
                         {fields.map((key) => (
                             <div key={key}>
                                 <label className="text-sm font-medium block mb-1">
                                     {key
-                                        .replace(/([A-Z])/g, " $1") // split camelCase
+                                        .replace(/([A-Z])/g, " $1") 
                                         .split(" ")
                                         .map(
                                             (word) =>
                                                 word.charAt(0).toUpperCase() +
                                                 word.slice(1)
-                                        ) // capitalize each word
+                                        ) 
                                         .join(" ")}
                                 </label>
                                 <input
@@ -165,7 +153,6 @@ const StudentInformationPage = () => {
                         ))}
                     </div>
 
-                    {/* Request Update Button */}
                     <div className="mt-6 text-right">
                         <button
                             onClick={handleRequestUpdate}
@@ -181,7 +168,6 @@ const StudentInformationPage = () => {
 
     if (loading) return <div className="p-6">Loading...</div>;
 
-    // ---------------- UI ----------------
     return (
         <div className="p-6 max-w-5xl mx-auto space-y-8">
             {[
@@ -205,13 +191,13 @@ const StudentInformationPage = () => {
                             <div key={k}>
                                 <span className="font-medium">
                                     {k
-                                        .replace(/([A-Z])/g, " $1") // split camelCase
+                                        .replace(/([A-Z])/g, " $1")
                                         .split(" ")
                                         .map(
                                             (word) =>
                                                 word.charAt(0).toUpperCase() +
                                                 word.slice(1)
-                                        ) // capitalize each word
+                                        ) 
                                         .join(" ")}
                                     :
                                 </span>{" "}

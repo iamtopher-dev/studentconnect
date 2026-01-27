@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Plus, Pencil, Trash2, X } from "lucide-react";
 import apiService from "../../services/apiService";
 
-/* CONSTANTS */
 const COLLEGE_PROGRAMS = ["BSIT", "BSCPE", "BSBA"];
 const COLLEGE_YEARS = ["1st Year", "2nd Year", "3rd Year", "4th Year"];
 const COLLEGE_SEMESTERS = ["1st Semester", "2nd Semester"];
@@ -43,14 +42,13 @@ const CurriculumPage = () => {
     const [openModal, setOpenModal] = useState(false);
     const [loading, setLoading] = useState(true);
 
-    /* ---------------- FETCH CURRICULUM ---------------- */
     const fetchCurriculum = () => {
         apiService
             .get("/curriculum")
             .then((res) => {
                 setData((prev) => ({
                     ...prev,
-                    ...res.data, // Merge fetched data
+                    ...res.data, 
                 }));
             })
             .catch((err) => {
@@ -63,7 +61,6 @@ const CurriculumPage = () => {
         fetchCurriculum();
     }, []);
 
-    // Determine current programs, years, semesters based on level
     const PROGRAMS = level === "College" ? COLLEGE_PROGRAMS : SHS_PROGRAMS;
     const YEARS = level === "College" ? COLLEGE_YEARS : SHS_YEARS;
     const SEMESTERS = level === "College" ? COLLEGE_SEMESTERS : SHS_SEMESTERS;
@@ -71,7 +68,6 @@ const CurriculumPage = () => {
     const subjects =
         data?.[level]?.[activeProgram]?.[activeYear]?.[activeSemester] || [];
 
-    /* ---------------- ADD SUBJECT ---------------- */
     const handleAddSubject = async (subject) => {
         try {
             const payload = {
@@ -89,7 +85,6 @@ const CurriculumPage = () => {
         }
     };
 
-    /* ---------------- DELETE SUBJECT ---------------- */
     const handleDeleteSubject = async (index, id) => {
         try {
             await apiService.delete(`/curriculum/${id}`);
@@ -110,7 +105,6 @@ const CurriculumPage = () => {
     return (
         <div className="min-h-screen bg-gray-50 px-4 sm:px-6 py-8 font-poppins">
             <div className="max-w-7xl mx-auto space-y-6">
-                {/* HEADER */}
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0">
                     <div>
                         <h1 className="text-2xl font-semibold text-gray-900">
@@ -133,7 +127,6 @@ const CurriculumPage = () => {
                     </button>
                 </div>
 
-                {/* LEVEL FILTER */}
                 <div className="flex gap-2 sm:gap-3 bg-white p-2 rounded-2xl shadow-sm overflow-x-auto">
                     {["College", "SHS"].map((lvl) => (
                         <button
@@ -216,7 +209,6 @@ const CurriculumPage = () => {
                     ))}
                 </div>
 
-                {/* TABLE / CARD FOR MOBILE */}
                 <div className="bg-white rounded-3xl shadow-md overflow-x-auto sm:overflow-x-hidden">
                     <table className="w-full min-w-[600px] text-sm hidden sm:table">
                         <thead className="bg-gray-100 text-gray-600">
@@ -284,7 +276,6 @@ const CurriculumPage = () => {
                         </tbody>
                     </table>
 
-                    {/* MOBILE CARD VIEW */}
                     <div className="sm:hidden flex flex-col gap-4 py-4">
                         {subjects.length === 0 ? (
                             <p className="text-center text-gray-400">
@@ -398,7 +389,6 @@ const AddSubjectModal = ({ onClose, onSave }) => {
     );
 };
 
-/* ---------------- INPUT ---------------- */
 const ModernInput = ({ type = "text", placeholder, onChange }) => (
     <input
         type={type}

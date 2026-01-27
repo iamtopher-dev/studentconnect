@@ -48,7 +48,6 @@ const RegisterPage = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        // Validate all required fields
         for (const key in formData) {
             if (!formData[key]) {
                 alert(`Please fill up the ${key.replace("_", " ")}`);
@@ -93,12 +92,9 @@ const RegisterPage = () => {
             className="relative min-h-screen flex items-center justify-center bg-cover bg-center"
             style={{ backgroundImage: `url(${BG_IMAGE_URL})` }}
         >
-            {/* Dark overlay */}
             <div className="absolute inset-0 bg-black/40"></div>
 
-            {/* Form container */}
             <div className="relative w-full max-w-6xl bg-white rounded-xl shadow-xl overflow-hidden grid grid-cols-1 md:grid-cols-3">
-                {/* LEFT PANEL */}
                 <div className="bg-green-600 text-white flex flex-col justify-between">
                     <div className="bg-white rounded-br-[80px] p-6">
                         <img src={SCHOOL_LOGO} alt="Logo" className="h-10" />
@@ -118,12 +114,10 @@ const RegisterPage = () => {
                     </div>
                 </div>
 
-                {/* RIGHT PANEL - SCROLLABLE */}
                 <form
                     onSubmit={handleSubmit}
                     className="md:col-span-2 bg-gray-50 p-5 space-y-4 overflow-y-auto max-h-[80vh]"
                 >
-                    {/* STUDENT TYPE */}
                     <div className="bg-white p-4 rounded-lg shadow-sm">
                         <h3 className="font-semibold text-green-700 mb-3">
                             Admission Application
@@ -270,7 +264,6 @@ const RegisterPage = () => {
                         </div>
                     </div>
 
-                    {/* PERSONAL INFO */}
                     <div className="bg-white p-4 rounded-lg shadow-sm">
                         <h3 className="font-semibold text-green-700 mb-3">
                             Personal Information
@@ -388,7 +381,6 @@ const RegisterPage = () => {
                         </div>
                     </div>
 
-                    {/* GUARDIAN INFO */}
                     <div className="bg-white p-4 rounded-lg shadow-sm">
                         <h3 className="font-semibold text-green-700 mb-3">
                             Guardian Information
@@ -415,7 +407,6 @@ const RegisterPage = () => {
                         </div>
                     </div>
 
-                    {/* SUBMIT */}
                     <div className="flex justify-end">
                         <button
                             type="submit"

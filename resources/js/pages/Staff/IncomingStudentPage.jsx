@@ -3,7 +3,6 @@ import Select from "react-select";
 import { Check, X } from "lucide-react";
 import apiService from "../../services/apiService";
 
-/* Constants */
 const yearLevels = ["1st Year", "2nd Year", "3rd Year", "4th Year"];
 const gradeLevels = ["Grade 11", "Grade 12"];
 const sections = ["A", "B", "C"];
@@ -76,7 +75,6 @@ const IncomingStudentPage = () => {
         fetchIncomingStudents();
     }, []);
 
-    // Open modal and populate form
     const openModal = (student) => {
         setSelectedStudent(student);
         console.log(student);
@@ -150,7 +148,6 @@ const IncomingStudentPage = () => {
     }
     return (
         <div className="p-8 bg-gray-50 min-h-screen font-poppins">
-            {/* HEADER */}
             <div className="mb-8">
                 <h1 className="text-3xl font-bold text-gray-900">
                     Incoming Students
@@ -160,7 +157,6 @@ const IncomingStudentPage = () => {
                 </p>
             </div>
 
-            {/* STUDENT TABLE */}
             <div className="bg-white rounded-3xl shadow-lg overflow-hidden border border-gray-200">
                 <table className="w-full border-collapse">
                     <thead className="bg-gray-100 text-gray-600 text-sm tracking-wide">
@@ -215,7 +211,6 @@ const IncomingStudentPage = () => {
                 </table>
             </div>
 
-            {/* MODAL */}
             {selectedStudent && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
                     <div className="bg-white w-full max-w-3xl rounded-3xl shadow-2xl p-8 overflow-y-auto max-h-[90vh]">
@@ -248,7 +243,6 @@ const IncomingStudentPage = () => {
                                 </span>
                             </div>
 
-                            {/* SECTIONS */}
                             <Section title="Student Information">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <InputField
@@ -450,7 +444,6 @@ const IncomingStudentPage = () => {
 
 export default IncomingStudentPage;
 
-/* ----------------- Helper Components ----------------- */
 const InputField = ({
     label,
     value,
