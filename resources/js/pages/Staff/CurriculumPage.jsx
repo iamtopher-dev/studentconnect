@@ -275,6 +275,24 @@ const CurriculumPage = () => {
                                 ))
                             )}
                         </tbody>
+                        {subjects.length > 0 && (
+                            <tfoot className="bg-gray-100 text-gray-800 font-medium">
+                                <tr>
+                                    <td
+                                        colSpan="3"
+                                        className="px-4 sm:px-6 py-3 text-right"
+                                    >
+                                        Total Units:{" "}
+                                        {subjects.reduce(
+                                            (sum, sub) =>
+                                                sum + Number(sub.units),
+                                            0,
+                                        )}
+                                    </td>
+                                    <td></td>
+                                </tr>
+                            </tfoot>
+                        )}
                     </table>
 
                     <div className="sm:hidden flex flex-col gap-4 py-4">
@@ -283,38 +301,49 @@ const CurriculumPage = () => {
                                 No subjects added
                             </p>
                         ) : (
-                            subjects.map((sub, i) => (
-                                <div
-                                    key={i}
-                                    className="bg-gray-50 rounded-2xl p-4 flex flex-col gap-2 shadow-sm"
-                                >
-                                    <div className="flex justify-between items-center">
-                                        <span className="font-medium text-gray-800">
-                                            {sub.code}
-                                        </span>
-                                        <div className="inline-flex gap-2">
-                                            <button className="p-2 rounded-lg text-blue-600 hover:bg-blue-50">
-                                                <Pencil size={16} />
-                                            </button>
-                                            <button
-                                                onClick={() =>
-                                                    handleDeleteSubject(
-                                                        i,
-                                                        sub.id,
-                                                    )
-                                                }
-                                                className="p-2 rounded-lg text-red-600 hover:bg-red-50"
-                                            >
-                                                <Trash2 size={16} />
-                                            </button>
+                            <>
+                                {subjects.map((sub, i) => (
+                                    <div
+                                        key={i}
+                                        className="bg-gray-50 rounded-2xl p-4 flex flex-col gap-2 shadow-sm"
+                                    >
+                                        <div className="flex justify-between items-center">
+                                            <span className="font-medium text-gray-800">
+                                                {sub.code}
+                                            </span>
+                                            <div className="inline-flex gap-2">
+                                                <button className="p-2 rounded-lg text-blue-600 hover:bg-blue-50">
+                                                    <Pencil size={16} />
+                                                </button>
+                                                <button
+                                                    onClick={() =>
+                                                        handleDeleteSubject(
+                                                            i,
+                                                            sub.id,
+                                                        )
+                                                    }
+                                                    className="p-2 rounded-lg text-red-600 hover:bg-red-50"
+                                                >
+                                                    <Trash2 size={16} />
+                                                </button>
+                                            </div>
                                         </div>
+                                        <p className="text-gray-700">
+                                            {sub.name}
+                                        </p>
+                                        <p className="text-right font-medium">
+                                            {sub.units} Units
+                                        </p>
                                     </div>
-                                    <p className="text-gray-700">{sub.name}</p>
-                                    <p className="text-center font-medium">
-                                        {sub.units} Units
-                                    </p>
+                                ))}
+                                <div className="bg-gray-100 rounded-xl p-4 text-right font-medium">
+                                    Total Units:{" "}
+                                    {subjects.reduce(
+                                        (sum, sub) => sum + Number(sub.units),
+                                        0,
+                                    )}
                                 </div>
-                            ))
+                            </>
                         )}
                     </div>
                 </div>
@@ -323,7 +352,9 @@ const CurriculumPage = () => {
                     <AddSubjectModal
                         onClose={() => setOpenModal(false)}
                         onSave={handleAddSubject}
-                        level_txt={level === "College" ? "Units" : "Number of Hours"}
+                        level_txt={
+                            level === "College" ? "Units" : "Number of Hours"
+                        }
                     />
                 )}
             </div>
