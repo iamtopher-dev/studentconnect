@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Schedule;
+use App\Models\StudentInformation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ScheduleController extends Controller
 {
@@ -42,9 +44,11 @@ class ScheduleController extends Controller
 
     public function read_schedule_pdf($schedule_for)
     {
+        $studentInformation = StudentInformation::where("student_information_id", Auth::user()->student_information_id)->first();
         $schedule = Schedule::where('schedule_for', $schedule_for)->orderBy('created_at', 'desc')->limit(1)->first();
         return response()->json([
             "success" => true,
+            "student" => $studentInformation,
             "data" => $schedule
         ]);
     }
