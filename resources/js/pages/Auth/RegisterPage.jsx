@@ -208,7 +208,7 @@ const RegisterPage = () => {
                                         </>
                                     )}
 
-                                    {formData.applicant_type === "College" && (
+                                    {formData.applicant_type === "COLLEGE" && (
                                         <>
                                             <option value="BSIT">BSIT</option>
                                             <option value="BSCPE">BSCPE</option>
@@ -243,7 +243,7 @@ const RegisterPage = () => {
                                             </option>
                                         </>
                                     )}
-                                    {formData.applicant_type === "College" && (
+                                    {formData.applicant_type === "COLLEGE" && (
                                         <>
                                             <option value="1st Year">
                                                 1st Year
