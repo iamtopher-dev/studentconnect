@@ -8,8 +8,34 @@ const PRIMARY_COLOR = "#307358";
 
 const RequestUpdateInformationPage = () => {
     const [search, setSearch] = useState("");
+    const [request, setRequest] = useState([]);
     const [loadingScreen, setLoadingScreen] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
+    const [selectedRequest, setSelectedRequest] = useState(null);
+    useEffect(() => {
+        get_request_update_information_student();
+    }, []);
 
+    const get_request_update_information_student = () => {
+        apiService
+            .get("staff/get-request-update-information-student")
+            .then((res) => {
+                console.log(res.data.data);
+                setRequest(res.data.data);
+            })
+            .catch((err) => {
+                console.error("Err", err);
+            });
+    };
+    const openModal = (data) => {
+        setSelectedRequest(data);
+        setIsOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsOpen(false);
+        setSelectedRequest(null);
+    };
     if (loadingScreen) {
         return (
             <div className="min-h-screen flex items-center justify-center text-gray-500">
@@ -19,7 +45,6 @@ const RequestUpdateInformationPage = () => {
     }
     return (
         <div className="p-4 sm:p-6 bg-gray-50 min-h-screen">
-
             <div className="mb-6 sm:mb-8">
                 <h1 className="text-2xl sm:text-3xl font-semibold text-slate-800">
                     Request Update Information List
@@ -46,9 +71,7 @@ const RequestUpdateInformationPage = () => {
                         />
                         <input
                             value={search}
-                            onChange={(e) => {
-                               
-                            }}
+                            onChange={(e) => {}}
                             placeholder="Search by name or student id"
                             className="pl-9 sm:pl-10 pr-3 sm:pr-4 py-2.5 text-sm sm:text-base rounded-xl w-full focus:outline-none"
                             style={{
@@ -72,22 +95,110 @@ const RequestUpdateInformationPage = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr >
-                                <td className="py-4">dwa</td>
-                                <td className="py-4">dwa</td>
-                                <td className="py-4">dwa</td>
-                                <td className="py-4">
-                                    <button
-                                        className="bg-green-500 text-white px-3 py-1 rounded-md text-sm"
-                                    >
-                                        View
-                                    </button>
-                                </td>
-                            </tr>
+                            {request.map((data) => (
+                                <tr>
+                                    <td className="py-4">
+                                        {data.student.family_name} ,{" "}
+                                        {data.student.first_name}{" "}
+                                        {data.student.middle_name}
+                                    </td>
+                                    <td className="py-4">
+                                        {data.data.studentNumber}
+                                    </td>
+                                    <td className="py-4">
+                                        {data.type} Information
+                                    </td>
+                                    <td className="py-4">
+                                        <button
+                                            onClick={() => openModal(data)}
+                                            className="bg-green-500 text-white px-3 py-1 rounded-md text-sm"
+                                        >
+                                            View
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))}
                         </tbody>
                     </table>
                 </div>
             </div>
+
+            {isOpen && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+                    <div className="bg-white w-full max-w-lg rounded-2xl shadow-lg p-6 relative">
+                        {/* CLOSE BUTTON */}
+                        <button
+                            onClick={closeModal}
+                            className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+                        >
+                            <X size={20} />
+                        </button>
+
+                        <h2 className="text-xl font-semibold mb-4 text-slate-800">
+                            Request Update Details
+                        </h2>
+
+                        {selectedRequest && (
+                            <div className="space-y-3 text-sm">
+                                <div>
+                                    <p className="text-gray-500">
+                                        Student Name
+                                    </p>
+                                    <p className="font-medium">
+                                        {selectedRequest.student.family_name},{" "}
+                                        {selectedRequest.student.first_name}{" "}
+                                        {selectedRequest.student.middle_name}
+                                    </p>
+                                </div>
+
+                                <div>
+                                    <p className="text-gray-500">Student ID</p>
+                                    <p className="font-medium">
+                                        {selectedRequest.data.studentNumber}
+                                    </p>
+                                </div>
+
+                                <div>
+                                    <p className="text-gray-500">
+                                        Request Type
+                                    </p>
+                                    <span className="inline-block px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-semibold">
+                                        {selectedRequest.type} Information
+                                    </span>
+                                </div>
+
+                                <div>
+                                    <p className="text-gray-500">
+                                        Requested Data
+                                    </p>
+                                    <pre className="bg-gray-100 rounded-lg p-3 text-xs overflow-auto">
+                                        {JSON.stringify(
+                                            selectedRequest.data,
+                                            null,
+                                            2,
+                                        )}
+                                    </pre>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* ACTIONS */}
+                        <div className="flex justify-end gap-3 mt-6">
+                            <button
+                                onClick={closeModal}
+                                className="px-4 py-2 text-sm rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-100"
+                            >
+                                Close
+                            </button>
+
+                            <button className="px-4 py-2 text-sm rounded-lg bg-green-600 text-white hover:bg-green-700 flex items-center gap-2">
+                                <Check size={16} />
+                                Approve
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

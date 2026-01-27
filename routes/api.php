@@ -29,7 +29,7 @@ Route::post('student/update-information', [StudentController::class, 'updateInfo
 
 
 Route::get('staff/dashboard', [StaffController::class, 'dashboard'])->middleware('auth:sanctum');
-
+Route::get('staff/get-request-update-information-student', [StaffController::class, 'get_request_update_information_student'])->middleware('auth:sanctum');
 Route::get('staff/student', [StaffController::class, 'getStudents'])->middleware('auth:sanctum');
 Route::post('staff/save-student-grades', [StaffController::class, 'saveStudentsGrades'])->middleware('auth:sanctum');
 Route::post('staff/save-student-grades-by-excel', [StaffController::class, 'saveStudentGradesByExcel'])->middleware('auth:sanctum');

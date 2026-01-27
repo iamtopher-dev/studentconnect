@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Curriculum;
 use App\Models\StudentInformation;
 use App\Models\StudentSubjects;
+use App\Models\StudentUpdateRequests;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -301,6 +302,15 @@ class StaffController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Irregular student re-enrolled successfully',
+        ]);
+    }
+
+    public function get_request_update_information_student()
+    {
+        $all_request = StudentUpdateRequests::with(['student'])->get();
+        return response()->json([
+            'success' => true,
+            'data' => $all_request
         ]);
     }
 }

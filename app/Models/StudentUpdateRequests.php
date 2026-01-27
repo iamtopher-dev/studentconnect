@@ -19,4 +19,9 @@ class StudentUpdateRequests extends Model
     protected $casts = [
         'data' => 'array'
     ];
+
+    public function student()
+    {
+        return $this->belongsTo(StudentInformation::class, 'student_information_id');
+    }
 }
