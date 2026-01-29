@@ -40,16 +40,13 @@ const IncomingStudentPage = () => {
         semester: "",
         selectedSubjects: [],
     });
-useEffect(() => {
-        fetchIncomingStudents();
-    }, []);
+
     const filteredSections =
         formData.applicant_type === "SHS"
             ? sections.filter((section) => section !== "C")
             : sections;
 
-    const fetchIncomingStudents = async () => {
-        console.log("trying")
+    const fetchIncomingStudents = () => {
         apiService
             .get("staff/incoming-students")
             .then((res) => {
@@ -74,7 +71,9 @@ useEffect(() => {
             .catch(console.error);
     };
 
-    
+    useEffect(() => {
+        fetchIncomingStudents();
+    }, []);
 
     const openModal = (student) => {
         setSelectedStudent(student);
