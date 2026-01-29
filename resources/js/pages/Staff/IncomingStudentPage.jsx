@@ -40,7 +40,9 @@ const IncomingStudentPage = () => {
         semester: "",
         selectedSubjects: [],
     });
-
+useEffect(() => {
+        fetchIncomingStudents();
+    }, []);
     const filteredSections =
         formData.applicant_type === "SHS"
             ? sections.filter((section) => section !== "C")
@@ -71,9 +73,7 @@ const IncomingStudentPage = () => {
             .catch(console.error);
     };
 
-    useEffect(() => {
-        fetchIncomingStudents();
-    }, []);
+    
 
     const openModal = (student) => {
         setSelectedStudent(student);
