@@ -48,7 +48,7 @@ useEffect(() => {
             ? sections.filter((section) => section !== "C")
             : sections;
 
-    const fetchIncomingStudents = () => {
+    const fetchIncomingStudents = async () => {
         console.log("trying")
         apiService
             .get("staff/incoming-students")
