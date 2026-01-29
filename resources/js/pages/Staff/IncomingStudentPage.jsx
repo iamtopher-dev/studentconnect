@@ -49,6 +49,7 @@ useEffect(() => {
             : sections;
 
     const fetchIncomingStudents = () => {
+        console.log("trying")
         apiService
             .get("staff/incoming-students")
             .then((res) => {
