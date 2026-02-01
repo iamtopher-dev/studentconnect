@@ -39,6 +39,7 @@ Route::post('staff/re-enroll-irregular', [StaffController::class, 'getReEnrollSt
 Route::post('staff/save-schedule-pdf', [ScheduleController::class, 'save_schedule_pdf'])->middleware('auth:sanctum');
 Route::get('staff/read-schedule-pdf/{schedule_for}', [ScheduleController::class, 'read_schedule_pdf'])->middleware('auth:sanctum');
 
+Route::get('staff/approve-request-information/{student_update_request_id}', [StaffController::class, 'approvedRequestInformation'])->middleware('auth:sanctum');
 
 
 // Staff Controllers

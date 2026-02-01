@@ -307,10 +307,48 @@ class StaffController extends Controller
 
     public function get_request_update_information_student()
     {
-        $all_request = StudentUpdateRequests::with(['student','user'])->get();
+        $all_request = StudentUpdateRequests::with(['student', 'user'])->get();
         return response()->json([
             'success' => true,
             'data' => $all_request
+        ]);
+    }
+
+    public function approvedRequestInformation($student_update_request_id)
+    {
+
+        $student_update_request = StudentUpdateRequests::where('student_update_request_id', $student_update_request_id)->first();
+        if ($student_update_request->type === "student") {
+            StudentInformation::where('student_information_id', $student_update_request->student_information_id)->update(
+                [
+                    'family_name' => $student_update_request->data['lastName'],
+                    'middle_name' => $student_update_request->data['middleName'],
+                    'first_name' => $student_update_request->data['firstName']
+                ]
+            );
+        }
+
+        if ($student_update_request->type === "personal") {
+            StudentInformation::where('student_information_id', $student_update_request->student_information_id)->update(
+                [
+                    'street' => $student_update_request->data['street'],
+                    'barangay' => $student_update_request->data['barangay'],
+                    'municipality' => $student_update_request->data['municipality'],
+                    'province' => $student_update_request->data['province'],
+                    'dob' => $student_update_request->data['dob'],
+                    'sex' => $student_update_request->data['sex'],
+                    'civil_status' => $student_update_request->data['civilStatus'],
+                    'nationality' => $student_update_request->data['nationality'],
+                    'religion' => $student_update_request->data['religion']
+                ]
+            );
+        }
+        if ($student_update_request->type === "guardian") {
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Request approved successfully'
         ]);
     }
 }
