@@ -344,6 +344,12 @@ class StaffController extends Controller
             );
         }
         if ($student_update_request->type === "guardian") {
+            StudentInformation::where('student_information_id', $student_update_request->student_information_id)->update(
+                [
+                    'guardian_name' => $student_update_request->data['guardianName'],
+                    'guardian_contact_number' => $student_update_request->data['guardianContact']
+                ]
+            );
         }
 
         return response()->json([
