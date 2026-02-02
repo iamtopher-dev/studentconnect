@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import BG_IMAGE_URL from "../../assets/images/bg3.jpg";
+import BG_IMAGE_URL from "../../assets/images/building.png";
 import SCHOOL_LOGO from "../../assets/images/site_logo.svg";
 import ILLUSTRATION from "../../assets/images/vector.png";
 import apiService from "../../services/apiService";

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import building from "../../assets/images/bg3.jpg";
+import building from "../../assets/images/building.png";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Lock, User2 } from "lucide-react";
 import logo from "../../assets/images/site_logo.svg";

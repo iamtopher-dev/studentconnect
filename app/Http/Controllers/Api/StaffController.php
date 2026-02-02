@@ -316,7 +316,6 @@ class StaffController extends Controller
 
     public function approvedRequestInformation($student_update_request_id)
     {
-
         $student_update_request = StudentUpdateRequests::where('student_update_request_id', $student_update_request_id)->first();
         if ($student_update_request->type === "student") {
             StudentInformation::where('student_information_id', $student_update_request->student_information_id)->update(
@@ -327,7 +326,6 @@ class StaffController extends Controller
                 ]
             );
         }
-
         if ($student_update_request->type === "personal") {
             StudentInformation::where('student_information_id', $student_update_request->student_information_id)->update(
                 [
