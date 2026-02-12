@@ -179,7 +179,6 @@ const StudentGradingPage = () => {
                 //     icon: "success"
                 // });
                 console.log(response)
-                console.log(response.message)
                 if(response.status){
                     console.log("Success")
                 }else{
