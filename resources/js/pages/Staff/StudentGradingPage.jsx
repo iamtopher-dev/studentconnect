@@ -168,8 +168,7 @@ const StudentGradingPage = () => {
     };
 
     const releaseGrades = (userId, subjects) => {
-        console.log("user-id",userId)
-        console.log("subject",subjects)
+        console.log(`userId ${userId} - subjects ${subjects}`)
         // apiService
         //     .post(`staff/release-grades-students/${userId}`, { subjects: subjects })
         //     .then((response) => {
