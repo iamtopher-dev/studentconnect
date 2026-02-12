@@ -418,7 +418,7 @@ const RegisterPage = () => {
                             type="submit"
                             label={"Submit Admission"}
                             variant="primary"
-                            addClass="w-full"
+                            addClass=""
                             loading={isSubmitting}
                         />
                         {/* <button
