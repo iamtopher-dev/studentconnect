@@ -32,6 +32,7 @@ const StudentGradingPage = () => {
 
                     return {
                         id: student.id,
+                        student_information_id:student_information_id,
                         fullName: `${info.family_name || ""}, ${info.first_name || ""
                             } ${info.middle_name || ""}`.trim(),
                         studentId: student.student_no || "N/A",
@@ -316,7 +317,7 @@ const StudentGradingPage = () => {
 
                         </div>
                         <button
-                            onClick={() => releaseGrades(s.id, s.enrolled_subjects)}
+                            onClick={() => releaseGrades(s.student_information_id, s.enrolled_subjects)}
                             className="flex items-center w-full text-sm justify-center gap-2 px-5 sm:px-6 py-1 sm:py-2 rounded-xl text-white font-medium shadow-sm hover:opacity-90 w-full sm:w-auto"
                             style={{ backgroundColor: PRIMARY_COLOR }}
                         >
