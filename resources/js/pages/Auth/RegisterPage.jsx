@@ -18,6 +18,7 @@ const Field = ({ label, required = false, children }) => (
 );
 
 const RegisterPage = () => {
+    const [isSubmitting,setIsSubmitting] = useState(false)
     const [formData, setFormData] = useState({
         applicant_type: "",
         family_name: "",
@@ -47,7 +48,7 @@ const RegisterPage = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
+        setIsSubmitting(true)
         for (const key in formData) {
             if (!formData[key]) {
                 alert(`Please fill up the ${key.replace("_", " ")}`);
@@ -80,6 +81,7 @@ const RegisterPage = () => {
                     guardian_name: "",
                     guardian_contact_number: "",
                 });
+                setIsSubmitting(false)
             })
             .catch((error) => {
                 console.error(error);
@@ -411,12 +413,19 @@ const RegisterPage = () => {
                     </div>
 
                     <div className="flex justify-end">
-                        <button
+                        <Button
+                            type="submit"
+                            label={"Submit Admission"}
+                            variant="primary"
+                            addClass="w-full"
+                            loading={isSubmitting}
+                        />
+                        {/* <button
                             type="submit"
                             className="bg-green-600 hover:bg-green-700 text-white px-8 py-2.5 rounded-md font-semibold text-sm shadow transition focus:outline-none focus:ring-2 focus:ring-green-500"
                         >
                             Submit Admission
-                        </button>
+                        </button> */}
                     </div>
                 </form>
             </div>
