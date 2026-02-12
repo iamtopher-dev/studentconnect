@@ -32,7 +32,7 @@ const StudentGradingPage = () => {
 
                     return {
                         id: student.id,
-                        student_information_id:student_information_id,
+                        student_information_id:info.student_information_id,
                         fullName: `${info.family_name || ""}, ${info.first_name || ""
                             } ${info.middle_name || ""}`.trim(),
                         studentId: student.student_no || "N/A",
