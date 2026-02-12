@@ -173,7 +173,7 @@ const StudentGradingPage = () => {
             .post(`staff/release-grades-students/${userId}`, { subjects: subjects })
             .then((response) => {
                 let result = response.data;
-                console.log(result.status)
+                console.log(result)
                 Swal.fire({
                     title: "Releasing Grades",
                     text: result.message,
