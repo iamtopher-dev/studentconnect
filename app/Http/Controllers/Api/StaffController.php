@@ -355,4 +355,7 @@ class StaffController extends Controller
             'message' => 'Request approved successfully'
         ]);
     }
+    public function releaseGradesStudents(Request $request){
+        
+    }
 }

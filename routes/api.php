@@ -44,6 +44,7 @@ Route::get('staff/approve-request-information/{student_update_request_id}', [Sta
 
 // Staff Controllers
 Route::get('staff/incoming-students', [StaffController::class, 'getIncomingStudents']);
+Route::get('staff/release-grades-students/{id}', [StaffController::class, 'releaseGradesStudents']);
 Route::post('staff/accept-student/{id}', [StaffController::class, 'acceptStudent']);
 
 Route::apiResource('curriculum', CurriculumController::class)->except(['show']);
