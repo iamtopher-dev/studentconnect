@@ -134,18 +134,15 @@ const StudentGradesPage = () => {
                                     ],
                                     [
                                         "Student Name",
-                                        `${
-                                            student?.student_information
+                                        `${student?.student_information
                                                 ?.family_name ?? ""
-                                        }, 
-                                         ${
-                                             student?.student_information
-                                                 ?.first_name ?? ""
-                                         } 
-                                         ${
-                                             student?.student_information
-                                                 ?.middle_name ?? ""
-                                         }`.trim() || "—",
+                                            }, 
+                                         ${student?.student_information
+                                                ?.first_name ?? ""
+                                            } 
+                                         ${student?.student_information
+                                                ?.middle_name ?? ""
+                                            }`.trim() || "—",
                                     ],
                                     [
                                         "School Year",
@@ -160,7 +157,7 @@ const StudentGradesPage = () => {
                                     [
                                         "Course",
                                         student?.student_information?.major ||
-                                            "—",
+                                        "—",
                                     ],
                                     [
                                         "Year Level",
@@ -170,7 +167,7 @@ const StudentGradesPage = () => {
                                     [
                                         "Section",
                                         student?.student_information?.section ||
-                                            "—",
+                                        "—",
                                     ],
                                 ].map(([label, value]) => (
                                     <div
@@ -223,14 +220,14 @@ const StudentGradesPage = () => {
 
                                     <tbody className="divide-y divide-gray-100">
                                         {student?.enrolled_subjects?.length >
-                                        0 ? (
+                                            0 ? (
                                             student.enrolled_subjects.map(
                                                 (subject) => {
                                                     const hasGrade =
                                                         subject.grades !==
-                                                            null &&
+                                                        null &&
                                                         subject.grades !==
-                                                            undefined &&
+                                                        undefined &&
                                                         subject.grades !== "";
 
                                                     const grade = hasGrade
@@ -274,20 +271,18 @@ const StudentGradesPage = () => {
                                                                     : "-"}
                                                             </td>
                                                             <td
-                                                                className={`px-4 py-3 font-medium ${
-                                                                    subject.isReleased ?
-                                                                    remark ===
-                                                                    "Passed" && 
-                                                                        ? "text-green-600"
-                                                                        : remark ===
-                                                                          "Failed"
-                                                                        ? "text-red-600"
-                                                                        : "text-gray-400"
+                                                                className={`px-4 py-3 font-medium ${subject.isReleased
+                                                                        ? remark === "Passed"
+                                                                            ? "text-green-600"
+                                                                            : remark === "Failed"
+                                                                                ? "text-red-600"
+                                                                                : "text-gray-400"
                                                                         : ""
-                                                                }`}
+                                                                    }`}
                                                             >
                                                                 {remark}
                                                             </td>
+
                                                         </tr>
                                                     );
                                                 }
