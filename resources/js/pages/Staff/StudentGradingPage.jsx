@@ -176,7 +176,7 @@ const StudentGradingPage = () => {
                 Swal.fire({
                     title: "Releasing Grades",
                     text: result.message,
-                    icon: (result.status) ? "success" : "warning"
+                    icon: result.status ? "success" : "warning"
                 });
             })
             .catch((err) => {
