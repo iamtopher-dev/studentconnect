@@ -368,12 +368,16 @@ class StaffController extends Controller
         if ($hasEmptyGrades) {
             return response()->json([
                 'success' => false,
-                'message' => 'Di pa na fillup lahat'
+                'message' => 'Some grades are still missing. Please complete all grades before releasing.'
             ]);
         } else {
+            StudentSubjects::whereIn('student_subject_id', $subjectIds)->update([
+                'isReleased' => true
+            ]);
+
             return response()->json([
                 'success' => true,
-                'message'=> 'lahat ay na fillup na'
+                'message' => 'All grades have been successfully completed and released.'
             ]);
         }
     }
