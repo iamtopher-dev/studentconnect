@@ -168,7 +168,6 @@ const StudentGradingPage = () => {
     };
 
     const releaseGrades = (userId, subjects) => {
-        console.log(`userId ${userId} - subjects ${subjects}`)
         // apiService
         //     .post(`staff/release-grades-students/${userId}`, { subjects: subjects })
         //     .then((response) => {
@@ -179,6 +178,8 @@ const StudentGradingPage = () => {
         //         alert("Failed to release grades");
         //         setLoading(false);
         //     });
+        console.log(`userId ${userId} - subjects ${subjects}`)
+
     }
 
     const handleGradeChange = (id, value) => {
