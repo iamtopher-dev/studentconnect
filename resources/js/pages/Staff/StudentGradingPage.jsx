@@ -167,6 +167,10 @@ const StudentGradingPage = () => {
         setEditModalOpen(true);
     };
 
+    const releaseGrades = (subjects) => {
+        console.log(subjects)
+    }
+
     const handleGradeChange = (id, value) => {
         setEditableSubjects((prev) =>
             prev.map((s) =>
@@ -298,14 +302,15 @@ const StudentGradingPage = () => {
                                     </span>
                                 </div>
                             ))}
-                            
+
                         </div>
                         <button
-                                className="flex items-center justify-center gap-2 px-5 sm:px-6 py-2 sm:py-3 rounded-xl text-white font-medium shadow-sm hover:opacity-90 w-full sm:w-auto"
-                                style={{ backgroundColor: PRIMARY_COLOR }}
-                            >
-                                <span className="text-sm sm:text-base">Release Grades</span>
-                            </button>
+                            onClick={() => releaseGrades(s.enrolled_subjects)}
+                            className="flex items-center justify-center gap-2 px-5 sm:px-6 py-2 sm:py-3 rounded-xl text-white font-medium shadow-sm hover:opacity-90 w-full sm:w-auto"
+                            style={{ backgroundColor: PRIMARY_COLOR }}
+                        >
+                            <span className="text-sm sm:text-base">Release Grades</span>
+                        </button>
                     </div>
                 ))}
             </div>
