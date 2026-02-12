@@ -298,13 +298,14 @@ const StudentGradingPage = () => {
                                     </span>
                                 </div>
                             ))}
-                            <button
+                            
+                        </div>
+                        <button
                                 className="flex items-center justify-center gap-2 px-5 sm:px-6 py-2 sm:py-3 rounded-xl text-white font-medium shadow-sm hover:opacity-90 w-full sm:w-auto"
                                 style={{ backgroundColor: PRIMARY_COLOR }}
                             >
                                 <span className="text-sm sm:text-base">Release Grades</span>
                             </button>
-                        </div>
                     </div>
                 ))}
             </div>
