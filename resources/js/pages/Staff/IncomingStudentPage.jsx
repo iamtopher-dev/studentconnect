@@ -15,6 +15,7 @@ const IncomingStudentPage = () => {
     const [curriculumSubjects, setCurriculumSubjects] = useState([]);
     const [selectedStudent, setSelectedStudent] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [isSubmitting, setIsSubmitting] = useState(false)
     const [formData, setFormData] = useState({
         family_name: "",
         first_name: "",
@@ -409,8 +410,8 @@ const IncomingStudentPage = () => {
                                             ) =>
                                                 context === "value"
                                                     ? option.label.split(
-                                                          " | ",
-                                                      )[0]
+                                                        " | ",
+                                                    )[0]
                                                     : option.label
                                             }
                                         />
@@ -426,13 +427,13 @@ const IncomingStudentPage = () => {
                                 >
                                     Cancel
                                 </button>
-                                <button
+                                <Button
                                     type="submit"
-                                    className="px-6 py-2 bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 flex items-center gap-2 transition"
-                                >
-                                    <Check className="w-5 h-5" />
-                                    Accept Student
-                                </button>
+                                    label={"Accept Student"}
+                                    variant="primary"
+                                    addClass=""
+                                    loading={isSubmitting}
+                                />
                             </div>
                         </form>
                     </div>
