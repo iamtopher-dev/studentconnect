@@ -178,6 +178,7 @@ const StudentGradingPage = () => {
                 //     text: "Your file has been deleted.",
                 //     icon: "success"
                 // });
+                console,log(response.message)
                 if(response.status){
                     console.log("Success")
                 }else{
