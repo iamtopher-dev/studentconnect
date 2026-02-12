@@ -168,17 +168,18 @@ const StudentGradingPage = () => {
     };
 
     const releaseGrades = (userId, subjects) => {
-        console.log(subjects)
-        apiService
-            .post(`staff/release-grades-students/${userId}`, {subjects:subjects})
-            .then((response) => {
-                console.log(response);
-            })
-            .catch((err) => {
-                console.error(err);
-                alert("Failed to release grades");
-                setLoading(false);
-            });
+        console.log("user-id",userId)
+        console.log("subject",subjects)
+        // apiService
+        //     .post(`staff/release-grades-students/${userId}`, { subjects: subjects })
+        //     .then((response) => {
+        //         console.log(response);
+        //     })
+        //     .catch((err) => {
+        //         console.error(err);
+        //         alert("Failed to release grades");
+        //         setLoading(false);
+        //     });
     }
 
     const handleGradeChange = (id, value) => {
@@ -315,7 +316,7 @@ const StudentGradingPage = () => {
 
                         </div>
                         <button
-                            onClick={() => releaseGrades(s.student_information_id,s.enrolled_subjects)}
+                            onClick={() => releaseGrades(s.student_information_id, s.enrolled_subjects)}
                             className="flex items-center w-full text-sm justify-center gap-2 px-5 sm:px-6 py-1 sm:py-2 rounded-xl text-white font-medium shadow-sm hover:opacity-90 w-full sm:w-auto"
                             style={{ backgroundColor: PRIMARY_COLOR }}
                         >
