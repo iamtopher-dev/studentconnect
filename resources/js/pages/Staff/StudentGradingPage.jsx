@@ -167,8 +167,18 @@ const StudentGradingPage = () => {
         setEditModalOpen(true);
     };
 
-    const releaseGrades = (subjects) => {
+    const releaseGrades = (userId, subjects) => {
         console.log(subjects)
+        apiService
+            .post(`staff/release-grades-students/${userId}`, payload)
+            .then((response) => {
+                console.log(response);
+            })
+            .catch((err) => {
+                console.error(err);
+                alert("Failed to release grades");
+                setLoading(false);
+            });
     }
 
     const handleGradeChange = (id, value) => {

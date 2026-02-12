@@ -356,6 +356,7 @@ class StaffController extends Controller
         ]);
     }
     public function releaseGradesStudents(Request $request){
-        
+        $subjects = $request->subjects;
+        print($subjects);
     }
 }
