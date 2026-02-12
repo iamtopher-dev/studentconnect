@@ -269,7 +269,7 @@ const StudentGradesPage = () => {
                                                                 }
                                                             </td>
                                                             <td className="px-4 py-3">
-                                                                {hasGrade
+                                                                {hasGrade && subject.isReleased
                                                                     ? grade
                                                                     : "-"}
                                                             </td>
