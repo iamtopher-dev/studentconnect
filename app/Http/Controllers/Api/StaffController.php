@@ -357,8 +357,9 @@ class StaffController extends Controller
     }
     public function releaseGradesStudents(Request $request){
         $subjects = $request->subjects;
-        foreach($subject as $subject){
-            echo $subject->student_subject_id;
-        }
+        return json_encode($subjects);
+        // foreach($subject as $subject){
+        //     echo $subject->student_subject_id;
+        // }
     }
 }
