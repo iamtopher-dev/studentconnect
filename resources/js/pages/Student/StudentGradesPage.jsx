@@ -237,7 +237,7 @@ const StudentGradesPage = () => {
                                                     let remark = "-";
                                                     if (
                                                         hasGrade &&
-                                                        !isNaN(grade)
+                                                        !isNaN(grade) && subject.isReleased
                                                     ) {
                                                         remark =
                                                             grade < 75
