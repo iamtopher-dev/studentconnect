@@ -367,11 +367,13 @@ class StaffController extends Controller
         }
 
         foreach ($subjects as $subject) {
-            $currentSubject = StudentSubjects::where('student_subject_id', $subject_
-        
-            $subject_id = $subject->student_subject_id;
-
-            echo $subject->student_subject_id;
+            StudentSubjects::where('student_subject_id', $$subject->student_subject_id)->update([
+                'isRelease' => true
+            ]);
         }
+
+        return response()->json([
+            'success' => true
+        ]);
     }
 }
