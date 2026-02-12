@@ -357,23 +357,24 @@ class StaffController extends Controller
     }
     public function releaseGradesStudents(Request $request)
     {
-        $subjects = $request->subjects;
-        $atleastOneEmpty = false;
-        foreach ($subjects as $subject) {
-            $currentSubject = StudentSubjects::where('student_subject_id', $subject_id)->first();
-            if ($currentSubject->grades != null) {
-                $atleastOneEmpty = true;
-            }
-        }
+        $subjects = $request->subjects; // array of subject objects
 
-        foreach ($subjects as $subject) {
-            StudentSubjects::where('student_subject_id', $$subject->student_subject_id)->update([
-                'isRelease' => true
+        $subjectIds = collect($subjects)->pluck('student_subject_id');
+
+        $hasEmptyGrades = StudentSubjects::whereIn('student_subject_id', $subjectIds)
+            ->whereNull('grades')
+            ->exists();
+
+        if ($hasEmptyGrades) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Di pa na fillup lahat'
+            ]);
+        } else {
+            return response()->json([
+                'success' => true,
+                'message'=> 'lahat ay na fillup na'
             ]);
         }
-
-        return response()->json([
-            'success' => true
-        ]);
     }
 }
