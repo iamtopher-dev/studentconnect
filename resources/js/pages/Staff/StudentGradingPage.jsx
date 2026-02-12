@@ -32,7 +32,7 @@ const StudentGradingPage = () => {
 
                     return {
                         id: student.id,
-                        student_information_id:info.student_information_id,
+                        student_information_id: info.student_information_id,
                         fullName: `${info.family_name || ""}, ${info.first_name || ""
                             } ${info.middle_name || ""}`.trim(),
                         studentId: student.student_no || "N/A",
@@ -172,7 +172,17 @@ const StudentGradingPage = () => {
         apiService
             .post(`staff/release-grades-students/${userId}`, { subjects: subjects })
             .then((response) => {
-                console.log(response);
+
+                // Swal.fire({
+                //     title: "Deleted!",
+                //     text: "Your file has been deleted.",
+                //     icon: "success"
+                // });
+                if(response.status){
+                    console.log("Success")
+                }else{
+                    console.log("Error")
+                }
             })
             .catch((err) => {
                 console.error(err);
