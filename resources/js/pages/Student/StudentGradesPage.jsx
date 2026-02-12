@@ -275,13 +275,15 @@ const StudentGradesPage = () => {
                                                             </td>
                                                             <td
                                                                 className={`px-4 py-3 font-medium ${
+                                                                    subject.isReleased ?
                                                                     remark ===
-                                                                    "Passed" && subject.isReleased
+                                                                    "Passed" && 
                                                                         ? "text-green-600"
                                                                         : remark ===
                                                                           "Failed"
                                                                         ? "text-red-600"
                                                                         : "text-gray-400"
+                                                                        : ""
                                                                 }`}
                                                             >
                                                                 {remark}
