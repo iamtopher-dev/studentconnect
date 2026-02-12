@@ -32,9 +32,8 @@ const StudentGradingPage = () => {
 
                     return {
                         id: student.id,
-                        fullName: `${info.family_name || ""}, ${
-                            info.first_name || ""
-                        } ${info.middle_name || ""}`.trim(),
+                        fullName: `${info.family_name || ""}, ${info.first_name || ""
+                            } ${info.middle_name || ""}`.trim(),
                         studentId: student.student_no || "N/A",
                         major: info.major || "N/A",
                         year_level: info.year_level || "N/A",
@@ -299,6 +298,12 @@ const StudentGradingPage = () => {
                                     </span>
                                 </div>
                             ))}
+                            <button
+                                className="flex items-center justify-center gap-2 px-5 sm:px-6 py-2 sm:py-3 rounded-xl text-white font-medium shadow-sm hover:opacity-90 w-full sm:w-auto"
+                                style={{ backgroundColor: PRIMARY_COLOR }}
+                            >
+                                <span className="text-sm sm:text-base">Release Grades</span>
+                            </button>
                         </div>
                     </div>
                 ))}
@@ -419,11 +424,10 @@ const StudentGradingPage = () => {
                             onClick={confirmUpload}
                             disabled={!selectedFile}
                             className={`mt-4 sm:mt-6 w-full py-2 sm:py-3 rounded-xl font-medium flex items-center justify-center gap-2 transition
-                ${
-                    selectedFile
-                        ? "text-white"
-                        : "bg-slate-300 text-slate-500 cursor-not-allowed"
-                }`}
+                ${selectedFile
+                                    ? "text-white"
+                                    : "bg-slate-300 text-slate-500 cursor-not-allowed"
+                                }`}
                             style={{
                                 backgroundColor: selectedFile
                                     ? PRIMARY_COLOR
