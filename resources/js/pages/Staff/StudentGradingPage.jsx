@@ -170,7 +170,7 @@ const StudentGradingPage = () => {
     const releaseGrades = (userId, subjects) => {
         console.log(subjects)
         apiService
-            .post(`staff/release-grades-students/${userId}`, payload)
+            .post(`staff/release-grades-students/${userId}`, {subjects:subjects})
             .then((response) => {
                 console.log(response);
             })
