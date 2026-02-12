@@ -169,16 +169,16 @@ const StudentGradingPage = () => {
     };
 
     const releaseGrades = (userId, subjects) => {
-        // apiService
-        //     .post(`staff/release-grades-students/${userId}`, { subjects: subjects })
-        //     .then((response) => {
-        //         console.log(response);
-        //     })
-        //     .catch((err) => {
-        //         console.error(err);
-        //         alert("Failed to release grades");
-        //         setLoading(false);
-        //     });
+        apiService
+            .post(`staff/release-grades-students/${userId}`, { subjects: subjects })
+            .then((response) => {
+                console.log(response);
+            })
+            .catch((err) => {
+                console.error(err);
+                alert("Failed to release grades");
+                setLoading(false);
+            });
         console.log(`userId ${userId} - subjects ${subjects}`)
 
     }
