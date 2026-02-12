@@ -172,18 +172,12 @@ const StudentGradingPage = () => {
         apiService
             .post(`staff/release-grades-students/${userId}`, { subjects: subjects })
             .then((response) => {
-
-                // Swal.fire({
-                //     title: "Deleted!",
-                //     text: "Your file has been deleted.",
-                //     icon: "success"
-                // });
-                console.log(response)
-                if(response.status){
-                    console.log("Success")
-                }else{
-                    console.log("Error")
-                }
+                let result = response.data;
+                Swal.fire({
+                    title: "Releasing Grades",
+                    text: result.message,
+                    icon: (result.status) ? "success" : "warning"
+                });
             })
             .catch((err) => {
                 console.error(err);
