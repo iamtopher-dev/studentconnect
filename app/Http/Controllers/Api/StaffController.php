@@ -355,11 +355,23 @@ class StaffController extends Controller
             'message' => 'Request approved successfully'
         ]);
     }
-    public function releaseGradesStudents(Request $request){
+    public function releaseGradesStudents(Request $request)
+    {
         $subjects = $request->subjects;
-        return json_encode($subjects);
-        // foreach($subject as $subject){
-        //     echo $subject->student_subject_id;
-        // }
+        $atleastOneEmpty = false;
+        foreach ($subjects as $subject) {
+            $currentSubject = StudentSubjects::where('student_subject_id', $subject_id)->first();
+            if ($currentSubject->grades != null) {
+                $atleastOneEmpty = true;
+            }
+        }
+
+        foreach ($subjects as $subject) {
+            $currentSubject = StudentSubjects::where('student_subject_id', $subject_
+        
+            $subject_id = $subject->student_subject_id;
+
+            echo $subject->student_subject_id;
+        }
     }
 }
