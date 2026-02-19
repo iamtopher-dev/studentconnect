@@ -5,6 +5,7 @@ import { Lock, User2 } from "lucide-react";
 import logo from "../../assets/images/site_logo.svg";
 import Button from "../../components/common/Button";
 import apiService from "../../services/apiService";
+import header from "../../assets/images/header.png"
 
 const LoginPage = () => {
     const navigate = useNavigate();
@@ -64,6 +65,7 @@ const LoginPage = () => {
             className="bg-cover bg-no-repeat h-screen w-full bg-blend-overlay bg-black/80 flex items-center justify-center"
             style={{ backgroundImage: `url(${building})` }}
         >
+            <div className="w-screen h-52" style={{backgroundImage: `url({${header}})`}}></div>
             <div className="bg-primary pt-1 rounded-t-xl w-full max-w-sm rounded-xl">
                 <div className="p-6 bg-white rounded-xl shadow-lg">
                     <div className="justify-items-center mb-4">
