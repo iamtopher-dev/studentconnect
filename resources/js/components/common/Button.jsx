@@ -5,7 +5,7 @@ const baseStyles =
 
 const variants = {
   primary:
-    "border border-primary hover:bg-green-800 text-white bg-primary focus:ring-4 focus:outline-none focus:ring-green-200 disabled:opacity-70",
+    "border border-primary bg-[#037c03] text-white  focus:ring-4 focus:outline-none focus:ring-green-200 disabled:opacity-70",
   secondary:
     "border hover:bg-primary hover:text-white border-primary focus:ring-4 focus:outline-none focus:ring-green-200 disabled:opacity-70",
 };
