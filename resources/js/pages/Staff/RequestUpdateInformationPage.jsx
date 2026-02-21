@@ -47,6 +47,20 @@ const RequestUpdateInformationPage = () => {
     const openModal = (data) => {
         setSelectedRequest(data);
         setIsOpen(true);
+        console.log("Selected Request:", data);
+    };
+
+    const approvedUpdateStudentInfo = (id) => {
+        apiService
+            .get(`staff/approve-request-information/${id}`)
+            .then((res) => {
+                console.log(res.data);
+                get_request_update_information_student();
+                closeModal();
+            })
+            .catch((err) => {
+                console.error("Err", err);
+            });
     };
 
     const closeModal = () => {
@@ -214,7 +228,6 @@ const RequestUpdateInformationPage = () => {
                                                     </p>
 
                                                     <div className="space-y-2">
-                                                        
                                                         {Object.entries(
                                                             selectedRequest.data,
                                                         )
@@ -320,7 +333,10 @@ const RequestUpdateInformationPage = () => {
                                 Close
                             </button>
 
-                            <button className="px-4 py-2 text-sm rounded-lg bg-green-600 text-white hover:bg-green-700 flex items-center gap-2">
+                            <button
+                                onClick={() => approvedUpdateStudentInfo(selectedRequest.student_update_request_id)}
+                                className="px-4 py-2 text-sm rounded-lg bg-green-600 text-white hover:bg-green-700 flex items-center gap-2"
+                            >
                                 <Check size={16} />
                                 Approve
                             </button>

@@ -332,7 +332,7 @@ const CurriculumPage = () => {
                                             {sub.name}
                                         </p>
                                         <p className="text-right font-medium">
-                                            {sub.units} Units
+                                            {(sub.units == 0 ? "-" : sub.units)} Units
                                         </p>
                                     </div>
                                 ))}
