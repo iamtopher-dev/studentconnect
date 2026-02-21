@@ -214,9 +214,7 @@ const RequestUpdateInformationPage = () => {
                                                     </p>
 
                                                     <div className="space-y-2">
-                                                        {JSON.stringify(
-                                                            selectedRequest.data,
-                                                        )}
+                                                        
                                                         {Object.entries(
                                                             selectedRequest.data,
                                                         )
