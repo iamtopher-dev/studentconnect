@@ -183,7 +183,7 @@ const StudentPage = () => {
         <div className="p-4 sm:p-6 bg-gray-50 min-h-screen">
             <div className="mb-6">
                 <h1 className="text-2xl sm:text-3xl font-semibold text-gray-800">
-                    Student Information
+                    Student Lists
                 </h1>
                 <p className="text-sm sm:text-base text-gray-400">
                     Home / Students
@@ -196,7 +196,7 @@ const StudentPage = () => {
                         className="font-semibold text-lg sm:text-xl"
                         style={{ color: PRIMARY_COLOR }}
                     >
-                        Students Information
+                        Student Information
                     </h2>
 
                     <div className="relative w-full sm:w-64">
