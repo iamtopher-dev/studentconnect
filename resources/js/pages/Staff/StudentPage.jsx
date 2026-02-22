@@ -52,8 +52,8 @@ const StudentPage = () => {
 
                     return {
                         id: student.id,
-                        applicant_type: info.applicant_type, // SHS / COLLEGE
-                        student_type: info.student_type, // REGULAR / IRREGULAR
+                        applicant_type: info.applicant_type,
+                        student_type: info.student_type,
                         student_information_id: info.student_information_id,
                         fullName,
                         year_level: info.year_level,
