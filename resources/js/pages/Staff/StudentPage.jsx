@@ -158,7 +158,7 @@ const StudentPage = () => {
 
             const matchesApplicantType =
                 applicantTypeFilter === "ALL" ||
-                s.student_type === applicantTypeFilter;
+                s.applicant_type === applicantTypeFilter;
 
             return matchesSearch && matchesApplicantType;
         });
@@ -253,6 +253,8 @@ const StudentPage = () => {
                                 <th className="pb-4">Student Id</th>
                                 <th className="pb-4">Address</th>
                                 <th className="pb-4">Section</th>
+                                <th className="pb-4">Semester</th>
+                                
                                 <th className="pb-4">Course</th>
                                 <th className="pb-4">Date of Birth</th>
                                 <th className="pb-4">Phone</th>
@@ -271,7 +273,9 @@ const StudentPage = () => {
                                         {s.address}
                                     </td>
                                     <td className="py-4">{s.section}</td>
+                                    <td className="py-4">{s.semester}</td>
                                     <td className="py-4">{s.major}</td>
+                                    
                                     <td className="py-4">{s.dob}</td>
                                     <td className="py-4">{s.phone}</td>
                                     <td className="py-4">
