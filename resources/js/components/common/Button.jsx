@@ -16,8 +16,8 @@ const Button = ({
   variant = "primary",
   addClass = "",
   loading = false,
-  icon: Icon, // ✅ pass icon component here (e.g., LogIn from lucide-react)
-  iconPosition = "left", // "left" or "right"
+  icon: Icon, 
+  iconPosition = "left", 
   ...props
 }) => {
   return (

@@ -52,9 +52,9 @@ const StudentPage = () => {
 
                     return {
                         id: student.id,
-                        student_type: info.applicant_type, // SHS / COLLEGE
-                        student_information_id:
-                            info.student_information_id,
+                        applicant_type: info.applicant_type, // SHS / COLLEGE
+                        student_type: info.student_type, // REGULAR / IRREGULAR
+                        student_information_id: info.student_information_id,
                         fullName,
                         year_level: info.year_level,
                         semester: info.semester,
@@ -80,6 +80,7 @@ const StudentPage = () => {
     };
 
     const reEnrollStudent = (student) => {
+        console.log("Re-enrolling student:", student);
         if (student.student_type !== "REGULAR") {
             setSelectedStudent(student);
             setOpenModalIrregular(true);
@@ -88,16 +89,25 @@ const StudentPage = () => {
         }
 
         apiService
-            .get(
-                `staff/re-enroll-regular/${student.student_information_id}`,
-            )
-            .then(() => {
-                alert("Student re-enrolled successfully");
+            .get(`staff/re-enroll-regular/${student.student_information_id}`)
+            .then((res) => {
+                Swal.fire({
+                    title: "Success",
+                    text: "Student re-enrolled successfully",
+                    icon: "success",
+                    confirmButtonColor: PRIMARY_COLOR,
+                });
                 getStudents();
+                console.log(res.data);
             })
             .catch((err) => {
                 console.error(err);
-                alert("Failed to re-enroll student");
+                Swal.fire({
+                    title: "Error",
+                    text: "Failed to re-enroll student",
+                    icon: "error",
+                    confirmButtonColor: PRIMARY_COLOR,
+                });
             });
     };
 
@@ -121,8 +131,7 @@ const StudentPage = () => {
 
         apiService
             .post("staff/re-enroll-irregular", {
-                student_information_id:
-                    selectedStudent.student_information_id,
+                student_information_id: selectedStudent.student_information_id,
                 subjects: formData.selectedSubjects.map((s) => s.value),
             })
             .then(() => {
@@ -155,9 +164,7 @@ const StudentPage = () => {
         });
     }, [students, search, applicantTypeFilter]);
 
-    const totalPages = Math.ceil(
-        filteredStudents.length / ITEMS_PER_PAGE,
-    );
+    const totalPages = Math.ceil(filteredStudents.length / ITEMS_PER_PAGE);
 
     const paginatedStudents = filteredStudents.slice(
         (page - 1) * ITEMS_PER_PAGE,
@@ -255,35 +262,25 @@ const StudentPage = () => {
                         <tbody>
                             {paginatedStudents.map((s) => (
                                 <tr key={s.id}>
-                                    <td className="py-4">
-                                        {s.fullName}
-                                    </td>
-                                    <td className="py-4">
-                                        {s.studentId}
-                                    </td>
+                                    <td className="py-4">{s.fullName}</td>
+                                    <td className="py-4">{s.studentId}</td>
                                     <td
                                         className="py-4 truncate max-w-xs"
                                         title={s.address}
                                     >
                                         {s.address}
                                     </td>
+                                    <td className="py-4">{s.section}</td>
+                                    <td className="py-4">{s.major}</td>
+                                    <td className="py-4">{s.dob}</td>
+                                    <td className="py-4">{s.phone}</td>
                                     <td className="py-4">
-                                        {s.section}
-                                    </td>
-                                    <td className="py-4">
-                                        {s.major}
-                                    </td>
-                                    <td className="py-4">
-                                        {s.dob}
-                                    </td>
-                                    <td className="py-4">
-                                        {s.phone}
-                                    </td>
-                                    <td className="py-4">
-                                        {s.year_level !==
-                                            "4th Year" &&
-                                        s.semester !==
-                                            "2nd Semester" ? (
+                                        {s.year_level === "4th Year" &&
+                                        s.semester === "2nd Semester" ? (
+                                            <span className="inline-block px-3 py-1 rounded-full bg-blue-100 text-blue-800 text-xs font-semibold">
+                                                Graduating
+                                            </span>
+                                        ) : (
                                             <button
                                                 onClick={() =>
                                                     reEnrollStudent(s)
@@ -292,10 +289,6 @@ const StudentPage = () => {
                                             >
                                                 Re-enroll
                                             </button>
-                                        ) : (
-                                            <span className="inline-block px-3 py-1 rounded-full bg-blue-100 text-blue-800 text-xs font-semibold">
-                                                Graduating
-                                            </span>
                                         )}
                                     </td>
                                 </tr>
@@ -304,6 +297,61 @@ const StudentPage = () => {
                     </table>
                 </div>
             </div>
+            {/* IRREGULAR MODAL (UNCHANGED UI) */}
+            {openModalIrregular && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+                    <div className="bg-white w-full max-w-3xl rounded-3xl shadow-2xl p-8 overflow-y-auto max-h-[90vh]">
+                        <form onSubmit={handleSubmit} className="space-y-6">
+                            <div className="flex justify-between items-center mb-4">
+                                <h2 className="text-xl font-bold text-gray-900">
+                                    Re-enroll Student
+                                </h2>
+                                <button onClick={closeModal} type="button">
+                                    <X className="w-6 h-6" />
+                                </button>
+                            </div>
+
+                            <div>
+                                <label className="block text-xs font-semibold text-gray-600 mb-2">
+                                    Curriculum Subjects
+                                </label>
+                                <Select
+                                    isMulti
+                                    options={curriculumSubjects}
+                                    value={formData.selectedSubjects}
+                                    onChange={handleSubjectChange}
+                                    classNamePrefix="react-select"
+                                    placeholder="Select subjects..."
+                                    getOptionLabel={(option) => option.label}
+                                    getOptionValue={(option) => option.value}
+                                    formatOptionLabel={(option, { context }) =>
+                                        context === "value"
+                                            ? option.label.split(" | ")[0]
+                                            : option.label
+                                    }
+                                />
+                            </div>
+
+                            <div className="flex justify-end gap-4">
+                                <button
+                                    type="button"
+                                    onClick={closeModal}
+                                    className="px-6 py-2 border rounded-xl"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="submit"
+                                    className="px-6 py-2 bg-emerald-600 text-white rounded-xl flex items-center gap-2"
+                                >
+                                    <Check className="w-5 h-5" />
+                                    Re-enroll Student
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
