@@ -24,14 +24,12 @@ const AppRoutes = () => {
     return (
         <Suspense fallback={<PageLoader />}>
             <Routes>
-                {/* Public */}
                 <Route path="/" element={<MainLayout />}>
                     <Route index element={<LoginPage />} />
                     <Route path="register" element={<RegisterPage />} />
                 </Route>
 
-                {/* Staff */}
-                <Route element={<RequireAuth />}>
+                <Route element={<RequireAuth allowedRoles={["STAFF"]} />}>
                     <Route path="/staff" element={<StaffLayout />}>
                         <Route index element={<StaffDashboardPage />} />
                         <Route
@@ -49,8 +47,7 @@ const AppRoutes = () => {
                     </Route>
                 </Route>
 
-                {/* Student */}
-                <Route element={<RequireAuth />}>
+                <Route element={<RequireAuth allowedRoles={["STUDENT"]} />}>
                     <Route path="/student" element={<StudentLayout />}>
                         {/* <Route index element={<StudentPage />} /> */}
                         <Route
@@ -69,9 +66,6 @@ const AppRoutes = () => {
                     </Route>
                 </Route>
 
-                {/* Admin */}
-
-                {/* Errors */}
                 <Route path="*" element={<NotFoundPage />} />
                 <Route path="/404" element={<NotFoundPage />} />
             </Routes>

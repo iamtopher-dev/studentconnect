@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { X } from "lucide-react";
 import apiService from "../../services/apiService";
+import Button from "../../components/common/Button";
 
 const StudentInformationPage = () => {
     const [openModal, setOpenModal] = useState("");
     const [student, setStudent] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     useEffect(() => {
         apiService
@@ -97,7 +99,6 @@ const StudentInformationPage = () => {
                 ? ["firstName", "middleName", "lastName"]
                 : Object.keys(data);
 
-        // 🔹 FILTER DATA BEFORE SENDING
         const getFilteredData = () => {
             return fields.reduce((acc, key) => {
                 if (
@@ -112,31 +113,48 @@ const StudentInformationPage = () => {
         };
 
         const handleRequestUpdate = () => {
+            setIsSubmitting(true);
             const filteredData = getFilteredData();
 
             apiService
                 .post("student/update-information", {
                     type,
-                    data: filteredData, // ✅ ONLY ALLOWED FIELDS
+                    data: filteredData,
                 })
                 .then((response) => {
                     console.log(response);
+
+                    Swal.fire({
+                        icon: "success",
+                        title: "Request Submitted!",
+                        text: "Your update request has been sent to the registrar for review and approval.",
+                        confirmButtonColor: "#307358",
+                    });
+
                     setOpenModal("");
                 })
-                .catch(console.error);
+                .catch((error) => {
+                    console.error(error);
+
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "Something went wrong. Please try again.",
+                    });
+                })
+                .finally(() => {
+                    setIsSubmitting(false);
+                });
         };
 
         return (
             <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
-                {/* BACKDROP */}
                 <div
                     className="absolute inset-0 backdrop-blur-sm bg-black/30"
                     onClick={() => setOpenModal("")}
                 />
 
-                {/* MODAL */}
                 <div className="relative bg-white rounded-2xl shadow-xl p-6 w-full max-w-lg z-10">
-                    {/* CLOSE */}
                     <button
                         className="absolute top-4 right-4 text-gray-400 hover:text-gray-700"
                         onClick={() => setOpenModal("")}
@@ -144,10 +162,8 @@ const StudentInformationPage = () => {
                         <X size={20} />
                     </button>
 
-                    {/* TITLE */}
                     <h3 className="text-lg font-semibold mb-6">{title}</h3>
 
-                    {/* FORM */}
                     <div className="space-y-4 max-h-[60vh] overflow-y-auto">
                         {fields.map((key) => (
                             <div key={key}>
@@ -173,14 +189,14 @@ const StudentInformationPage = () => {
                         ))}
                     </div>
 
-                    {/* ACTION */}
                     <div className="mt-6 text-right">
-                        <button
+                        <Button
                             onClick={handleRequestUpdate}
-                            className="bg-teal-600 text-white px-4 py-2 rounded-lg hover:bg-teal-700 transition"
-                        >
-                            Request Update
-                        </button>
+                            label="Request Update"
+                            variant="primary"
+                            addClass="w-full"
+                            loading={isSubmitting}
+                        />
                     </div>
                 </div>
             </div>

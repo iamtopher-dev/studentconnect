@@ -255,7 +255,6 @@ const StudentPage = () => {
                     </div>
                 </div>
 
-                {/* Applicant Type Tabs */}
                 <div className="flex gap-2 mb-6">
                     {["ALL", "SHS", "COLLEGE"].map((type) => (
                         <button
@@ -343,7 +342,6 @@ const StudentPage = () => {
                     </table>
                 </div>
             </div>
-            {/* IRREGULAR MODAL (UNCHANGED UI) */}
             {openModalIrregular && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
                     <div className="bg-white w-full max-w-3xl rounded-3xl shadow-2xl p-8 overflow-y-auto max-h-[90vh]">

@@ -27,7 +27,6 @@ const Button = ({
       disabled={loading || props.disabled}
       {...props}
     >
-      {/* Loading spinner */}
       {loading && (
         <svg
           className="animate-spin h-4 w-4 text-white"
@@ -51,13 +50,10 @@ const Button = ({
         </svg>
       )}
 
-      {/* Icon (left side by default) */}
       {!loading && Icon && iconPosition === "left" && <Icon className="w-4 h-4" />}
 
-      {/* Label */}
       <span>{loading ? "Loading..." : label}</span>
 
-      {/* Icon (right side if specified) */}
       {!loading && Icon && iconPosition === "right" && <Icon className="w-4 h-4" />}
     </button>
   );

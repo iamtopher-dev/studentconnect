@@ -436,7 +436,6 @@ const StudentGradingPage = () => {
                             grades.
                         </p>
 
-                        {/* DROP AREA */}
                         <div
                             onClick={() =>
                                 document.getElementById("excelInput").click()

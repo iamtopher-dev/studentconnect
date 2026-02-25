@@ -20,7 +20,6 @@ const Sidebar = ({ userRole }) => {
 
   return (
     <>
-      {/* Mobile Hamburger */}
       <button
         onClick={() => setMobileOpen((prev) => !prev)}
         type="button"
@@ -41,19 +40,16 @@ const Sidebar = ({ userRole }) => {
         </svg>
       </button>
 
-      {/* Sidebar */}
       <aside
         className={`fixed top-0 left-0 z-40 w-64 h-screen bg-white border-r border-gray-200 shadow-lg transform transition-transform duration-300
           ${mobileOpen ? "translate-x-0" : "-translate-x-full"} sm:translate-x-0`}
       >
         <div className="flex flex-col h-full justify-between">
-          {/* Logo */}
           <div className="px-4 py-6 flex flex-col items-center">
             <img src={logo} alt="Logo" className="h-16 mb-4" />
             <span className="text-lg font-semibold text-gray-700">Student Connect</span>
           </div>
 
-          {/* Links */}
           <nav className="flex-1 px-2 space-y-1 overflow-y-auto">
             {userRole === "ADMIN" && (
               <>
@@ -159,7 +155,6 @@ const Sidebar = ({ userRole }) => {
             )}
           </nav>
 
-          {/* Logout */}
           <div className="px-4 py-4 border-t border-gray-200">
             <button
               onClick={handleLogout}
@@ -172,7 +167,6 @@ const Sidebar = ({ userRole }) => {
         </div>
       </aside>
 
-      {/* Overlay for mobile */}
       {mobileOpen && (
         <div
           className="fixed inset-0 bg-black/40 sm:hidden z-30"

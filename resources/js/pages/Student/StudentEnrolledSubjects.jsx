@@ -71,7 +71,6 @@ const StudentEnrolledSubjects = () => {
                     </div>
                 </div>
 
-                {/* Enrolled Subjects */}
                 <div className="lg:col-span-2 bg-white rounded-2xl shadow-md p-6">
                     <h2 className="text-lg font-semibold text-gray-800 mb-5">
                         Enrolled Subjects
@@ -133,7 +132,6 @@ const StudentEnrolledSubjects = () => {
                 </div>
             </div>
 
-            {/* Footer */}
             <p className="text-xs text-center text-gray-400 mt-8">
                 STUDENT CONNECT – ALABANG
             </p>

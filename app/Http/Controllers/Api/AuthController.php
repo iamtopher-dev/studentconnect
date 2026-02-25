@@ -11,6 +11,21 @@ use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
+
+    public function getUserLogged()
+    {
+        $user = Auth::user();
+
+        if (!$user) {
+            return response()->json(null, 401);
+        }
+
+        return response()->json([
+            'id' => $user->id,
+            'name' => $user->name,
+            'role' => strtoupper($user->role),
+        ]);
+    }
     public function login(Request $request)
     {
         $credentials = $request->validate([
@@ -19,20 +34,24 @@ class AuthController extends Controller
         ]);
 
         $identifier = $credentials['identifier'];
-        $password = $credentials['password'];
+        $password   = $credentials['password'];
 
         $loginField = filter_var($identifier, FILTER_VALIDATE_EMAIL) ? 'email' : 'student_no';
 
+        // Attempt login
         if (Auth::attempt([$loginField => $identifier, 'password' => $password])) {
-            $user = User::where($loginField, $identifier)->first();
 
-            $token = $user->createToken('auth_token')->plainTextToken;
+            $request->session()->regenerate(); 
+            $user = Auth::user();
 
             return response()->json([
                 'status'  => 'success',
                 'message' => 'Login successful',
-                'data'    => $user,
-                'token'   => $token,
+                'user'    => [
+                    'id'   => $user->id,
+                    'name' => $user->name,
+                    'role' => strtoupper($user->role),
+                ],
             ], 200);
         }
 
@@ -50,7 +69,7 @@ class AuthController extends Controller
             'email'                 => 'required|email|unique:users,email',
             'course'                 => 'required|string|max:6',
             'student_no'            => 'nullable|string|unique:users,student_no',
-            'password'              => 'required|string|min:8|confirmed', // ✅ Must have password_confirmation
+            'password'              => 'required|string|min:8|confirmed', 
             'password_confirmation' => 'required|string|min:8',
         ]);
 

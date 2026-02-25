@@ -14,7 +14,6 @@ const Header = () => {
         if (value === "Employee Portal") return navigate("/login/employee");
     };
 
-    // ✅ Hide header if route starts with /login
     if (location.pathname.startsWith("/login")) {
         return null;
     }

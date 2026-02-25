@@ -1,6 +1,6 @@
 import React from "react";
 import Logo from "../../assets/images/site_logo.svg"; 
-const logoText = "Student Connect"; // Replace with your app name or initials
+const logoText = "Student Connect"; 
 
 const PageLoader = () => {
     return (

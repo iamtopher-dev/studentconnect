@@ -64,7 +64,6 @@ const StaffDashboardPage = () => {
                 </div>
             </div>
 
-            {/* ================= TOP OVERVIEW CARDS ================= */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 <DashboardCard
                     title="Total Students"
@@ -95,7 +94,6 @@ const StaffDashboardPage = () => {
                 />
             </div>
 
-            {/* ================= MIDDLE ROW ================= */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 {/* Students by Major */}
                 <Card title="Students by Major">
@@ -131,7 +129,6 @@ const StaffDashboardPage = () => {
                     </ResponsiveContainer>
                 </Card>
 
-                {/* Student Type */}
                 <Card title="Student Type Distribution">
                     <ResponsiveContainer width="100%" height={300}>
                         <PieChart>
@@ -156,7 +153,6 @@ const StaffDashboardPage = () => {
                 </Card>
             </div>
 
-            {/* ================= TREND ROW ================= */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* Enrollment by School Year */}
                 <Card title="Enrollment by School Year">
@@ -176,7 +172,6 @@ const StaffDashboardPage = () => {
                     </ResponsiveContainer>
                 </Card>
 
-                {/* Monthly Registrations */}
                 <Card title="Monthly Registrations">
                     <ResponsiveContainer width="100%" height={300}>
                         <LineChart data={data.monthly_registrations}>
@@ -195,7 +190,6 @@ const StaffDashboardPage = () => {
                 </Card>
             </div>
 
-            {/* ================= AGE + TOP PROGRAM ================= */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* Age Distribution */}
                 <Card title="Age Distribution">
@@ -221,7 +215,6 @@ const StaffDashboardPage = () => {
                     </ResponsiveContainer>
                 </Card>
 
-                {/* Top Program */}
                 <div className="bg-white rounded-2xl shadow-sm p-6 flex items-center justify-between">
                     <div>
                         <p className="text-gray-500 text-sm">
@@ -243,7 +236,6 @@ const StaffDashboardPage = () => {
     );
 };
 
-/* ================= REUSABLE COMPONENTS ================= */
 
 const DashboardCard = ({ title, value, icon, color }) => (
     <div className="bg-white rounded-2xl shadow-sm p-5 flex justify-between items-center hover:shadow-xl transition">

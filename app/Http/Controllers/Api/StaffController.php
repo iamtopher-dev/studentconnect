@@ -15,7 +15,6 @@ class StaffController extends Controller
 {
     public function dashboard()
     {
-        // ================= OVERVIEW =================
         $totalStudents = User::where('role', 'STUDENT')->count();
         $totalApplicants = StudentInformation::count();
         $approvedStudents = StudentInformation::where('isAccept', true)->count();
@@ -25,36 +24,30 @@ class StaffController extends Controller
             ? round(($approvedStudents / $totalApplicants) * 100, 1)
             : 0;
 
-        // ================= TOP PROGRAM =================
         $topProgram = StudentInformation::selectRaw('major, COUNT(*) as total')
             ->groupBy('major')
             ->orderByDesc('total')
             ->first();
 
-        // ================= STUDENTS BY MAJOR =================
         $byMajor = StudentInformation::selectRaw('major as name, COUNT(*) as count')
             ->groupBy('major')
             ->orderBy('major')
             ->get();
 
-        // ================= STUDENTS BY YEAR LEVEL =================
         $byYearLevel = StudentInformation::selectRaw('year_level as name, COUNT(*) as count')
             ->groupBy('year_level')
             ->orderBy('year_level')
             ->get();
 
-        // ================= STUDENT TYPE =================
         $studentType = StudentInformation::selectRaw('student_type as name, COUNT(*) as value')
             ->groupBy('student_type')
             ->get();
 
-        // ================= SCHOOL YEAR TREND =================
         $bySchoolYear = StudentInformation::selectRaw('school_year as year, COUNT(*) as count')
             ->groupBy('school_year')
             ->orderBy('school_year')
             ->get();
 
-        // ================= MONTHLY REGISTRATIONS =================
         $monthlyRegistrations = StudentInformation::selectRaw('MONTH(created_at) as month, COUNT(*) as count')
             ->groupBy('month')
             ->orderBy('month')
@@ -66,7 +59,6 @@ class StaffController extends Controller
                 ];
             });
 
-        // ================= AGE DISTRIBUTION =================
         $ageDistribution = StudentInformation::selectRaw("
         CASE
             WHEN TIMESTAMPDIFF(YEAR, dob, CURDATE()) BETWEEN 15 AND 17 THEN '15-17'
@@ -79,7 +71,6 @@ class StaffController extends Controller
             ->groupBy('name')
             ->get();
 
-        // ================= GENDER COUNT =================
         $genderCount = StudentInformation::selectRaw('sex, COUNT(*) as count')
             ->groupBy('sex')
             ->pluck('count', 'sex');
@@ -205,7 +196,7 @@ class StaffController extends Controller
                     $query->join('student_information', 'student_subjects.user_id', '=', 'student_information.student_information_id')
                         ->whereColumn('student_subjects.year_level', 'student_information.year_level')
                         ->whereColumn('student_subjects.semester', 'student_information.semester')
-                        ->select('student_subjects.*'); // important to select student_subjects fields
+                        ->select('student_subjects.*');
                 }
             ])
             ->get();
@@ -228,7 +219,7 @@ class StaffController extends Controller
 
         foreach ($data['grades'] as $subjectGrade) {
             StudentSubjects::where('student_subject_id', $subjectGrade['student_subject_id'])
-                ->update(['grades' => $subjectGrade['grade']]); // single associative array
+                ->update(['grades' => $subjectGrade['grade']]);
         }
 
         return response()->json(['message' => 'Grades saved successfully']);
@@ -297,20 +288,15 @@ class StaffController extends Controller
 
             $studentInformation->semester = '1st Semester';
 
-            // =========================
-            // COLLEGE LOGIC
-            // =========================
             if ($studentInformation->applicant_type === 'COLLEGE') {
 
-                // Year Level Progression
                 $studentInformation->year_level = match ($studentInformation->year_level) {
                     '1st Year' => '2nd Year',
                     '2nd Year' => '3rd Year',
                     '3rd Year' => '4th Year',
-                    default => $studentInformation->year_level, // 4th Year stays
+                    default => $studentInformation->year_level,
                 };
 
-                // Section Format: 1A → 2A
                 if (preg_match('/^(\d+)([A-Z])$/i', $studentInformation->section, $matches)) {
                     $number = (int) $matches[1];
                     $letter = strtoupper($matches[2]);
@@ -318,9 +304,6 @@ class StaffController extends Controller
                 }
             }
 
-            // =========================
-            // SHS LOGIC
-            // =========================
             if ($studentInformation->applicant_type === 'SHS') {
 
                 // Grade Progression
@@ -381,9 +364,6 @@ class StaffController extends Controller
 
             $studentInformation->semester = '1st Semester';
 
-            // =========================
-            // COLLEGE LOGIC
-            // =========================
             if ($studentInformation->applicant_type === 'COLLEGE') {
 
                 $studentInformation->year_level = match ($studentInformation->year_level) {
@@ -393,7 +373,6 @@ class StaffController extends Controller
                     default => $studentInformation->year_level,
                 };
 
-                // Section Format: 1A → 2A
                 if (preg_match('/^(\d+)([A-Z])$/i', $studentInformation->section, $matches)) {
                     $number = (int) $matches[1];
                     $letter = strtoupper($matches[2]);
@@ -401,9 +380,6 @@ class StaffController extends Controller
                 }
             }
 
-            // =========================
-            // SHS LOGIC
-            // =========================
             if ($studentInformation->applicant_type === 'SHS') {
 
                 $studentInformation->year_level = match ($studentInformation->year_level) {
@@ -487,6 +463,7 @@ class StaffController extends Controller
             );
         }
 
+        StudentUpdateRequests::where('student_update_request_id', $student_update_request_id)->delete();
         return response()->json([
             'success' => true,
             'message' => 'Request approved successfully'
@@ -494,7 +471,7 @@ class StaffController extends Controller
     }
     public function releaseGradesStudents(Request $request)
     {
-        $subjects = $request->subjects; // array of subject objects
+        $subjects = $request->subjects;
 
         $subjectIds = collect($subjects)->pluck('student_subject_id');
 

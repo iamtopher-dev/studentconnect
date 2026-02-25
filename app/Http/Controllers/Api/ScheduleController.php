@@ -19,7 +19,7 @@ class ScheduleController extends Controller
         $final_file_info = '';
 
         if ($request->hasFile('file')) {
-            $file = $request->file('file'); // use correct input name
+            $file = $request->file('file'); 
             $filename = time() . '_' . rand(1000, 9999) . '.' . $file->getClientOriginalExtension();
             $destinationPath = public_path('uploads/schedule');
             if (!file_exists($destinationPath)) {

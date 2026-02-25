@@ -7,7 +7,7 @@ const Select = ({
   label,
   options = [],
   required = false,
-  placeholder = "Select an option", // ✅ New prop
+  placeholder = "Select an option", 
   ...props
 }) => {
   return (
@@ -28,12 +28,10 @@ const Select = ({
                    dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         {...props}
       >
-        {/* ✅ Placeholder Option */}
         <option value="" disabled selected hidden>
           {placeholder}
         </option>
 
-        {/* ✅ Render Options */}
         {options.map((opt) => (
           <option key={opt.value} value={opt.value}>
             {opt.label}

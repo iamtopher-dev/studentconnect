@@ -2,6 +2,7 @@ import React, { useState, useMemo, useEffect } from "react";
 import { Search, X, Check } from "lucide-react";
 import Select from "react-select";
 import apiService from "../../services/apiService";
+import Button from "../../components/common/Button";
 
 const ITEMS_PER_PAGE = 10;
 const PRIMARY_COLOR = "#307358";
@@ -29,6 +30,7 @@ const RequestUpdateInformationPage = () => {
     const [loadingScreen, setLoadingScreen] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
     const [selectedRequest, setSelectedRequest] = useState(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
     useEffect(() => {
         get_request_update_information_student();
     }, []);
@@ -51,6 +53,7 @@ const RequestUpdateInformationPage = () => {
     };
 
     const approvedUpdateStudentInfo = (id) => {
+        setIsSubmitting(true);
         apiService
             .get(`staff/approve-request-information/${id}`)
             .then((res) => {
@@ -60,7 +63,8 @@ const RequestUpdateInformationPage = () => {
             })
             .catch((err) => {
                 console.error("Err", err);
-            });
+            })
+            .finally(() => setIsSubmitting(false));
     };
 
     const closeModal = () => {
@@ -332,14 +336,17 @@ const RequestUpdateInformationPage = () => {
                             >
                                 Close
                             </button>
-
-                            <button
-                                onClick={() => approvedUpdateStudentInfo(selectedRequest.student_update_request_id)}
-                                className="px-4 py-2 text-sm rounded-lg bg-green-600 text-white hover:bg-green-700 flex items-center gap-2"
-                            >
-                                <Check size={16} />
-                                Approve
-                            </button>
+                            <Button
+                                onClick={() =>
+                                    approvedUpdateStudentInfo(
+                                        selectedRequest.student_update_request_id,
+                                    )
+                                }
+                                label="Approve"
+                                variant="primary"
+                                loading={isSubmitting}
+                                icon={Check}
+                            />
                         </div>
                     </div>
                 </div>

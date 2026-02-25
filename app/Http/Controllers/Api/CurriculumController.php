@@ -17,11 +17,9 @@ class CurriculumController extends Controller
     {
         $curriculums = Curriculum::all();
 
-        /* PROGRAMS */
         $collegePrograms = ["BSIT", "BSCPE", "BSBA"];
         $shsPrograms = ["ICT", "ABM", "HE","IA"];
 
-        /* EMPTY STRUCTURES */
         $emptyCollegeYears = [
             "1st Year" => ["1st Semester" => [], "2nd Semester" => []],
             "2nd Year" => ["1st Semester" => [], "2nd Semester" => []],
@@ -34,23 +32,19 @@ class CurriculumController extends Controller
             "Grade 12" => ["1st Semester" => [], "2nd Semester" => []],
         ];
 
-        /* INITIALIZE RESULT */
         $result = [
             "College" => [],
             "SHS" => [],
         ];
 
-        /* INIT COLLEGE */
         foreach ($collegePrograms as $prog) {
             $result["College"][$prog] = $emptyCollegeYears;
         }
 
-        /* INIT SHS */
         foreach ($shsPrograms as $prog) {
             $result["SHS"][$prog] = $emptyShsYears;
         }
 
-        /* POPULATE DATA */
         foreach ($curriculums as $item) {
             $level    = $item->curriculum_for === "COLLEGE" ? "College" : "SHS";
             $program  = $item->course;
@@ -100,7 +94,7 @@ class CurriculumController extends Controller
             'code'           => $validated['code'],
             'subject_name'   => $validated['name'],
             'units'          => $validated['units'],
-            'curriculum_for' => strtoupper($validated['level']), // COLLEGE | SHS
+            'curriculum_for' => strtoupper($validated['level']), 
         ]);
 
         return response()->json([

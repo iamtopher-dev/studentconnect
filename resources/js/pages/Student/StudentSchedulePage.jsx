@@ -6,14 +6,14 @@ const PRIMARY_COLOR = "#307358";
 
 const StudentSchedulePage = () => {
     const [pdfPreviewUrl, setPdfPreviewUrl] = useState(null);
-
+    const [loading, setLoading] = useState(false);
     useEffect(() => {
         read_schedule_pdf("COLLEGE");
     });
 
     const read_schedule_pdf = (schedule_pdf) => {
         apiService
-            .get(`staff/read-schedule-pdf/${schedule_pdf}`)
+            .get(`student/read-schedule-pdf/${schedule_pdf}`)
             .then((res) => {
                 const pdf_url = res.data.data.pdf_file;
                 setPdfPreviewUrl(pdf_url);
@@ -37,22 +37,28 @@ const StudentSchedulePage = () => {
                 </p>
             </div>
 
-            {pdfPreviewUrl && (
-                <div
-                    className="mt-4 border rounded-xl overflow-hidden sm:h-80 "
-                    style={{ height: "calc(100vh - 200px)" }}
-                    onContextMenu={(e) => e.preventDefault()}
-                >
-                    <object
-                        data={pdfPreviewUrl}
-                        type="application/pdf"
-                        className="w-full h-full"
-                    >
-                        <p className="text-sm text-slate-500 p-4">
-                            PDF preview is not supported in this browser.
-                        </p>
-                    </object>
+            {loading ? (
+                <div className="flex items-center justify-center py-20">
+                    <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
                 </div>
+            ) : (
+                pdfPreviewUrl && (
+                    <div
+                        className="mt-4 border rounded-xl overflow-hidden sm:h-80"
+                        style={{ height: "calc(100vh - 200px)" }}
+                        onContextMenu={(e) => e.preventDefault()}
+                    >
+                        <object
+                            data={pdfPreviewUrl}
+                            type="application/pdf"
+                            className="w-full h-full"
+                        >
+                            <p className="text-sm text-slate-500 p-4">
+                                PDF preview is not supported in this browser.
+                            </p>
+                        </object>
+                    </div>
+                )
             )}
         </div>
     );

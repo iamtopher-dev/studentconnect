@@ -141,7 +141,6 @@ const SchedulePage = () => {
                             schedule.
                         </p>
 
-                        {/* DROP AREA */}
                         <div
                             onClick={() =>
                                 document.getElementById("pdfInput").click()
@@ -177,7 +176,6 @@ const SchedulePage = () => {
                             />
                         </div>
 
-                        {/* CONFIRM */}
                         <button
                             disabled={!selectedFile || loading}
                             onClick={handleConfirmUpload}

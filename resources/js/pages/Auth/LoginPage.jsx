@@ -1,13 +1,12 @@
 import React, { useState } from "react";
-import building from "../../assets/images/bg.png";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Lock, User2 } from "lucide-react";
-import logo from "../../assets/images/site_logo.svg";
-import Button from "../../components/common/Button";
 import apiService from "../../services/apiService";
-import header from "../../assets/images/header.png";
-// import header from "../../assets/images/header.png"
+import Button from "../../components/common/Button";
 import logoSchool from "../../assets/images/logo.png";
+import logo from "../../assets/images/site_logo.svg";
+import building from "../../assets/images/bg.png";
+
 const LoginPage = () => {
     const navigate = useNavigate();
     const [identifier, setIdentifier] = useState("");
@@ -19,43 +18,39 @@ const LoginPage = () => {
             alert("Please fill in all fields.");
             return;
         }
+
         setIsSubmitting(true);
         try {
-            const response = await apiService.post("/login", {
-                identifier,
-                password,
-            });
+            await apiService.get("/sanctum/csrf-cookie");
 
-            if (response.status === 200 && response.data.status === "success") {
-                const { data, token } = response.data;
+            const res = await apiService.post(
+                "/login",
+                { identifier, password },
+                { withCredentials: true },
+            );
 
-                localStorage.setItem("token", token);
-                localStorage.setItem("user", JSON.stringify(data));
+            console.log("Login response:", res.data);
 
-                switch (data.role) {
+            if (res.data?.status === "success") {
+                const role = res.data.user.role.toUpperCase();
+                console.log("User role:", role);
+
+                switch (role) {
                     case "STAFF":
                         navigate("/staff");
-                        break;
-                    case "ADMIN":
-                        navigate("/admin");
                         break;
                     case "STUDENT":
                         navigate("/student");
                         break;
                     default:
-                        alert(
-                            "Unknown role. Please contact the administrator.",
-                        );
+                        alert("Unknown role. Contact admin.");
                 }
             } else {
-                alert(response.data.message || "Login failed.");
+                alert(res.data.message || "Login failed");
             }
         } catch (error) {
-            console.error("Login error:", error);
-            const message =
-                error.response?.data?.message ||
-                "Invalid credentials. Please try again.";
-            alert(message);
+            console.error(error);
+            alert(error.response?.data?.message || "Invalid credentials");
         } finally {
             setIsSubmitting(false);
         }
@@ -63,7 +58,6 @@ const LoginPage = () => {
 
     return (
         <div className="min-h-screen flex flex-col">
-            {/* Header */}
             <div className="flex gap-x-6 bg-[#037c03] text-white items-center justify-center py-4 px-4">
                 <div>
                     <img
@@ -72,7 +66,6 @@ const LoginPage = () => {
                         className="h-24 w-24 object-contain"
                     />
                 </div>
-
                 <div className="leading-tight text-center sm:text-left">
                     <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold">
                         IETI COLLEGE, Inc.
@@ -83,7 +76,6 @@ const LoginPage = () => {
                 </div>
             </div>
 
-            {/* Background Section */}
             <div
                 className="flex-1 bg-cover bg-center bg-no-repeat bg-blend-overlay bg-white/60 flex items-center justify-center px-4"
                 style={{ backgroundImage: `url(${building})` }}
@@ -98,9 +90,7 @@ const LoginPage = () => {
                                     alt="Logo"
                                 />
                             </div>
-
                             <div className="space-y-4">
-                                {/* Identifier */}
                                 <div className="relative">
                                     <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                                         <User2
@@ -119,7 +109,6 @@ const LoginPage = () => {
                                     />
                                 </div>
 
-                                {/* Password */}
                                 <div className="relative">
                                     <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                                         <Lock
@@ -138,16 +127,14 @@ const LoginPage = () => {
                                     />
                                 </div>
 
-                                {/* Button */}
                                 <Button
                                     onClick={handleLogin}
-                                    label={"Sign in"}
+                                    label="Sign in"
                                     variant="primary"
                                     addClass="w-full"
                                     loading={isSubmitting}
                                 />
 
-                                {/* Register */}
                                 <p className="text-sm text-center">
                                     Don't have an account?{" "}
                                     <NavLink

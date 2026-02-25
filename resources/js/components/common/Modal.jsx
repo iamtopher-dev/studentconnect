@@ -19,10 +19,8 @@ const Modal = ({ isOpen, onClose, title, children,onSave,loading }) => {
                     </button>
                 </div>
 
-                {/* Body */}
                 <div className="p-4 px-6 space-y-8">{children}</div>
 
-                {/* Footer */}
                 <div className="flex justify-end gap-2 px-6 py-5">
                     <button
                         onClick={onClose}
