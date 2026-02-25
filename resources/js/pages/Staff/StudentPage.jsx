@@ -2,6 +2,7 @@ import React, { useState, useMemo, useEffect } from "react";
 import { Search, X, Check } from "lucide-react";
 import Select from "react-select";
 import apiService from "../../services/apiService";
+import Button from "../../components/common/Button";
 
 const ITEMS_PER_PAGE = 10;
 const PRIMARY_COLOR = "#307358";
@@ -15,7 +16,8 @@ const StudentPage = () => {
     const [selectedStudent, setSelectedStudent] = useState(null);
     const [loadingScreen, setLoadingScreen] = useState(true);
     const [applicantTypeFilter, setApplicantTypeFilter] = useState("ALL");
-
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [loadingIds, setLoadingIds] = useState([]);
     const [formData, setFormData] = useState({
         selectedSubjects: [],
     });
@@ -36,6 +38,7 @@ const StudentPage = () => {
 
     useEffect(() => {
         getStudents();
+        console.log("Show Me ", students);
     }, []);
 
     const getStudents = () => {
@@ -45,6 +48,7 @@ const StudentPage = () => {
                 const apiStudents = response.data.data;
 
                 const formattedStudents = apiStudents.map((student) => {
+                    console.log();
                     const info = student.student_information || {};
                     const fullName = `${info.family_name || ""} ${
                         info.first_name || ""
@@ -68,6 +72,7 @@ const StudentPage = () => {
                         major: info.major || "N/A",
                         dob: info.dob || "N/A",
                         phone: info.guardian_contact_number || "N/A",
+                        enrolled_subjects: student.enrolled_subjects || [],
                     };
                 });
 
@@ -81,6 +86,21 @@ const StudentPage = () => {
 
     const reEnrollStudent = (student) => {
         console.log("Re-enrolling student:", student);
+        setLoadingIds((prev) => [...prev, student.id]);
+        const allReleased =
+            student.enrolled_subjects.length > 0 &&
+            student.enrolled_subjects.every((sub) => sub.isReleased === 1);
+
+        if (!allReleased) {
+            Swal.fire({
+                title: "Grades Not Released",
+                text: "Some grades are still pending release. Please complete all entries before releasing.",
+                icon: "warning",
+            });
+            setLoadingIds((prev) => prev.filter((id) => id !== student.id));
+            return;
+        }
+
         if (student.student_type !== "REGULAR") {
             setSelectedStudent(student);
             setOpenModalIrregular(true);
@@ -98,16 +118,17 @@ const StudentPage = () => {
                     confirmButtonColor: PRIMARY_COLOR,
                 });
                 getStudents();
-                console.log(res.data);
             })
             .catch((err) => {
-                console.error(err);
                 Swal.fire({
                     title: "Error",
                     text: "Failed to re-enroll student",
                     icon: "error",
                     confirmButtonColor: PRIMARY_COLOR,
                 });
+            })
+            .finally(() => {
+                setLoadingIds((prev) => prev.filter((id) => id !== student.id));
             });
     };
 
@@ -123,7 +144,7 @@ const StudentPage = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
+        setLoadingIds((prev) => [...prev, selectedStudent.id]);
         if (!selectedStudent || formData.selectedSubjects.length === 0) {
             alert("Please select subjects");
             return;
@@ -135,13 +156,28 @@ const StudentPage = () => {
                 subjects: formData.selectedSubjects.map((s) => s.value),
             })
             .then(() => {
-                alert("Student re-enrolled successfully");
+                Swal.fire({
+                    title: "Success",
+                    text: "Student re-enrolled successfully",
+                    icon: "success",
+                    confirmButtonColor: PRIMARY_COLOR,
+                });
                 closeModal();
                 getStudents();
             })
             .catch((err) => {
                 console.error(err);
-                alert("Failed to re-enroll student");
+                Swal.fire({
+                    title: "Error",
+                    text: "Failed to re-enroll student",
+                    icon: "error",
+                    confirmButtonColor: PRIMARY_COLOR,
+                });
+            })
+            .finally(() => {
+                setLoadingIds((prev) =>
+                    prev.filter((id) => id !== selectedStudent.id),
+                );
             });
     };
 
@@ -253,7 +289,7 @@ const StudentPage = () => {
                                 <th className="pb-4">Address</th>
                                 <th className="pb-4">Section</th>
                                 <th className="pb-4">Semester</th>
-                                
+
                                 <th className="pb-4">Course</th>
                                 <th className="pb-4">Date of Birth</th>
                                 <th className="pb-4">Phone</th>
@@ -274,24 +310,31 @@ const StudentPage = () => {
                                     <td className="py-4">{s.section}</td>
                                     <td className="py-4">{s.semester}</td>
                                     <td className="py-4">{s.major}</td>
-                                    
+
                                     <td className="py-4">{s.dob}</td>
                                     <td className="py-4">{s.phone}</td>
                                     <td className="py-4">
-                                        {s.year_level === "4th Year" &&
-                                        s.semester === "2nd Semester" ? (
+                                        {(s.year_level === "4th Year" &&
+                                            s.semester === "2nd Semester") ||
+                                        (s.year_level === "Grade 12" &&
+                                            s.semester === "2nd Semester") ? (
                                             <span className="inline-block px-3 py-1 rounded-full bg-blue-100 text-blue-800 text-xs font-semibold">
                                                 Graduating
                                             </span>
                                         ) : (
-                                            <button
+                                            <Button
+                                                key={s.id}
+                                                type="button"
+                                                label={"Re-enroll"}
+                                                variant="primary"
+                                                addClass=""
+                                                loading={loadingIds.includes(
+                                                    s.id,
+                                                )}
                                                 onClick={() =>
                                                     reEnrollStudent(s)
                                                 }
-                                                className="bg-green-500 text-white px-3 py-1 rounded-md text-sm"
-                                            >
-                                                Re-enroll
-                                            </button>
+                                            />
                                         )}
                                     </td>
                                 </tr>
@@ -343,13 +386,14 @@ const StudentPage = () => {
                                 >
                                     Cancel
                                 </button>
-                                <button
+
+                                <Button
                                     type="submit"
-                                    className="px-6 py-2 bg-emerald-600 text-white rounded-xl flex items-center gap-2"
-                                >
-                                    <Check className="w-5 h-5" />
-                                    Re-enroll Student
-                                </button>
+                                    label={"Re-enroll Student"}
+                                    variant="primary"
+                                    addClass=""
+                                    loading={isSubmitting}
+                                />
                             </div>
                         </form>
                     </div>

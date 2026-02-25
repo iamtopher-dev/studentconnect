@@ -9,14 +9,14 @@ const gradeLevels = ["Grade 11", "Grade 12"];
 const sections = ["A", "B", "C"];
 
 const semesters = ["1st Semester", "2nd Semester"];
-const studentTypes = ["Regular", "Irregular"];
+const studentTypes = ["REGULAR", "IRREGULAR"];
 
 const IncomingStudentPage = () => {
     const [incomingStudents, setIncomingStudents] = useState([]);
     const [curriculumSubjects, setCurriculumSubjects] = useState([]);
     const [selectedStudent, setSelectedStudent] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [isSubmitting, setIsSubmitting] = useState(false)
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [formData, setFormData] = useState({
         family_name: "",
         first_name: "",
@@ -123,9 +123,29 @@ const IncomingStudentPage = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        setIsSubmitting(true);
 
         if (!formData.studentId || !formData.section || !formData.semester) {
-            alert("Please fill all required fields.");
+            Swal.fire({
+                title: "Warning!",
+                text: "Please fill all required fields.",
+                icon: "warning",
+            });
+            setIsSubmitting(false);
+            return;
+        }
+
+        if (
+            formData.studentType === "IRREGULAR" &&
+            formData.selectedSubjects.length === 0
+        ) {
+            Swal.fire({
+                title: "Warning!",
+                text: "Please select at least one subject for irregular students.",
+                icon: "warning",
+            });
+            setIsSubmitting(false);
+
             return;
         }
 
@@ -135,11 +155,25 @@ const IncomingStudentPage = () => {
                 formData,
             )
             .then(() => {
-                alert("Student accepted successfully!");
+                // alert("Student accepted successfully!");
                 setSelectedStudent(null);
                 fetchIncomingStudents();
+                setIsSubmitting(false);
+                Swal.fire({
+                    title: "Success!",
+                    text: "Student has been successfully enrolled.",
+                    icon: "success",
+                });
             })
-            .catch(() => alert("Failed to accept student."));
+            .catch(() => {
+                // alert("Failed to accept student.");
+                setIsSubmitting(false);
+                Swal.fire({
+                    title: "Error!",
+                    text: "Failed to enroll student. Please try again.",
+                    icon: "error",
+                });
+            });
     };
     if (loading) {
         return (
@@ -387,7 +421,7 @@ const IncomingStudentPage = () => {
                                     />
                                 </div>
 
-                                {formData.studentType === "Irregular" && (
+                                {formData.studentType === "IRREGULAR" && (
                                     <div>
                                         <label className="block text-xs font-semibold text-gray-600 mb-2">
                                             Curriculum Subjects
@@ -411,8 +445,8 @@ const IncomingStudentPage = () => {
                                             ) =>
                                                 context === "value"
                                                     ? option.label.split(
-                                                        " | ",
-                                                    )[0]
+                                                          " | ",
+                                                      )[0]
                                                     : option.label
                                             }
                                         />

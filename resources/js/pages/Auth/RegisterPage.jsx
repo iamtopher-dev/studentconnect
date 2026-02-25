@@ -4,6 +4,7 @@ import SCHOOL_LOGO from "../../assets/images/site_logo.svg";
 import ILLUSTRATION from "../../assets/images/vector.png";
 import apiService from "../../services/apiService";
 import Button from "../../components/common/Button";
+import { Link } from "react-router-dom";
 
 const inputStyle =
     "w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-green-500";
@@ -19,7 +20,7 @@ const Field = ({ label, required = false, children }) => (
 );
 
 const RegisterPage = () => {
-    const [isSubmitting,setIsSubmitting] = useState(false)
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [formData, setFormData] = useState({
         applicant_type: "",
         family_name: "",
@@ -44,12 +45,40 @@ const RegisterPage = () => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData((prev) => ({ ...prev, [name]: value }));
+
+        const capitalizeWords = (val) => {
+            return val
+                .toLowerCase()
+                .replace(/\b\w/g, (char) => char.toUpperCase());
+        };
+
+        const fieldsToCapitalize = [
+            "family_name",
+            "first_name",
+            "middle_name",
+            "place_of_birth",
+            "street",
+            "barangay",
+            "municipality",
+            "province",
+            "nationality",
+            "religion",
+            "guardian_name",
+        ];
+
+        const newValue = fieldsToCapitalize.includes(name)
+            ? capitalizeWords(value)
+            : value;
+
+        setFormData((prev) => ({
+            ...prev,
+            [name]: newValue,
+        }));
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        setIsSubmitting(true)
+        setIsSubmitting(true);
         for (const key in formData) {
             if (!formData[key]) {
                 alert(`Please fill up the ${key.replace("_", " ")}`);
@@ -60,7 +89,6 @@ const RegisterPage = () => {
         apiService
             .post("/admissions", formData)
             .then((response) => {
-                alert(response.data.message);
                 setFormData({
                     applicant_type: "",
                     family_name: "",
@@ -82,11 +110,20 @@ const RegisterPage = () => {
                     guardian_name: "",
                     guardian_contact_number: "",
                 });
-                setIsSubmitting(false)
+                Swal.fire({
+                    title: "Warning!",
+                    text: response.data.message,
+                    icon: "warning",
+                });
+                setIsSubmitting(false);
             })
             .catch((error) => {
                 console.error(error);
-                alert("Failed to submit admission. Please check your input.");
+                Swal.fire({
+                    title: "Error!",
+                    text: "Failed to submit admission. Please check your input.",
+                    icon: "error",
+                });
             });
     };
 
@@ -110,6 +147,13 @@ const RegisterPage = () => {
                         />
                     </div>
                     <div className="text-center pb-8 px-4">
+                        <span className="text-white  text-sm">
+                            Already have an account?{" "}
+                            <Link to="/" className="underline">
+                                {" "}
+                                Login
+                            </Link>
+                        </span>
                         <h2 className="text-xl font-bold">Student Admission</h2>
                         <p className="text-xs opacity-80 mt-1">
                             Please complete all required details

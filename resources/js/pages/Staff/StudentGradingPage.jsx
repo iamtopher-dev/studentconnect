@@ -20,6 +20,7 @@ const StudentGradingPage = () => {
 
     useEffect(() => {
         getStudents();
+        console.log("Show the Grade", students);
     }, []);
 
     const getStudents = () => {
@@ -33,8 +34,9 @@ const StudentGradingPage = () => {
                     return {
                         id: student.id,
                         student_information_id: info.student_information_id,
-                        fullName: `${info.family_name || ""}, ${info.first_name || ""
-                            } ${info.middle_name || ""}`.trim(),
+                        fullName: `${info.family_name || ""}, ${
+                            info.first_name || ""
+                        } ${info.middle_name || ""}`.trim(),
                         studentId: student.student_no || "N/A",
                         major: info.major || "N/A",
                         year_level: info.year_level || "N/A",
@@ -170,24 +172,27 @@ const StudentGradingPage = () => {
 
     const releaseGrades = (userId, subjects) => {
         apiService
-            .post(`staff/release-grades-students/${userId}`, { subjects: subjects })
+            .post(`staff/release-grades-students/${userId}`, {
+                subjects: subjects,
+            })
             .then((response) => {
                 let result = response.data;
-                console.log(result.success)
+                console.log(result.success);
                 Swal.fire({
                     title: "Releasing Grades",
                     text: result.message,
-                    icon: result.success ? "success" : "warning"
+                    icon: result.success ? "success" : "warning",
                 });
             })
             .catch((err) => {
                 console.error(err);
                 alert("Failed to release grades");
                 setLoading(false);
+            })
+            .finally(() => {
+                getStudents();
             });
-        console.log(`userId ${userId} - subjects ${subjects}`)
-
-    }
+    };
 
     const handleGradeChange = (id, value) => {
         setEditableSubjects((prev) =>
@@ -277,60 +282,82 @@ const StudentGradingPage = () => {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-                {filteredStudents.map((s) => (
-                    <div
-                        key={s.id}
-                        className="bg-white rounded-2xl p-4 sm:p-6 shadow-sm hover:shadow-md transition"
-                    >
-                        <div className="flex justify-between mb-3 sm:mb-4">
-                            <div className="overflow-hidden">
-                                <h3 className="text-base sm:text-lg font-semibold text-slate-800 truncate">
-                                    {s.fullName}
-                                </h3>
-                                <p className="text-xs sm:text-sm text-slate-500 truncate">
-                                    {s.studentId}
-                                </p>
-                                <p
-                                    className="text-xs sm:text-sm font-medium truncate"
-                                    style={{ color: PRIMARY_COLOR }}
-                                >
-                                    {s.major} · {s.year_level}
-                                </p>
+                {filteredStudents.map((s) => {
+                    const allReleased =
+                        s.enrolled_subjects.length > 0 &&
+                        s.enrolled_subjects.every(
+                            (sub) => sub.isReleased === 1,
+                        );
+
+                    return (
+                        <div
+                            key={s.id}
+                            className="bg-white rounded-2xl p-4 sm:p-6 shadow-sm hover:shadow-md transition"
+                        >
+                            <div className="flex justify-between mb-3 sm:mb-4">
+                                <div className="overflow-hidden">
+                                    <h3 className="text-base sm:text-lg font-semibold text-slate-800 truncate">
+                                        {s.fullName}
+                                    </h3>
+                                    <p className="text-xs sm:text-sm text-slate-500 truncate">
+                                        {s.studentId}
+                                    </p>
+                                    <p
+                                        className="text-xs sm:text-sm font-medium truncate"
+                                        style={{ color: PRIMARY_COLOR }}
+                                    >
+                                        {s.major} · {s.year_level}
+                                    </p>
+                                </div>
+                                {!allReleased && (
+                                    <button
+                                        onClick={() => openEditGrades(s)}
+                                        className="text-slate-400 hover:text-slate-600 ml-2 flex-shrink-0"
+                                    >
+                                        <Pencil size={18} />
+                                    </button>
+                                )}
                             </div>
 
-                            <button
-                                onClick={() => openEditGrades(s)}
-                                className="text-slate-400 hover:text-slate-600 ml-2 flex-shrink-0"
-                            >
-                                <Pencil size={18} />
-                            </button>
-                        </div>
+                            <div className="space-y-2 text-xs sm:text-sm max-h-40 overflow-y-auto">
+                                {s.enrolled_subjects.map((sub) => (
+                                    <div
+                                        key={sub.student_subject_id}
+                                        className="flex justify-between"
+                                    >
+                                        <span className="text-slate-600 truncate">
+                                            {sub.subject_name}
+                                        </span>
+                                        <span className="font-medium">
+                                            {sub.grades ?? "—"}
+                                        </span>
+                                    </div>
+                                ))}
+                            </div>
 
-                        <div className="space-y-2 text-xs sm:text-sm max-h-40 overflow-y-auto">
-                            {s.enrolled_subjects.map((sub) => (
-                                <div
-                                    key={sub.student_subject_id}
-                                    className="flex justify-between"
-                                >
-                                    <span className="text-slate-600 truncate">
-                                        {sub.subject_name}
-                                    </span>
-                                    <span className="font-medium">
-                                        {sub.grades ?? "—"}
-                                    </span>
+                            {allReleased ? (
+                                <div className="flex items-center justify-center w-full text-sm px-5 sm:px-6 py-2 rounded-xl font-medium bg-slate-100 text-slate-600 mt-3">
+                                    Grades Already Released
                                 </div>
-                            ))}
-
+                            ) : (
+                                <button
+                                    onClick={() =>
+                                        releaseGrades(
+                                            s.student_information_id,
+                                            s.enrolled_subjects,
+                                        )
+                                    }
+                                    className="flex items-center w-full text-sm justify-center gap-2 px-5 sm:px-6 py-1 sm:py-2 rounded-xl text-white font-medium shadow-sm hover:opacity-90 w-full sm:w-auto mt-3"
+                                    style={{ backgroundColor: PRIMARY_COLOR }}
+                                >
+                                    <span className="text-sm sm:text-base">
+                                        Release Grades
+                                    </span>
+                                </button>
+                            )}
                         </div>
-                        <button
-                            onClick={() => releaseGrades(s.student_information_id, s.enrolled_subjects)}
-                            className="flex items-center w-full text-sm justify-center gap-2 px-5 sm:px-6 py-1 sm:py-2 rounded-xl text-white font-medium shadow-sm hover:opacity-90 w-full sm:w-auto"
-                            style={{ backgroundColor: PRIMARY_COLOR }}
-                        >
-                            <span className="text-sm sm:text-base">Release Grades</span>
-                        </button>
-                    </div>
-                ))}
+                    );
+                })}
             </div>
 
             {editModalOpen && selectedStudent && (
@@ -448,10 +475,11 @@ const StudentGradingPage = () => {
                             onClick={confirmUpload}
                             disabled={!selectedFile}
                             className={`mt-4 sm:mt-6 w-full py-2 sm:py-3 rounded-xl font-medium flex items-center justify-center gap-2 transition
-                ${selectedFile
-                                    ? "text-white"
-                                    : "bg-slate-300 text-slate-500 cursor-not-allowed"
-                                }`}
+                ${
+                    selectedFile
+                        ? "text-white"
+                        : "bg-slate-300 text-slate-500 cursor-not-allowed"
+                }`}
                             style={{
                                 backgroundColor: selectedFile
                                     ? PRIMARY_COLOR

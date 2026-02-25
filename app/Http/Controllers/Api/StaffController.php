@@ -16,11 +16,27 @@ class StaffController extends Controller
     public function dashboard()
     {
         $totalStudents = User::where('role', 'STUDENT')->count();
+
         $totalIncomingStudents = StudentInformation::where('isAccept', false)->count();
+
+        $incomingPerYear = StudentInformation::selectRaw('YEAR(created_at) as year, COUNT(*) as count')
+            ->where('isAccept', false)
+            ->groupBy('year')
+            ->orderBy('year')
+            ->get();
+
+        $genderCount = StudentInformation::selectRaw('sex, COUNT(*) as count')
+            ->groupBy('sex')
+            ->pluck('count', 'sex');
 
         return response()->json([
             "total_students" => $totalStudents,
-            "total_incoming_students" => $totalIncomingStudents
+            "total_incoming_students" => $totalIncomingStudents,
+            "incoming_per_year" => $incomingPerYear,
+            "gender_count" => [
+                "male" => $genderCount['Male'] ?? 0,
+                "female" => $genderCount['Female'] ?? 0
+            ]
         ]);
     }
     public function getIncomingStudents()
@@ -51,6 +67,7 @@ class StaffController extends Controller
         }
 
         $student->semester = $request["semester"];
+        $student->student_type = $request["studentType"];
         $student->school_year = date('Y') . '-' . (date('Y') + 1);
         if ($student->save()) {
             $user = new User();
@@ -66,7 +83,7 @@ class StaffController extends Controller
             $user->password = Hash::make($generatedPassword);
             $user->save();
             $userId = $user->student_information_id;
-            if ($request['studentType'] == "Irregular") {
+            if ($request['studentType'] == "IRREGULAR") {
                 foreach ($request['selectedSubjects'] as $subject) {
 
                     $curriculumSubjects = Curriculum::where('id', $subject['value'])->first();
@@ -202,28 +219,56 @@ class StaffController extends Controller
 
     public function getReEnrollStudentsRegular($student_id)
     {
-
-
-
-        $studentInformation = StudentInformation::where('student_information_id', $student_id)->first();
+        $studentInformation = StudentInformation::where(
+            'student_information_id',
+            $student_id
+        )->firstOrFail();
 
         if ($studentInformation->semester === '1st Semester') {
+
             $studentInformation->semester = '2nd Semester';
         } else {
+
             $studentInformation->semester = '1st Semester';
 
-            $studentInformation->year_level = match ($studentInformation->year_level) {
-                '1st Year' => '2nd Year',
-                '2nd Year' => '3rd Year',
-                '3rd Year' => '4th Year',
-                default => $studentInformation->year_level,
-            };
+            // =========================
+            // COLLEGE LOGIC
+            // =========================
+            if ($studentInformation->applicant_type === 'COLLEGE') {
 
-            if (preg_match('/(\d)([A-Z])/i', $studentInformation->section, $matches)) {
-                $currentNumber = (int)$matches[1];
-                $sectionLetter = strtoupper($matches[2]);
+                // Year Level Progression
+                $studentInformation->year_level = match ($studentInformation->year_level) {
+                    '1st Year' => '2nd Year',
+                    '2nd Year' => '3rd Year',
+                    '3rd Year' => '4th Year',
+                    default => $studentInformation->year_level, // 4th Year stays
+                };
 
-                $studentInformation->section = ($currentNumber + 1) . $sectionLetter;
+                // Section Format: 1A → 2A
+                if (preg_match('/^(\d+)([A-Z])$/i', $studentInformation->section, $matches)) {
+                    $number = (int) $matches[1];
+                    $letter = strtoupper($matches[2]);
+                    $studentInformation->section = ($number + 1) . $letter;
+                }
+            }
+
+            // =========================
+            // SHS LOGIC
+            // =========================
+            if ($studentInformation->applicant_type === 'SHS') {
+
+                // Grade Progression
+                $studentInformation->year_level = match ($studentInformation->year_level) {
+                    'Grade 11' => 'Grade 12',
+                    default => $studentInformation->year_level, // Grade 12 stays
+                };
+
+                // Section Format: A1 → A2
+                if (preg_match('/^([A-Z])(\d+)$/i', $studentInformation->section, $matches)) {
+                    $letter = strtoupper($matches[1]);
+                    $number = (int) $matches[2];
+                    $studentInformation->section = $letter . ($number + 1);
+                }
             }
         }
 
@@ -236,13 +281,13 @@ class StaffController extends Controller
 
         foreach ($curriculumSubjects as $subject) {
             StudentSubjects::create([
-                "user_id" => $studentInformation->student_information_id,
-                "subject_name" => $subject->subject_name,
-                "subject_code" => $subject->code,
+                "user_id"       => $studentInformation->student_information_id,
+                "subject_name"  => $subject->subject_name,
+                "subject_code"  => $subject->code,
                 "subject_units" => $subject->units,
-                "school_year" => date('Y') . '-' . (date('Y') + 1),
-                "year_level" => $studentInformation->year_level,
-                "semester" => $studentInformation->semester
+                "school_year"   => date('Y') . '-' . (date('Y') + 1),
+                "year_level"    => $studentInformation->year_level,
+                "semester"      => $studentInformation->semester
             ]);
         }
 
@@ -251,7 +296,6 @@ class StaffController extends Controller
             "message" => "Student re-enrolled successfully"
         ]);
     }
-
     public function getReEnrollStudentsIrregular(Request $request)
     {
         $request->validate([
@@ -265,21 +309,48 @@ class StaffController extends Controller
         )->firstOrFail();
 
         if ($studentInformation->semester === '1st Semester') {
+
             $studentInformation->semester = '2nd Semester';
         } else {
+
             $studentInformation->semester = '1st Semester';
 
-            $studentInformation->year_level = match ($studentInformation->year_level) {
-                '1st Year' => '2nd Year',
-                '2nd Year' => '3rd Year',
-                '3rd Year' => '4th Year',
-                default => $studentInformation->year_level,
-            };
-            if (preg_match('/(\d)([A-Z])/i', $studentInformation->section, $matches)) {
-                $currentNumber = (int)$matches[1];
-                $sectionLetter = strtoupper($matches[2]);
+            // =========================
+            // COLLEGE LOGIC
+            // =========================
+            if ($studentInformation->applicant_type === 'COLLEGE') {
 
-                $studentInformation->section = ($currentNumber + 1) . $sectionLetter;
+                $studentInformation->year_level = match ($studentInformation->year_level) {
+                    '1st Year' => '2nd Year',
+                    '2nd Year' => '3rd Year',
+                    '3rd Year' => '4th Year',
+                    default => $studentInformation->year_level,
+                };
+
+                // Section Format: 1A → 2A
+                if (preg_match('/^(\d+)([A-Z])$/i', $studentInformation->section, $matches)) {
+                    $number = (int) $matches[1];
+                    $letter = strtoupper($matches[2]);
+                    $studentInformation->section = ($number + 1) . $letter;
+                }
+            }
+
+            // =========================
+            // SHS LOGIC
+            // =========================
+            if ($studentInformation->applicant_type === 'SHS') {
+
+                $studentInformation->year_level = match ($studentInformation->year_level) {
+                    'Grade 11' => 'Grade 12',
+                    default => $studentInformation->year_level,
+                };
+
+                // Section Format: A1 → A2
+                if (preg_match('/^([A-Z])(\d+)$/i', $studentInformation->section, $matches)) {
+                    $letter = strtoupper($matches[1]);
+                    $number = (int) $matches[2];
+                    $studentInformation->section = $letter . ($number + 1);
+                }
             }
         }
 
