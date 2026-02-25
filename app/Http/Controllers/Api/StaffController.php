@@ -15,24 +15,90 @@ class StaffController extends Controller
 {
     public function dashboard()
     {
+        // ================= OVERVIEW =================
         $totalStudents = User::where('role', 'STUDENT')->count();
+        $totalApplicants = StudentInformation::count();
+        $approvedStudents = StudentInformation::where('isAccept', true)->count();
+        $pendingStudents = StudentInformation::where('isAccept', false)->count();
 
-        $totalIncomingStudents = StudentInformation::where('isAccept', false)->count();
+        $acceptanceRate = $totalApplicants > 0
+            ? round(($approvedStudents / $totalApplicants) * 100, 1)
+            : 0;
 
-        $incomingPerYear = StudentInformation::selectRaw('YEAR(created_at) as year, COUNT(*) as count')
-            ->where('isAccept', false)
-            ->groupBy('year')
-            ->orderBy('year')
+        // ================= TOP PROGRAM =================
+        $topProgram = StudentInformation::selectRaw('major, COUNT(*) as total')
+            ->groupBy('major')
+            ->orderByDesc('total')
+            ->first();
+
+        // ================= STUDENTS BY MAJOR =================
+        $byMajor = StudentInformation::selectRaw('major as name, COUNT(*) as count')
+            ->groupBy('major')
+            ->orderBy('major')
             ->get();
 
+        // ================= STUDENTS BY YEAR LEVEL =================
+        $byYearLevel = StudentInformation::selectRaw('year_level as name, COUNT(*) as count')
+            ->groupBy('year_level')
+            ->orderBy('year_level')
+            ->get();
+
+        // ================= STUDENT TYPE =================
+        $studentType = StudentInformation::selectRaw('student_type as name, COUNT(*) as value')
+            ->groupBy('student_type')
+            ->get();
+
+        // ================= SCHOOL YEAR TREND =================
+        $bySchoolYear = StudentInformation::selectRaw('school_year as year, COUNT(*) as count')
+            ->groupBy('school_year')
+            ->orderBy('school_year')
+            ->get();
+
+        // ================= MONTHLY REGISTRATIONS =================
+        $monthlyRegistrations = StudentInformation::selectRaw('MONTH(created_at) as month, COUNT(*) as count')
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get()
+            ->map(function ($item) {
+                return [
+                    "month" => date("M", mktime(0, 0, 0, $item->month, 1)),
+                    "count" => $item->count
+                ];
+            });
+
+        // ================= AGE DISTRIBUTION =================
+        $ageDistribution = StudentInformation::selectRaw("
+        CASE
+            WHEN TIMESTAMPDIFF(YEAR, dob, CURDATE()) BETWEEN 15 AND 17 THEN '15-17'
+            WHEN TIMESTAMPDIFF(YEAR, dob, CURDATE()) BETWEEN 18 AND 20 THEN '18-20'
+            WHEN TIMESTAMPDIFF(YEAR, dob, CURDATE()) BETWEEN 21 AND 23 THEN '21-23'
+            ELSE '24+'
+        END as name,
+        COUNT(*) as value
+    ")
+            ->groupBy('name')
+            ->get();
+
+        // ================= GENDER COUNT =================
         $genderCount = StudentInformation::selectRaw('sex, COUNT(*) as count')
             ->groupBy('sex')
             ->pluck('count', 'sex');
 
         return response()->json([
-            "total_students" => $totalStudents,
-            "total_incoming_students" => $totalIncomingStudents,
-            "incoming_per_year" => $incomingPerYear,
+            "overview" => [
+                "total_students" => $totalStudents,
+                "total_applicants" => $totalApplicants,
+                "approved_students" => $approvedStudents,
+                "pending_students" => $pendingStudents,
+            ],
+            "acceptance_rate" => $acceptanceRate,
+            "top_program" => $topProgram,
+            "by_major" => $byMajor,
+            "by_year_level" => $byYearLevel,
+            "student_type" => $studentType,
+            "by_school_year" => $bySchoolYear,
+            "monthly_registrations" => $monthlyRegistrations,
+            "age_distribution" => $ageDistribution,
             "gender_count" => [
                 "male" => $genderCount['Male'] ?? 0,
                 "female" => $genderCount['Female'] ?? 0
