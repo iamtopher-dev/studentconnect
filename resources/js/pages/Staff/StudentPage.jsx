@@ -145,7 +145,6 @@ const StudentPage = () => {
             });
     };
 
-    // FILTERING (Search + Applicant Type)
     const filteredStudents = useMemo(() => {
         return students.filter((s) => {
             const matchesSearch =
