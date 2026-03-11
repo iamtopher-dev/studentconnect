@@ -245,7 +245,7 @@ const StudentPage = () => {
                                 setSearch(e.target.value);
                                 setPage(1);
                             }}
-                            placeholder="Search by name or student id"
+                            placeholder="Search by name or student number"
                             className="pl-9 pr-3 py-2.5 text-sm rounded-xl w-full focus:outline-none"
                             style={{
                                 backgroundColor: "#E6F0EE",
@@ -284,7 +284,7 @@ const StudentPage = () => {
                         <thead>
                             <tr className="text-gray-400 text-left">
                                 <th className="pb-4">Name</th>
-                                <th className="pb-4">Student Id</th>
+                                <th className="pb-4">Student Number</th>
                                 <th className="pb-4">Address</th>
                                 <th className="pb-4">Section</th>
                                 <th className="pb-4">Semester</th>

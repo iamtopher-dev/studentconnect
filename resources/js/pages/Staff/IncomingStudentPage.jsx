@@ -396,7 +396,7 @@ const IncomingStudentPage = () => {
                                     onChange={handleChange}
                                 />
                                 <InputField
-                                    label="Student ID"
+                                    label="Student Number"
                                     name="studentId"
                                     value={formData.studentId}
                                     onChange={handleChange}

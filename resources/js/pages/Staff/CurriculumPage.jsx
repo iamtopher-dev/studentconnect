@@ -221,7 +221,7 @@ const CurriculumPage = () => {
                                     Subject
                                 </th>
                                 <th className="px-4 sm:px-6 py-3 text-center font-medium">
-                                    Units
+                                   {level == "SHS" ?"Hours":"Units"} 
                                 </th>
                                 <th className="px-4 sm:px-6 py-3 text-right font-medium">
                                     Actions

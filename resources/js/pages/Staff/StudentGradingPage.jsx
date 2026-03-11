@@ -232,6 +232,11 @@ const StudentGradingPage = () => {
             setSelectedStudent(null);
             setEditableSubjects([]);
             setLoading(false);
+            Swal.fire({
+                title: "Success!",
+                text: "Grades have been successfully saved.",
+                icon: "success",
+            });
         } catch (error) {
             console.error("Failed to save grades:", error);
             setLoading(false);
@@ -309,14 +314,12 @@ const StudentGradingPage = () => {
                                         {s.major} · {s.year_level}
                                     </p>
                                 </div>
-                                {!allReleased && (
-                                    <button
-                                        onClick={() => openEditGrades(s)}
-                                        className="text-slate-400 hover:text-slate-600 ml-2 flex-shrink-0"
-                                    >
-                                        <Pencil size={18} />
-                                    </button>
-                                )}
+                                <button
+                                    onClick={() => openEditGrades(s)}
+                                    className="text-slate-400 hover:text-slate-600 ml-2 flex-shrink-0"
+                                >
+                                    <Pencil size={18} />
+                                </button>
                             </div>
 
                             <div className="space-y-2 text-xs sm:text-sm max-h-40 overflow-y-auto">

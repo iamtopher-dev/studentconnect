@@ -130,7 +130,6 @@ const RegisterPage = () => {
 
     return (
         <div className="min-h-screen flex flex-col">
-           
 
             <div
                 className="flex-1 bg-cover bg-center bg-no-repeat bg-blend-overlay bg-white/60 flex items-center justify-center px-4"
@@ -141,11 +140,11 @@ const RegisterPage = () => {
                         <div className="bg-green-600 text-white flex flex-col justify-between">
                             <div className="bg-white rounded-br-[80px] p-6 flex items-center gap-x-3">
                                 <img
-                                    src={SCHOOL_LOGO}
+                                    src={logoSchool}
                                     alt="Logo"
                                     className="h-10"
                                 />
-                                <span className="text-black">STUDENT CONNECT</span>
+                                <span className="text-black">IETI Alabang</span>
                             </div>
                             <div className="flex justify-center px-6">
                                 <img

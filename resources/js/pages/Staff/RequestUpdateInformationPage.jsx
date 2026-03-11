@@ -122,7 +122,7 @@ const RequestUpdateInformationPage = () => {
                         <input
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
-                            placeholder="Search by name or student id"
+                            placeholder="Search by name or student number"
                             className="pl-9 sm:pl-10 pr-3 sm:pr-4 py-2.5 text-sm sm:text-base rounded-xl w-full focus:outline-none"
                             style={{
                                 backgroundColor: "#E6F0EE",
@@ -203,7 +203,7 @@ const RequestUpdateInformationPage = () => {
                                 </div>
 
                                 <div>
-                                    <p className="text-gray-500">Student ID</p>
+                                    <p className="text-gray-500">Student Number</p>
                                     <p className="font-medium">
                                         {selectedRequest.user.student_no}
                                     </p>

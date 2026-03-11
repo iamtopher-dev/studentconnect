@@ -42,7 +42,6 @@ const AppRoutes = () => {
                             path="student-grading"
                             element={<StudentGradingPage />}
                         />
-                        <Route path="schedule" element={<SchedulePage />} />
                         <Route path="request-update-information" element={<RequestUpdateInformationPage />} />
                     </Route>
                 </Route>

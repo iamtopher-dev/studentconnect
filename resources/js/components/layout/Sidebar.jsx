@@ -4,7 +4,7 @@ import { LayoutDashboard, Users, UserPlus, UserCheck, LogIn } from "lucide-react
 
 import apiService from "../../services/apiService";
 import logo from "../../assets/images/site_logo.svg";
-
+import logoSchool from "../../assets/images/logo.png"
 const Sidebar = ({ userRole }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -46,8 +46,8 @@ const Sidebar = ({ userRole }) => {
       >
         <div className="flex flex-col h-full justify-between">
           <div className="px-4 py-6 flex flex-col items-center">
-            <img src={logo} alt="Logo" className="h-16 mb-4" />
-            <span className="text-lg font-semibold text-gray-700">Student Connect</span>
+            <img src={logoSchool} alt="Logo" className="h-16 mb-4" />
+            <span className="text-lg font-semibold text-gray-700">IETI Alabang</span>
           </div>
 
           <nav className="flex-1 px-2 space-y-1 overflow-y-auto">
@@ -120,11 +120,7 @@ const Sidebar = ({ userRole }) => {
                   icon={<UserCheck size={20} />}
                 />
 
-                <SiderBarLinkSingle
-                  url="/staff/schedule"
-                  label="Class Schedule"
-                  icon={<UserCheck size={20} />}
-                />
+              
               </>
             )}
 
@@ -134,11 +130,6 @@ const Sidebar = ({ userRole }) => {
                 <SiderBarLinkSingle
                   url="/student/information"
                   label="Student Information"
-                  icon={<LayoutDashboard size={20} />}
-                />
-                <SiderBarLinkSingle
-                  url="/student/schedule"
-                  label="Class Schedule"
                   icon={<LayoutDashboard size={20} />}
                 />
                 <SiderBarLinkSingle

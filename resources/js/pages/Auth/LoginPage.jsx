@@ -40,7 +40,7 @@ const LoginPage = () => {
                         navigate("/staff");
                         break;
                     case "STUDENT":
-                        navigate("/student");
+                        navigate("/student/information");
                         break;
                     default:
                         alert("Unknown role. Contact admin.");
@@ -58,7 +58,7 @@ const LoginPage = () => {
 
     return (
         <div className="min-h-screen flex flex-col">
-            <div className="flex gap-x-6 bg-[#037c03] text-white items-center justify-center py-4 px-4">
+            <div className="flex gap-x-6 bg-[#308f00] text-white items-center justify-center py-4 px-4">
                 <div>
                     <img
                         src={logoSchool}
@@ -66,11 +66,11 @@ const LoginPage = () => {
                         className="h-24 w-24 object-contain"
                     />
                 </div>
-                <div className="leading-tight text-center sm:text-left">
-                    <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold">
+                <div className="leading-tight text-center sm:text-left ">
+                    <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold bookosb">
                         IETI COLLEGE, Inc.
                     </h1>
-                    <h6 className="text-sm sm:text-base">
+                    <h6 className="text-sm sm:text-base arial">
                         5 Molina St., Alabang, Muntinlupa City
                     </h6>
                 </div>
@@ -85,7 +85,7 @@ const LoginPage = () => {
                         <div className="p-8 bg-white rounded-xl">
                             <div className="flex justify-center mb-6">
                                 <img
-                                    src={logo}
+                                    src={logoSchool}
                                     className="h-24 w-24 object-contain"
                                     alt="Logo"
                                 />

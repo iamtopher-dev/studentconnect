@@ -8,14 +8,12 @@ use App\Http\Controllers\Api\StudentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\RoleMiddleware;
 
-// Public routes
 Route::middleware('web')->group(function () {
     Route::post("register", [AuthController::class, "register"]);
     Route::post("login", [AuthController::class, "login"]);
     Route::post('admissions', [StudentController::class, 'submitAdmission']);
 });
 
-// Protected routes
 Route::middleware(['web', 'auth:sanctum'])->group(function () {
 
     Route::get('get-user-logged', [AuthController::class, 'getUserLogged']);
@@ -24,8 +22,6 @@ Route::middleware(['web', 'auth:sanctum'])->group(function () {
         Route::get('student/get-student-information', [StudentController::class, 'getEnrolledSubject']);
         Route::post('student/generate-grade-report', [StudentController::class, 'generateGradeReport']);
         Route::post('student/update-information', [StudentController::class, 'updateInformation']);
-        Route::get('student/read-schedule-pdf/{schedule_for}', [ScheduleController::class, 'read_schedule_pdf']);
-
     });
 
     Route::middleware([RoleMiddleware::class . ':STAFF'])->group(function () {
@@ -36,8 +32,6 @@ Route::middleware(['web', 'auth:sanctum'])->group(function () {
         Route::post('staff/save-student-grades-by-excel', [StaffController::class, 'saveStudentGradesByExcel']);
         Route::get('staff/re-enroll-regular/{student_id}', [StaffController::class, 'getReEnrollStudentsRegular']);
         Route::post('staff/re-enroll-irregular', [StaffController::class, 'getReEnrollStudentsIrregular']);
-        Route::post('staff/save-schedule-pdf', [ScheduleController::class, 'save_schedule_pdf']);
-        Route::get('staff/read-schedule-pdf/{schedule_for}', [ScheduleController::class, 'read_schedule_pdf']);
         Route::get('staff/approve-request-information/{student_update_request_id}', [StaffController::class, 'approvedRequestInformation']);
         Route::get('staff/incoming-students', [StaffController::class, 'getIncomingStudents']);
         Route::post('staff/release-grades-students/{id}', [StaffController::class, 'releaseGradesStudents']);

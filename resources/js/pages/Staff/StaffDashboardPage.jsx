@@ -57,7 +57,7 @@ const StaffDashboardPage = () => {
             {/* HEADER */}
             <div className="flex justify-between items-center">
                 <h1 className="text-2xl font-bold text-gray-800">
-                    Staff Dashboard
+                    Admin Dashboard
                 </h1>
                 <div className="text-sm text-gray-500">
                     Academic Overview & Analytics
