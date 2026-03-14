@@ -38,11 +38,14 @@ class AuthController extends Controller
         $identifier = $credentials['identifier'];
         $password   = $credentials['password'];
 
+        // Detect login field (email or student number)
         $loginField = filter_var($identifier, FILTER_VALIDATE_EMAIL) ? 'email' : 'student_no';
 
         $key = Str::lower($identifier) . '|' . $request->ip();
 
-        if (RateLimiter::tooManyAttempts($key, 5)) {
+        $maxAttempts = 3;
+
+        if (RateLimiter::tooManyAttempts($key, $maxAttempts)) {
 
             $seconds = RateLimiter::availableIn($key);
 
@@ -52,8 +55,10 @@ class AuthController extends Controller
             ], 429);
         }
 
+        // Attempt login
         if (Auth::attempt([$loginField => $identifier, 'password' => $password])) {
 
+            // Clear attempts after successful login
             RateLimiter::clear($key);
 
             $request->session()->regenerate();
@@ -70,7 +75,19 @@ class AuthController extends Controller
             ], 200);
         }
 
-        RateLimiter::hit($key, 60);
+        /*
+    |----------------------------------------
+    | Increment waiting time
+    |----------------------------------------
+    | 1st fail = 60 sec
+    | 2nd fail = 120 sec
+    | 3rd fail = 180 sec
+    */
+
+        $attempts = RateLimiter::attempts($key) + 1;
+        $decaySeconds = $attempts * 60;
+
+        RateLimiter::hit($key, $decaySeconds);
 
         return response()->json([
             'status'  => 'error',
