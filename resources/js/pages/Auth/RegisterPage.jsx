@@ -149,7 +149,8 @@ const RegisterPage = () => {
                                         IETI College - Alabang
                                     </span>
                                     <p className="text-black text-sm">
-                                        #5 T. Molina St., Alabang, Muntinlupa City
+                                        #5 T. Molina St., Alabang, Muntinlupa
+                                        City
                                     </p>
                                 </div>
                             </div>
@@ -349,6 +350,16 @@ const RegisterPage = () => {
                                                 </>
                                             )}
                                         </select>
+                                    </Field>
+
+                                    <Field label="Transferee?" >
+                                        <input
+                                            type="checkbox"
+                                            name="middle_name"
+                                            value={formData.middle_name}
+                                            onChange={handleChange}
+                                            className=""
+                                        />
                                     </Field>
                                 </div>
                             </div>
