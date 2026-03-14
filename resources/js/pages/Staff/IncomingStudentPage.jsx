@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Select from "react-select";
-import { Check, X } from "lucide-react";
+import { Check, Trash2, X } from "lucide-react";
 import apiService from "../../services/apiService";
 
 import Button from "../../components/common/Button";
@@ -9,7 +9,7 @@ const gradeLevels = ["Grade 11", "Grade 12"];
 const sections = ["A", "B", "C"];
 
 const semesters = ["1st Semester", "2nd Semester"];
-const studentTypes = ["REGULAR", "IRREGULAR","CROSS ENROLL","TRANSFEREE"];
+const studentTypes = ["REGULAR", "IRREGULAR", "CROSS ENROLL", "TRANSFEREE"];
 
 const IncomingStudentPage = () => {
     const [incomingStudents, setIncomingStudents] = useState([]);
@@ -387,21 +387,25 @@ const IncomingStudentPage = () => {
                             </Section>
 
                             <Section title="Student Enrollment">
-                                <SelectField
-                                    label="Student Type"
-                                    name="studentType"
-                                    value={formData.studentType}
-                                    options={studentTypes}
-                                    onChange={handleChange}
-                                />
-                                <InputField
-                                    label="Student Number"
-                                    name="studentId"
-                                    value={formData.studentId}
-                                    onChange={handleChange}
-                                    required
-                                />
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="flex w-full gap-x-5">
+                                    <SelectField
+                                        label="Student Type"
+                                        name="studentType"
+                                        value={formData.studentType}
+                                        options={studentTypes}
+                                        onChange={handleChange}
+                                        width="w-full"
+                                    />
+                                    <InputField
+                                        label="Student Number"
+                                        name="studentId"
+                                        value={formData.studentId}
+                                        onChange={handleChange}
+                                        required
+                                        width="w-full"
+                                    />
+                                </div>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-5">
                                     <SelectField
                                         label="Section"
                                         name="section"
@@ -451,6 +455,42 @@ const IncomingStudentPage = () => {
                                         />
                                     </div>
                                 )}
+                                <div className="bg-white rounded-3xl shadow-md overflow-x-auto sm:overflow-x-hidden mt-5">
+                                    <table className="w-full min-w-[600px] text-sm hidden sm:table">
+                                        <thead className="bg-gray-100 text-gray-600">
+                                            <tr>
+                                                <th className="px-4 sm:px-6 py-3 text-left font-medium">
+                                                    Subject Code
+                                                </th>
+                                                <th className="px-4 sm:px-6 py-3 text-left font-medium">
+                                                    Subject Name
+                                                </th>
+                                                <th className="px-4 sm:px-6 py-3 text-center font-medium"></th>
+                                                <th className="px-4 sm:px-6 py-3 text-right font-medium">
+                                                    Actions
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr className="hover:bg-gray-50 transition">
+                                                <td className="px-4 sm:px-6 py-3 font-medium text-gray-800">
+                                                    IT 12
+                                                </td>
+                                                <td className="px-4 sm:px-6 py-3 text-gray-700">
+                                                    dwa
+                                                </td>
+                                                <td className="px-4 sm:px-6 py-3 text-center"></td>
+                                                <td className="px-4 sm:px-6 py-3 text-right">
+                                                    <div className="inline-flex gap-2 sm:gap-3">
+                                                        <button className="p-2 rounded-lg text-red-600 hover:bg-red-50">
+                                                            <Trash2 size={16} />
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </Section>
 
                             <div className="flex justify-end gap-4 mt-4">
@@ -487,8 +527,9 @@ const InputField = ({
     required = false,
     name,
     onChange,
+    width,
 }) => (
-    <div>
+    <div className={width}>
         <label className="block text-xs font-semibold text-gray-600 mb-1">
             {label}
         </label>
@@ -511,8 +552,9 @@ const SelectField = ({
     options,
     onChange,
     required = false,
+    width,
 }) => (
-    <div>
+    <div className={width}>
         <label className="block text-xs font-semibold text-gray-600 mb-1">
             {label}
         </label>

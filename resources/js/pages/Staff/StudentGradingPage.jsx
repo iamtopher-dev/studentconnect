@@ -1,7 +1,8 @@
 import React, { useState, useMemo, useEffect } from "react";
-import { Search, Pencil, Upload, X, Check } from "lucide-react";
+import { Search, Pencil, Upload, X, Check, Trash2 } from "lucide-react";
 import * as XLSX from "xlsx";
 import apiService from "../../services/apiService";
+import Button from "../../components/common/Button";
 
 const PRIMARY_COLOR = "#307358";
 
@@ -365,7 +366,7 @@ const StudentGradingPage = () => {
 
             {editModalOpen && selectedStudent && (
                 <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-                    <div className="bg-white rounded-3xl w-full max-w-md sm:max-w-lg p-5 sm:p-7 relative shadow-xl">
+                    <div className="bg-white rounded-3xl w-full max-w-md sm:max-w-2xl p-5 sm:p-7 relative shadow-xl">
                         <button
                             onClick={() => setEditModalOpen(false)}
                             className="absolute top-4 right-4 text-slate-400 hover:text-slate-600"
@@ -379,29 +380,56 @@ const StudentGradingPage = () => {
                         <p className="text-xs sm:text-sm text-slate-500 mb-4 sm:mb-6">
                             {selectedStudent.fullName}
                         </p>
-
-                        <div className="space-y-3 max-h-64 sm:max-h-80 overflow-y-auto">
-                            {editableSubjects.map((sub) => (
-                                <div
-                                    key={sub.student_subject_id}
-                                    className="flex justify-between items-center"
-                                >
-                                    <span className="text-slate-700 truncate text-xs sm:text-sm">
-                                        {sub.subject_name}
-                                    </span>
-                                    <input
-                                        value={sub.grades}
-                                        onChange={(e) =>
-                                            handleGradeChange(
-                                                sub.student_subject_id,
-                                                e.target.value,
-                                            )
-                                        }
-                                        className="w-16 sm:w-24 text-center bg-slate-100 rounded-xl py-1 sm:py-2 text-xs sm:text-sm outline-none focus:ring-2"
-                                        style={{ outlineColor: PRIMARY_COLOR }}
-                                    />
-                                </div>
-                            ))}
+                        <div className="bg-white rounded-3xl shadow-md overflow-x-auto sm:overflow-x-hidden mt-5">
+                            <table className="w-full  text-sm hidden sm:table">
+                                <thead className="bg-gray-100 text-gray-600">
+                                    <tr>
+                                        <th className="px-4 sm:px-6 py-3 text-left font-medium"></th>
+                                        <th className="px-4 sm:px-6 py-3 text-left font-medium"></th>
+                                        <th className="px-4 sm:px-6 py-3 text-right font-medium">
+                                            Actions
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {editableSubjects.map((sub) => (
+                                        <tr
+                                            className="hover:bg-gray-50 transition"
+                                            key={sub.student_subject_id}
+                                        >
+                                            <td className="px-4 sm:px-6 py-3 text-gray-700">
+                                                <span className="text-slate-700 truncate text-xs sm:text-sm">
+                                                    {sub.subject_name}
+                                                </span>
+                                            </td>
+                                            <td className="px-4 sm:px-6 py-3 text-center">
+                                                <input
+                                                    value={sub.grades}
+                                                    onChange={(e) =>
+                                                        handleGradeChange(
+                                                            sub.student_subject_id,
+                                                            e.target.value,
+                                                        )
+                                                    }
+                                                    className="w-16 sm:w-24 text-center bg-slate-100 rounded-xl py-1 sm:py-2 text-xs sm:text-sm outline-none focus:ring-2"
+                                                    style={{
+                                                        outlineColor:
+                                                            PRIMARY_COLOR,
+                                                    }}
+                                                />
+                                            </td>
+                                            <td className="px-4 sm:px-6 py-3 text-right">
+                                                <div className="inline-flex gap-2 sm:gap-3">
+                                                    <button className="p-2 rounded-lg text-white  flex gap-2 bg-red-500">
+                                                        <Trash2 size={16} />
+                                                        {"Drop "}
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
                         </div>
 
                         <button
