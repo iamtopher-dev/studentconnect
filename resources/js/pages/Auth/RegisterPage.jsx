@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import BG_IMAGE_URL from "../../assets/images/building.png";
+import BG_IMAGE_URL from "../../assets/images/bg.png";
 import image1 from "../../assets/images/image1.png";
 import image2 from "../../assets/images/image2.png";
 import image3 from "../../assets/images/image3.png";
