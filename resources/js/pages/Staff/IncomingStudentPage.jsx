@@ -9,7 +9,7 @@ const gradeLevels = ["Grade 11", "Grade 12"];
 const sections = ["A", "B", "C"];
 
 const semesters = ["1st Semester", "2nd Semester"];
-const studentTypes = ["REGULAR", "IRREGULAR"];
+const studentTypes = ["REGULAR", "IRREGULAR","CROSS ENROLL","TRANSFEREE"];
 
 const IncomingStudentPage = () => {
     const [incomingStudents, setIncomingStudents] = useState([]);
