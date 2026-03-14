@@ -189,7 +189,7 @@ const RegisterPage = () => {
 
                         <form
                             onSubmit={handleSubmit}
-                            className="md:col-span-2 bg-gray-50 p-5 space-y-4 overflow-y-auto max-h-[80vh]"
+                            className="md:col-span-2 bg-gray-50 p-5 space-y-4 overflow-y-auto max-h-full"
                         >
                             <div className="bg-white p-4 rounded-lg shadow-sm">
                                 <h3 className="font-semibold text-green-700 mb-3">
