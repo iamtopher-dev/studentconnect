@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -38,10 +40,23 @@ class AuthController extends Controller
 
         $loginField = filter_var($identifier, FILTER_VALIDATE_EMAIL) ? 'email' : 'student_no';
 
-        // Attempt login
+        $key = Str::lower($identifier) . '|' . $request->ip();
+
+        if (RateLimiter::tooManyAttempts($key, 5)) {
+
+            $seconds = RateLimiter::availableIn($key);
+
+            return response()->json([
+                'status'  => 'error',
+                'message' => "Too many login attempts. Try again in {$seconds} seconds."
+            ], 429);
+        }
+
         if (Auth::attempt([$loginField => $identifier, 'password' => $password])) {
 
-            $request->session()->regenerate(); 
+            RateLimiter::clear($key);
+
+            $request->session()->regenerate();
             $user = Auth::user();
 
             return response()->json([
@@ -54,6 +69,8 @@ class AuthController extends Controller
                 ],
             ], 200);
         }
+
+        RateLimiter::hit($key, 60);
 
         return response()->json([
             'status'  => 'error',
@@ -69,7 +86,7 @@ class AuthController extends Controller
             'email'                 => 'required|email|unique:users,email',
             'course'                 => 'required|string|max:6',
             'student_no'            => 'nullable|string|unique:users,student_no',
-            'password'              => 'required|string|min:8|confirmed', 
+            'password'              => 'required|string|min:8|confirmed',
             'password_confirmation' => 'required|string|min:8',
         ]);
 

@@ -4,7 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Connect</title>
+    <title>Grading System for Students | IETI Alabang</title>
+    <meta
+        name="description"
+        content="Learn about the student grading system at IETI Alabang. Track academic performance, understand grading scales, and stay updated with your grades online." />
     <link rel="icon" type="image/svg+xml" href="{{asset('/fav/site_logo.svg')}}" />
     <!-- <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" /> -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,6 +15,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 </head>
 
 @vite('resources/css/app.css')
@@ -20,7 +24,6 @@
     <div id="root"></div>
     @viteReactRefresh
     @vite('resources/js/main.jsx')
-
     <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
     <script>
         window.env = {

@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import BG_IMAGE_URL from "../../assets/images/building.png";
-import SCHOOL_LOGO from "../../assets/images/site_logo.svg";
-import ILLUSTRATION from "../../assets/images/vector.png";
+import image1 from "../../assets/images/image1.png";
+import image2 from "../../assets/images/image2.png";
+import image3 from "../../assets/images/image3.png";
 import apiService from "../../services/apiService";
 import Button from "../../components/common/Button";
 import { Link } from "react-router-dom";
@@ -130,7 +131,6 @@ const RegisterPage = () => {
 
     return (
         <div className="min-h-screen flex flex-col">
-
             <div
                 className="flex-1 bg-cover bg-center bg-no-repeat bg-blend-overlay bg-white/60 flex items-center justify-center px-4"
                 style={{ backgroundImage: `url(${BG_IMAGE_URL})` }}
@@ -144,13 +144,30 @@ const RegisterPage = () => {
                                     alt="Logo"
                                     className="h-10"
                                 />
-                                <span className="text-black">IETI Alabang</span>
+                                <div className="text-center">
+                                    <span className="text-black font-medium">
+                                        IETI College - Alabang
+                                    </span>
+                                    <p className="text-black text-sm">
+                                        #5 T. Molina St., Alabang, Muntinlupa City
+                                    </p>
+                                </div>
                             </div>
-                            <div className="flex justify-center px-6">
+                            <div className=" justify-center px-6 py-3 space-y-4">
                                 <img
-                                    src={ILLUSTRATION}
-                                    alt="Illustration"
-                                    className="w-56 object-contain"
+                                    src={image1}
+                                    alt="ieti-alabang"
+                                    className="w-full object-contain rounded-xl"
+                                />
+                                <img
+                                    src={image2}
+                                    alt="ieti-alabang"
+                                    className="w-full object-contain rounded-xl"
+                                />
+                                <img
+                                    src={image3}
+                                    alt="ieti-alabang"
+                                    className="w-full object-contain rounded-xl"
                                 />
                             </div>
                             <div className="text-center pb-8 px-4">

@@ -12,14 +12,16 @@ const LoginPage = () => {
     const [identifier, setIdentifier] = useState("");
     const [password, setPassword] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [error, setError] = useState("");
 
     const handleLogin = async () => {
+        setError("");
+        setIsSubmitting(true);
         if (!identifier || !password) {
-            alert("Please fill in all fields.");
+            setError("Please fill in all fields.");
+            setIsSubmitting(false);
             return;
         }
-
-        setIsSubmitting(true);
         try {
             await apiService.get("/sanctum/csrf-cookie");
 
@@ -28,12 +30,8 @@ const LoginPage = () => {
                 { identifier, password },
                 { withCredentials: true },
             );
-
-            console.log("Login response:", res.data);
-
             if (res.data?.status === "success") {
                 const role = res.data.user.role.toUpperCase();
-                console.log("User role:", role);
 
                 switch (role) {
                     case "STAFF":
@@ -46,11 +44,14 @@ const LoginPage = () => {
                         alert("Unknown role. Contact admin.");
                 }
             } else {
-                alert(res.data.message || "Login failed");
+                setError(res.data.message || "Login failed");
             }
         } catch (error) {
-            console.error(error);
-            alert(error.response?.data?.message || "Invalid credentials");
+            if (error.response?.status === 429) {
+                setError(error.response.data.message);
+            } else {
+                setError("Invalid credentials");
+            }
         } finally {
             setIsSubmitting(false);
         }
@@ -90,6 +91,15 @@ const LoginPage = () => {
                                     alt="Logo"
                                 />
                             </div>
+                            {error && (
+                                <div
+                                    class="p-4 mb-4 text-sm text-red-500 rounded-xl bg-red-200"
+                                    role="alert"
+                                >
+                                    <span class="font-medium">{error}</span>
+                                </div>
+                            )}
+
                             <div className="space-y-4">
                                 <div className="relative">
                                     <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">

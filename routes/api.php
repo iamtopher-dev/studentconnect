@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\CurriculumController;
 use App\Http\Controllers\Api\ScheduleController;
 use App\Http\Controllers\Api\StaffController;
 use App\Http\Controllers\Api\StudentController;
+use App\Http\Controllers\Api\TeacherController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\RoleMiddleware;
 
@@ -36,6 +37,8 @@ Route::middleware(['web', 'auth:sanctum'])->group(function () {
         Route::get('staff/incoming-students', [StaffController::class, 'getIncomingStudents']);
         Route::post('staff/release-grades-students/{id}', [StaffController::class, 'releaseGradesStudents']);
         Route::post('staff/accept-student/{id}', [StaffController::class, 'acceptStudent']);
+        Route::apiResource('/staff/teachers', TeacherController::class)->except(['show']);
+
     });
 
     Route::middleware([RoleMiddleware::class . ':STAFF'])->group(function () {

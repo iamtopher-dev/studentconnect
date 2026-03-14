@@ -13,11 +13,12 @@ const variants = {
 const Button = ({
   type = "button",
   label,
-  variant = "primary",
+  variant,
   addClass = "",
   loading = false,
   icon: Icon, 
   iconPosition = "left", 
+  iconClass,
   ...props
 }) => {
   return (
@@ -50,11 +51,11 @@ const Button = ({
         </svg>
       )}
 
-      {!loading && Icon && iconPosition === "left" && <Icon className="w-4 h-4" />}
+      {!loading && Icon && iconPosition === "left" && <Icon className={`w-4 h-4 ${iconClass}`} />}
 
       <span>{loading ? "Loading..." : label}</span>
 
-      {!loading && Icon && iconPosition === "right" && <Icon className="w-4 h-4" />}
+      {!loading && Icon && iconPosition === "right" && <Icon className={`w-4 h-4 ${iconClass}`}  />}
     </button>
   );
 };
