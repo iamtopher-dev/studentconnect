@@ -250,7 +250,7 @@ const RegisterPage = () => {
                                             value={formData.middle_name}
                                             onChange={handleChange}
                                             className={inputStyle}
-                                            required
+                                            
                                         />
                                     </Field>
                                     <Field
