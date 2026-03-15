@@ -142,11 +142,11 @@ const RegisterPage = () => {
                                 <img
                                     src={logoSchool}
                                     alt="Logo"
-                                    className="h-10"
+                                    className="h-20"
                                 />
                                 <div className="text-center">
                                     <span className="text-black font-medium">
-                                        IETI College - Alabang
+                                       {window.env?.APP_NAME}
                                     </span>
                                     <p className="text-black text-sm">
                                         #5 T. Molina St., Alabang, Muntinlupa City

@@ -265,14 +265,9 @@ const StudentPage = () => {
                             }}
                             className={`px-4 py-2 rounded-xl text-sm font-medium transition ${
                                 applicantTypeFilter === type
-                                    ? "text-white"
+                                    ? "text-white bg-[#037c03]"
                                     : "bg-gray-100 text-gray-600"
                             }`}
-                            style={
-                                applicantTypeFilter === type
-                                    ? { backgroundColor: PRIMARY_COLOR }
-                                    : {}
-                            }
                         >
                             {type}
                         </button>

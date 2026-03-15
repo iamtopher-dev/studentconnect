@@ -56,7 +56,7 @@ const Sidebar = ({ userRole }) => {
                             className="h-16 mb-4"
                         />
                         <span className="text-lg font-semibold text-gray-700">
-                            IETI Alabang
+                            {window.env?.APP_NAME}
                         </span>
                     </div>
 

@@ -130,7 +130,7 @@ const TeacherManagementPage = () => {
 
                     <button
                         onClick={() => setOpenModal(true)}
-                        className="flex items-center gap-2 rounded-xl bg-emerald-600 px-4 sm:px-5 py-2.5
+                        className="flex items-center gap-2 rounded-xl bg-[#037c03] px-4 sm:px-5 py-2.5
                        text-sm font-medium text-white shadow-md
                        hover:bg-emerald-700 transition"
                     >

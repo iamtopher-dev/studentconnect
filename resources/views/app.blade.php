@@ -28,7 +28,8 @@
     <script>
         window.env = {
             API_BASE_URL: '{{ config("app.api_base_url") }}',
-            APP_URL: '{{ config("app.url") }}'
+            APP_URL: '{{ config("app.url") }}',
+            APP_NAME:'{{ config("app.name") }}'
         };
     </script>
 </body>

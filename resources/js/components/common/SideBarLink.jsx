@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 const baseStyles = "flex p-2 items-center group rounded";
 const variants = {
     default: "bg-transparent",
-    active: "bg-primary text-white",
+    active: "bg-[#037c03] text-white",
 };
 const sizes = {
     sm: "px-3 py-1 text-sm",
