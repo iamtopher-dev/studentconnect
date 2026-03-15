@@ -232,6 +232,7 @@ const StudentGradesPage = () => {
                                                     : "Units",
                                                 "Grade",
                                                 "Remarks",
+                                                "Instructor",
                                             ].map((head) => (
                                                 <th
                                                     key={head}
@@ -313,6 +314,11 @@ const StudentGradesPage = () => {
                                                                 {subject.isDrop
                                                                     ? "Drop"
                                                                     : remark}
+                                                            </td>
+                                                            <td className="px-4 py-3">
+                                                                {
+                                                                    subject.instructor
+                                                                }
                                                             </td>
                                                         </tr>
                                                     );

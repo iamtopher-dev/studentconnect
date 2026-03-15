@@ -23,7 +23,7 @@ const StudentEnrolledSubjects = () => {
     const totalUnits = student.enrolled_subjects
         ? student.enrolled_subjects.reduce(
               (sum, sub) => sum + Number(sub.subject_units),
-              0
+              0,
           )
         : 0;
 
@@ -49,16 +49,22 @@ const StudentEnrolledSubjects = () => {
                             ],
                             [
                                 "Semester",
-                                `${student.student_information?.semester}` || "—",
+                                `${student.student_information?.semester}` ||
+                                    "—",
                             ],
-                            ["Course", `${student.student_information?.major}` || "—"],
+                            [
+                                "Course",
+                                `${student.student_information?.major}` || "—",
+                            ],
                             [
                                 "Year Level",
-                                `${student.student_information?.year_level}` || "—",
+                                `${student.student_information?.year_level}` ||
+                                    "—",
                             ],
                             [
                                 "Section",
-                                `${student.student_information?.section}` || "—",
+                                `${student.student_information?.section}` ||
+                                    "—",
                             ],
                         ].map(([label, value]) => (
                             <div key={label} className="flex justify-between">
@@ -80,36 +86,54 @@ const StudentEnrolledSubjects = () => {
                         <table className="w-full text-sm">
                             <thead>
                                 <tr className="text-gray-500 text-left">
-                                    <th className="px-3 py-2 font-medium">Course Code</th>
-                                    <th className="px-3 py-2 font-medium">Course Title</th>
-                                    <th className="px-3 py-2 font-medium text-center">Units</th>
+                                    <th className="px-3 py-2 font-medium">
+                                        Course Code
+                                    </th>
+                                    <th className="px-3 py-2 font-medium">
+                                        Course Title
+                                    </th>
+                                    <th className="px-3 py-2 font-medium text-center">
+                                        Units
+                                    </th>
+                                    <th className="px-3 py-2 font-medium text-center">
+                                        Instructor
+                                    </th>
                                 </tr>
                             </thead>
 
                             <tbody className="text-gray-700">
                                 {student.enrolled_subjects &&
                                 student.enrolled_subjects.length > 0 ? (
-                                    student.enrolled_subjects.map((subject, i) => (
-                                        <tr
-                                            key={i}
-                                            className="hover:bg-gray-50 rounded-lg transition"
-                                        >
-                                            <td className="px-3 py-3">{subject.subject_code}</td>
-                                            <td className="px-3 py-3 text-gray-400">
-                                                {subject.subject_name}
-                                            </td>
-                                            <td className="px-3 py-3 text-center">
-                                                {subject.subject_units}
-                                            </td>
-                                        </tr>
-                                    ))
+                                    student.enrolled_subjects.map(
+                                        (subject, i) => (
+                                            <tr
+                                                key={i}
+                                                className="hover:bg-gray-50 rounded-lg transition"
+                                            >
+                                                <td className="px-3 py-3">
+                                                    {subject.subject_code}
+                                                </td>
+                                                <td className="px-3 py-3 text-gray-400">
+                                                    {subject.subject_name}
+                                                </td>
+                                                <td className="px-3 py-3 text-center">
+                                                    {subject.subject_units}
+                                                </td>
+                                                <td className="px-3 py-3 text-center">
+                                                    {subject.instructor}
+                                                </td>
+                                            </tr>
+                                        ),
+                                    )
                                 ) : (
                                     <tr className="hover:bg-gray-50 rounded-lg transition">
                                         <td className="px-3 py-3">—</td>
                                         <td className="px-3 py-3 text-gray-400">
                                             No enrolled subjects
                                         </td>
-                                        <td className="px-3 py-3 text-center">—</td>
+                                        <td className="px-3 py-3 text-center">
+                                            —
+                                        </td>
                                     </tr>
                                 )}
                             </tbody>
@@ -118,12 +142,16 @@ const StudentEnrolledSubjects = () => {
                                 student.enrolled_subjects.length > 0 && (
                                     <tfoot>
                                         <tr className="bg-gray-100 font-medium">
-                                            <td colSpan={2} className="px-3 py-3 text-right">
+                                            <td
+                                                colSpan={2}
+                                                className="px-3 py-3 text-right"
+                                            >
                                                 Total Units:
                                             </td>
                                             <td className="px-3 py-3 text-center">
                                                 {totalUnits}
                                             </td>
+                                            <td className="px-3 py-3 text-center"></td>
                                         </tr>
                                     </tfoot>
                                 )}

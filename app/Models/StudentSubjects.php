@@ -18,7 +18,8 @@ class StudentSubjects extends Model
         "year_level",
         "grades",
         "isReleased",
-        "isDrop"
+        "isDrop",
+        "instructor"
     ];
 
     public function user()

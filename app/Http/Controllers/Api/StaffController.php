@@ -165,6 +165,7 @@ class StaffController extends Controller
             foreach ($request['selectedSubjects'] as $subject) {
 
                 $curriculumSubjects = Curriculum::where('id', $subject['value'])->first();
+                
                 StudentSubjects::create([
                     "user_id" => $userId,
                     "subject_name" => $curriculumSubjects->subject_name,
@@ -173,7 +174,8 @@ class StaffController extends Controller
                     "school_year" => date('Y') . '-' . (date('Y') + 1),
                     "year_level" => $request['year_level'],
                     "semester" => $request['semester'],
-                    "isDrop" => false
+                    "isDrop" => false,
+                    "instructor" => $curriculumSubjects->instructor
                 ]);
             }
             return response()->json([
