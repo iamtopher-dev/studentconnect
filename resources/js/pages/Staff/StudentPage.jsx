@@ -12,12 +12,15 @@ const StudentPage = () => {
     const [page, setPage] = useState(1);
     const [students, setStudents] = useState([]);
     const [curriculumSubjects, setCurriculumSubjects] = useState([]);
-    const [openModalIrregular, setOpenModalIrregular] = useState(false);
+    const [openModal, setOpenModal] = useState(false);
     const [selectedStudent, setSelectedStudent] = useState(null);
     const [loadingScreen, setLoadingScreen] = useState(true);
     const [applicantTypeFilter, setApplicantTypeFilter] = useState("ALL");
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [loadingIds, setLoadingIds] = useState([]);
+
+    const [nextSubjectEnrolled,setNextSubjectenrolled] = useState([])
+
     const [formData, setFormData] = useState({
         selectedSubjects: [],
     });
@@ -86,7 +89,7 @@ const StudentPage = () => {
 
     const reEnrollStudent = (student) => {
         console.log("Re-enrolling student:", student);
-        setLoadingIds((prev) => [...prev, student.id]);
+        // setLoadingIds((prev) => [...prev, student.id]);
         const allReleased =
             student.enrolled_subjects.length > 0 &&
             student.enrolled_subjects.every((sub) => sub.isReleased === 1);
@@ -101,39 +104,37 @@ const StudentPage = () => {
             return;
         }
 
-        if (student.student_type !== "REGULAR") {
-            setSelectedStudent(student);
-            setOpenModalIrregular(true);
-            fetchCurriculum(student.major);
-            return;
-        }
-
+        console.log(student);
         apiService
-            .get(`staff/re-enroll-regular/${student.student_information_id}`)
-            .then((res) => {
-                Swal.fire({
-                    title: "Success",
-                    text: "Student re-enrolled successfully",
-                    icon: "success",
-                    confirmButtonColor: PRIMARY_COLOR,
-                });
-                getStudents();
+            .get(`staff/re-enroll/${student.student_information_id}`)
+            .then((resp) => {
+                console.log("resultsa", resp);
+                const subjectsFromApi = resp.data.data.map((s) => ({
+                    value: `${s.id}`,
+                    label: `${s.code} | ${s.subject_name}`,
+                }));
+                setFormData({ selectedSubjects: subjectsFromApi })
+                // Swal.fire({
+                //     title: "Success",
+                //     text: "Student re-enrolled successfully",
+                //     icon: "success",
+                //     confirmButtonColor: PRIMARY_COLOR,
+                // });
+                // getStudents();
             })
             .catch((err) => {
-                Swal.fire({
-                    title: "Error",
-                    text: "Failed to re-enroll student",
-                    icon: "error",
-                    confirmButtonColor: PRIMARY_COLOR,
-                });
+                console.log(err);
             })
             .finally(() => {
-                setLoadingIds((prev) => prev.filter((id) => id !== student.id));
+                // setLoadingIds((prev) => prev.filter((id) => id !== student.id));
             });
+        setSelectedStudent(student);
+        setOpenModal(true);
+        fetchCurriculum(student.major);
     };
 
     const closeModal = () => {
-        setOpenModalIrregular(false);
+        setOpenModal(false);
         setFormData({ selectedSubjects: [] });
         setSelectedStudent(null);
     };
@@ -151,7 +152,7 @@ const StudentPage = () => {
         }
 
         apiService
-            .post("staff/re-enroll-irregular", {
+            .post("staff/re-enroll-submit", {
                 student_information_id: selectedStudent.student_information_id,
                 subjects: formData.selectedSubjects.map((s) => s.value),
             })
@@ -337,7 +338,7 @@ const StudentPage = () => {
                     </table>
                 </div>
             </div>
-            {openModalIrregular && (
+            {openModal && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
                     <div className="bg-white w-full max-w-3xl rounded-3xl shadow-2xl p-8 overflow-y-auto max-h-[90vh]">
                         <form onSubmit={handleSubmit} className="space-y-6">

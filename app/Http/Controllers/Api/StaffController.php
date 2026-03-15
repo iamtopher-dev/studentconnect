@@ -165,7 +165,7 @@ class StaffController extends Controller
             foreach ($request['selectedSubjects'] as $subject) {
 
                 $curriculumSubjects = Curriculum::where('id', $subject['value'])->first();
-                
+
                 StudentSubjects::create([
                     "user_id" => $userId,
                     "subject_name" => $curriculumSubjects->subject_name,
@@ -280,7 +280,7 @@ class StaffController extends Controller
         ]);
     }
 
-    public function getReEnrollStudentsRegular($student_id)
+    public function getNextSubjectEnrolled($student_id)
     {
         $studentInformation = StudentInformation::where(
             'student_information_id',
@@ -327,31 +327,30 @@ class StaffController extends Controller
             }
         }
 
-        $studentInformation->save();
 
         $curriculumSubjects = Curriculum::where('course', $studentInformation->major)
             ->where('year', $studentInformation->year_level)
             ->where('semester', $studentInformation->semester)
             ->get();
 
-        foreach ($curriculumSubjects as $subject) {
-            StudentSubjects::create([
-                "user_id"       => $studentInformation->student_information_id,
-                "subject_name"  => $subject->subject_name,
-                "subject_code"  => $subject->code,
-                "subject_units" => $subject->units,
-                "school_year"   => date('Y') . '-' . (date('Y') + 1),
-                "year_level"    => $studentInformation->year_level,
-                "semester"      => $studentInformation->semester
-            ]);
-        }
+        // foreach ($curriculumSubjects as $subject) {
+        //     StudentSubjects::create([
+        //         "user_id"       => $studentInformation->student_information_id,
+        //         "subject_name"  => $subject->subject_name,
+        //         "subject_code"  => $subject->code,
+        //         "subject_units" => $subject->units,
+        //         "school_year"   => date('Y') . '-' . (date('Y') + 1),
+        //         "year_level"    => $studentInformation->year_level,
+        //         "semester"      => $studentInformation->semester
+        //     ]);
+        // }
 
         return response()->json([
             "success" => true,
-            "message" => "Student re-enrolled successfully"
+            "data" => $curriculumSubjects
         ]);
     }
-    public function getReEnrollStudentsIrregular(Request $request)
+    public function reEnrolledSubjectStudents(Request $request)
     {
         $request->validate([
             'student_information_id' => 'required',
@@ -415,6 +414,8 @@ class StaffController extends Controller
                 'school_year'   => date('Y') . '-' . (date('Y') + 1),
                 'year_level'    => $studentInformation->year_level,
                 'semester'      => $studentInformation->semester,
+                'isDrop' => false,
+                'instructor' => $subject->instructor
             ]);
         }
 

@@ -126,6 +126,8 @@ const RegisterPage = () => {
                     text: "Failed to submit admission. Please check your input.",
                     icon: "error",
                 });
+                setIsSubmitting(false);
+
             });
     };
 

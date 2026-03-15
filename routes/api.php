@@ -31,8 +31,10 @@ Route::middleware(['web', 'auth:sanctum'])->group(function () {
         Route::get('staff/student', [StaffController::class, 'getStudents']);
         Route::post('staff/save-student-grades', [StaffController::class, 'saveStudentsGrades']);
         Route::post('staff/save-student-grades-by-excel', [StaffController::class, 'saveStudentGradesByExcel']);
-        Route::get('staff/re-enroll-regular/{student_id}', [StaffController::class, 'getReEnrollStudentsRegular']);
-        Route::post('staff/re-enroll-irregular', [StaffController::class, 'getReEnrollStudentsIrregular']);
+        // Route::get('staff/re-enroll-regular/{student_id}', [StaffController::class, 'getReEnrollStudentsRegular']);
+        Route::get('staff/re-enroll/{student_id}', [StaffController::class, 'getNextSubjectEnrolled']);
+        Route::post('staff/re-enroll-submit', [StaffController::class, 'reEnrolledSubjectStudents']);
+
         Route::get('staff/approve-request-information/{student_update_request_id}', [StaffController::class, 'approvedRequestInformation']);
         Route::get('staff/incoming-students', [StaffController::class, 'getIncomingStudents']);
         Route::post('staff/release-grades-students/{id}', [StaffController::class, 'releaseGradesStudents']);
