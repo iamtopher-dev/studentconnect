@@ -32,9 +32,10 @@ class StudentInformation extends Model
         "isAccept",
         "applicant_type",
         "school_year",
+        "from_school",
     ];
     public function user()
-{
-    return $this->hasOne(User::class, 'student_information_id', 'student_information_id');
-}
+    {
+        return $this->hasOne(User::class, 'student_information_id', 'student_information_id');
+    }
 }

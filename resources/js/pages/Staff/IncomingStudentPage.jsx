@@ -36,6 +36,7 @@ const IncomingStudentPage = () => {
         civil_status: "",
         religion: "",
         email: "",
+        from_school: "",
         guardian_name: "",
         guardian_contact_number: "",
         studentType: "",
@@ -215,9 +216,7 @@ const IncomingStudentPage = () => {
             return;
         }
 
-        if (
-            formData.selectedSubjects.length === 0
-        ) {
+        if (formData.selectedSubjects.length === 0) {
             Swal.fire({
                 title: "Warning!",
                 text: "Please select at least one subject for irregular students.",
@@ -475,6 +474,16 @@ const IncomingStudentPage = () => {
                                         onChange={handleChange}
                                         width="w-full"
                                     />
+                                    {studentType === "TRANSFEREE" && (
+                                        <InputField
+                                            label="From School"
+                                            name="from_school"
+                                            value={formData.from_school}
+                                            onChange={handleChange}
+                                            required
+                                            width="w-full"
+                                        />
+                                    )}
                                     <InputField
                                         label="Student Number"
                                         name="studentId"

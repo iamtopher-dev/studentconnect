@@ -144,6 +144,9 @@ class StaffController extends Controller
 
         $student->semester = $request["semester"];
         $student->student_type = $request["studentType"];
+        if ($request["studentType"] == "TRANSFEREE") {
+            $student->from_school = $request["from_school"];
+        }
         $student->school_year = date('Y') . '-' . (date('Y') + 1);
         if ($student->save()) {
             $user = new User();
@@ -169,7 +172,8 @@ class StaffController extends Controller
                     "subject_units" => $curriculumSubjects->units,
                     "school_year" => date('Y') . '-' . (date('Y') + 1),
                     "year_level" => $request['year_level'],
-                    "semester" => $request['semester']
+                    "semester" => $request['semester'],
+                    "isDrop" => false
                 ]);
             }
             return response()->json([
