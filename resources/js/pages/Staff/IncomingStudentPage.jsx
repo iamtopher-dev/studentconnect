@@ -9,7 +9,7 @@ const gradeLevels = ["Grade 11", "Grade 12"];
 const sections = ["A", "B", "C"];
 
 const semesters = ["1st Semester", "2nd Semester"];
-const studentTypes = ["REGULAR", "IRREGULAR", "CROSS ENROLL", "TRANSFEREE"];
+const studentTypes = ["REGULAR", "CROSS ENROLLING", "TRANSFEREE"];
 
 const IncomingStudentPage = () => {
     const [incomingStudents, setIncomingStudents] = useState([]);
@@ -17,6 +17,8 @@ const IncomingStudentPage = () => {
     const [selectedStudent, setSelectedStudent] = useState(null);
     const [loading, setLoading] = useState(true);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [initCurriculumTake, setInitCurriculumTake] = useState([]);
+    const [selectedSubject, setSelectedSubject] = useState([]);
     const [formData, setFormData] = useState({
         family_name: "",
         first_name: "",
@@ -65,8 +67,10 @@ const IncomingStudentPage = () => {
             .get(`/curriculum/${major}`)
             .then((res) => {
                 const subjectsFromApi = res.data.data.map((s) => ({
-                    value: `${s.id}`,
+                    value: s.id,
                     label: `${s.code} | ${s.subject_name}`,
+                    code: s.code,
+                    subject_name: s.subject_name,
                 }));
                 setCurriculumSubjects(subjectsFromApi);
             })
@@ -110,6 +114,18 @@ const IncomingStudentPage = () => {
         fetchCurriculum(student.major);
     };
 
+    const { major, semester, year_level, studentType } = formData;
+
+    useEffect(() => {
+        setFormData((prev) => ({
+            ...prev,
+            selectedSubjects: [], // starts empty
+        }));
+        if (studentType === "REGULAR" && major && semester && year_level) {
+            getCurriculum(major, semester, year_level);
+        }
+    }, [major, semester, year_level, studentType]);
+
     const closeModal = () => setSelectedStudent(null);
 
     const handleChange = (e) => {
@@ -118,8 +134,72 @@ const IncomingStudentPage = () => {
     };
 
     const handleSubjectChange = (selected) => {
-        setFormData((prev) => ({ ...prev, selectedSubjects: selected }));
+        // console.log(selected);
+        setFormData((prev) => ({
+            ...prev,
+            selectedSubjects: selected || [], // keep formData in sync
+        }));
     };
+
+    const getCurriculum = (course, semester, year) => {
+        apiService
+            .get(`staff/get-curriculum/${course}/${semester}/${year}`)
+            .then((res) => {
+                const curriculumFromApi = res.data.map((s) => ({
+                    value: s.id,
+                    label: `${s.code} | ${s.subject_name}`,
+                    code: s.code,
+                    subject_name: s.subject_name,
+                }));
+                setFormData((prev) => ({
+                    ...prev,
+                    selectedSubjects: curriculumFromApi, // keep formData in sync
+                }));
+                // // alert("Student accepted successfully!");
+                // setSelectedStudent(null);
+                // fetchIncomingStudents();
+                // setIsSubmitting(false);
+                // Swal.fire({
+                //     title: "Success!",
+                //     text: "Student has been successfully enrolled.",
+                //     icon: "success",
+                // });
+            })
+            .catch(() => {
+                console.log("Something error");
+                // setIsSubmitting(false);
+                // Swal.fire({
+                //     title: "Error!",
+                //     text: "Failed to enroll student. Please try again.",
+                //     icon: "error",
+                // });
+            });
+    };
+
+    // const handleAddSubjects = () => {
+    //     if (!formData.selectedSubjects.length) return;
+
+    //     const newSubjects = formData.selectedSubjects.map((sub) => ({
+    //         id: sub.value,
+    //         code: sub.code,
+    //         subject_name: sub.subject_name,
+    //     }));
+
+    //     setInitCurriculumTake((prev) => {
+    //         const existingIds = prev.map((s) => s.id);
+
+    //         const filtered = newSubjects.filter(
+    //             (s) => !existingIds.includes(s.id),
+    //         );
+
+    //         return [...prev, ...filtered];
+    //     });
+
+    //     setFormData((prev) => ({
+    //         ...prev,
+    //         selectedSubjects: [],
+    //     }));
+    // };
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -136,7 +216,6 @@ const IncomingStudentPage = () => {
         }
 
         if (
-            formData.studentType === "IRREGULAR" &&
             formData.selectedSubjects.length === 0
         ) {
             Swal.fire({
@@ -423,74 +502,42 @@ const IncomingStudentPage = () => {
                                         required
                                     />
                                 </div>
-
-                                {formData.studentType === "IRREGULAR" && (
+                                {formData.studentType && formData.semester && (
                                     <div>
-                                        <label className="block text-xs font-semibold text-gray-600 mb-2">
-                                            Curriculum Subjects
-                                        </label>
-                                        <Select
-                                            isMulti
-                                            options={curriculumSubjects}
-                                            value={formData.selectedSubjects}
-                                            onChange={handleSubjectChange}
-                                            classNamePrefix="react-select"
-                                            placeholder="Select subjects..."
-                                            getOptionLabel={(option) =>
-                                                option.label
-                                            }
-                                            getOptionValue={(option) =>
-                                                option.value
-                                            }
-                                            formatOptionLabel={(
-                                                option,
-                                                { context },
-                                            ) =>
-                                                context === "value"
-                                                    ? option.label.split(
-                                                          " | ",
-                                                      )[0]
-                                                    : option.label
-                                            }
-                                        />
+                                        <div>
+                                            <label className="block text-xs font-semibold text-gray-600 mb-2">
+                                                Curriculum Subjects
+                                            </label>
+
+                                            <Select
+                                                isMulti
+                                                options={curriculumSubjects}
+                                                value={
+                                                    formData.selectedSubjects
+                                                }
+                                                onChange={handleSubjectChange}
+                                                classNamePrefix="react-select"
+                                                placeholder="Select subjects..."
+                                                getOptionLabel={(option) =>
+                                                    option.label
+                                                }
+                                                getOptionValue={(option) =>
+                                                    option.value
+                                                }
+                                                formatOptionLabel={(
+                                                    option,
+                                                    { context },
+                                                ) =>
+                                                    context === "value"
+                                                        ? option.label.split(
+                                                              " | ",
+                                                          )[0]
+                                                        : option.label
+                                                }
+                                            />
+                                        </div>
                                     </div>
                                 )}
-                                <div className="bg-white rounded-3xl shadow-md overflow-x-auto sm:overflow-x-hidden mt-5">
-                                    <table className="w-full min-w-[600px] text-sm hidden sm:table">
-                                        <thead className="bg-gray-100 text-gray-600">
-                                            <tr>
-                                                <th className="px-4 sm:px-6 py-3 text-left font-medium">
-                                                    Subject Code
-                                                </th>
-                                                <th className="px-4 sm:px-6 py-3 text-left font-medium">
-                                                    Subject Name
-                                                </th>
-                                                <th className="px-4 sm:px-6 py-3 text-center font-medium"></th>
-                                                <th className="px-4 sm:px-6 py-3 text-right font-medium">
-                                                    Actions
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr className="hover:bg-gray-50 transition">
-                                                <td className="px-4 sm:px-6 py-3 font-medium text-gray-800">
-                                                    IT 12
-                                                </td>
-                                                <td className="px-4 sm:px-6 py-3 text-gray-700">
-                                                    dwa
-                                                </td>
-                                                <td className="px-4 sm:px-6 py-3 text-center"></td>
-                                                <td className="px-4 sm:px-6 py-3 text-right">
-                                                    <div className="inline-flex gap-2 sm:gap-3">
-                                                        <button className="p-2 rounded-lg text-red-600 hover:bg-red-50">
-                                                            <Trash2 size={16} />
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
                             </Section>
 
                             <div className="flex justify-end gap-4 mt-4">

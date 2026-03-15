@@ -6,7 +6,7 @@ const StudentGradesPage = () => {
     const [loading, setLoading] = useState(true);
     const [selectedYear, setSelectedYear] = useState("");
     const [selectedSemester, setSelectedSemester] = useState("");
-    const [applicantType, setApplicantType] = useState("COLLEGE")
+    const [applicantType, setApplicantType] = useState("COLLEGE");
     useEffect(() => {
         getEnrolledSubjects();
     }, []);
@@ -36,8 +36,12 @@ const StudentGradesPage = () => {
         apiService
             .get("student/get-student-information")
             .then((response) => {
-                console.log(response.data.data.student_information.applicant_type)
-                setApplicantType(response.data.data.student_information.applicant_type)
+                console.log(
+                    response.data.data.student_information.applicant_type,
+                );
+                setApplicantType(
+                    response.data.data.student_information.applicant_type,
+                );
                 setStudent(response.data.data);
             })
             .catch((error) => {
@@ -78,23 +82,31 @@ const StudentGradesPage = () => {
                                         className="w-full bg-gray-50 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-400"
                                     >
                                         <option value="">------------</option>
-                                        {
-                                            applicantType === "SHS" ? (
-                                                <>
-                                                    <option value="Grade 11">Grade 11</option>
-                                                    <option value="Grade 12">Grade 12</option>
-
-                                                </>
-                                            ) : (
-                                                <>
-                                                    <option value="1st Year">1st Year</option>
-                                                    <option value="2nd Year">2nd Year</option>
-                                                    <option value="3rd Year">3rd Year</option>
-                                                    <option value="4th Year">4th Year</option>
-                                                </>
-                                            )
-                                        }
-
+                                        {applicantType === "SHS" ? (
+                                            <>
+                                                <option value="Grade 11">
+                                                    Grade 11
+                                                </option>
+                                                <option value="Grade 12">
+                                                    Grade 12
+                                                </option>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <option value="1st Year">
+                                                    1st Year
+                                                </option>
+                                                <option value="2nd Year">
+                                                    2nd Year
+                                                </option>
+                                                <option value="3rd Year">
+                                                    3rd Year
+                                                </option>
+                                                <option value="4th Year">
+                                                    4th Year
+                                                </option>
+                                            </>
+                                        )}
                                     </select>
                                 </div>
 
@@ -142,15 +154,18 @@ const StudentGradesPage = () => {
                                     ],
                                     [
                                         "Student Name",
-                                        `${student?.student_information
-                                            ?.family_name ?? ""
-                                            }, 
-                                         ${student?.student_information
-                                                ?.first_name ?? ""
-                                            } 
-                                         ${student?.student_information
-                                                ?.middle_name ?? ""
-                                            }`.trim() || "—",
+                                        `${
+                                            student?.student_information
+                                                ?.family_name ?? ""
+                                        }, 
+                                         ${
+                                             student?.student_information
+                                                 ?.first_name ?? ""
+                                         } 
+                                         ${
+                                             student?.student_information
+                                                 ?.middle_name ?? ""
+                                         }`.trim() || "—",
                                     ],
                                     [
                                         "School Year",
@@ -165,7 +180,7 @@ const StudentGradesPage = () => {
                                     [
                                         "Course",
                                         student?.student_information?.major ||
-                                        "—",
+                                            "—",
                                     ],
                                     [
                                         "Year Level",
@@ -175,7 +190,7 @@ const StudentGradesPage = () => {
                                     [
                                         "Section",
                                         student?.student_information?.section ||
-                                        "—",
+                                            "—",
                                     ],
                                 ].map(([label, value]) => (
                                     <div
@@ -212,7 +227,9 @@ const StudentGradesPage = () => {
                                             {[
                                                 "Subject Code",
                                                 "Subject Description",
-                                                (applicantType ==="SHS") ?"Hours":"Units",
+                                                applicantType === "SHS"
+                                                    ? "Hours"
+                                                    : "Units",
                                                 "Grade",
                                                 "Remarks",
                                             ].map((head) => (
@@ -228,14 +245,14 @@ const StudentGradesPage = () => {
 
                                     <tbody className="divide-y divide-gray-100">
                                         {student?.enrolled_subjects?.length >
-                                            0 ? (
+                                        0 ? (
                                             student.enrolled_subjects.map(
                                                 (subject) => {
                                                     const hasGrade =
                                                         subject.grades !==
-                                                        null &&
+                                                            null &&
                                                         subject.grades !==
-                                                        undefined &&
+                                                            undefined &&
                                                         subject.grades !== "";
 
                                                     const grade = hasGrade
@@ -245,7 +262,8 @@ const StudentGradesPage = () => {
                                                     let remark = "-";
                                                     if (
                                                         hasGrade &&
-                                                        !isNaN(grade) && subject.isReleased
+                                                        !isNaN(grade) &&
+                                                        subject.isReleased
                                                     ) {
                                                         remark =
                                                             grade < 75
@@ -274,26 +292,31 @@ const StudentGradesPage = () => {
                                                                 }
                                                             </td>
                                                             <td className="px-4 py-3">
-                                                                {hasGrade && subject.isReleased
+                                                                {hasGrade &&
+                                                                subject.isReleased
                                                                     ? grade
                                                                     : "-"}
                                                             </td>
                                                             <td
-                                                                className={`px-4 py-3 font-medium ${subject.isReleased
-                                                                    ? remark === "Passed"
-                                                                        ? "text-green-600"
-                                                                        : remark === "Failed"
-                                                                            ? "text-red-600"
-                                                                            : "text-gray-400"
-                                                                    : ""
-                                                                    }`}
+                                                                className={`px-4 py-3 font-medium ${
+                                                                    subject.isReleased
+                                                                        ? remark ===
+                                                                          "Passed"
+                                                                            ? "text-green-600"
+                                                                            : remark ===
+                                                                                "Failed"
+                                                                              ? "text-red-600"
+                                                                              : "text-gray-400"
+                                                                        : ""
+                                                                }`}
                                                             >
-                                                                {remark}
+                                                                {subject.isDrop
+                                                                    ? "Drop"
+                                                                    : remark}
                                                             </td>
-
                                                         </tr>
                                                     );
-                                                }
+                                                },
                                             )
                                         ) : (
                                             <tr>

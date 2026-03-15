@@ -13,6 +13,18 @@ use Illuminate\Support\Facades\Hash;
 
 class StaffController extends Controller
 {
+
+    public function dropSubject($id)
+    {
+        $stundent_subject = StudentSubjects::where('student_subject_id', $id)->update([
+            'isDrop' => true
+        ]);
+        if ($stundent_subject) {
+            return response()->json([
+                'message' => "Subject drop successfully!"
+            ]);
+        }
+    }
     public function dashboard()
     {
         $totalStudents = User::where('role', 'STUDENT')->count();
@@ -140,37 +152,18 @@ class StaffController extends Controller
             $user->password = Hash::make($generatedPassword);
             $user->save();
             $userId = $user->student_information_id;
-            if ($request['studentType'] == "IRREGULAR") {
-                foreach ($request['selectedSubjects'] as $subject) {
+            foreach ($request['selectedSubjects'] as $subject) {
 
-                    $curriculumSubjects = Curriculum::where('id', $subject['value'])->first();
-                    StudentSubjects::create([
-                        "user_id" => $userId,
-                        "subject_name" => $curriculumSubjects->subject_name,
-                        "subject_code" => $curriculumSubjects->code,
-                        "subject_units" => $curriculumSubjects->units,
-                        "school_year" => date('Y') . '-' . (date('Y') + 1),
-                        "year_level" => $request['year_level'],
-                        "semester" => $request['semester']
-                    ]);
-                }
-            } else {
-                $curriculumSubjects = Curriculum::where('course', $request['major'])
-                    ->where('year', $request['year_level'])
-                    ->where('semester', $request['semester'])
-                    ->get();
-
-                foreach ($curriculumSubjects as $subject) {
-                    StudentSubjects::create([
-                        "user_id" => $userId,
-                        "subject_name" => $subject->subject_name,
-                        "subject_code" => $subject->code,
-                        "subject_units" => $subject->units,
-                        "school_year" => date('Y') . '-' . (date('Y') + 1),
-                        "year_level" => $request['year_level'],
-                        "semester" => $request['semester']
-                    ]);
-                }
+                $curriculumSubjects = Curriculum::where('id', $subject['value'])->first();
+                StudentSubjects::create([
+                    "user_id" => $userId,
+                    "subject_name" => $curriculumSubjects->subject_name,
+                    "subject_code" => $curriculumSubjects->code,
+                    "subject_units" => $curriculumSubjects->units,
+                    "school_year" => date('Y') . '-' . (date('Y') + 1),
+                    "year_level" => $request['year_level'],
+                    "semester" => $request['semester']
+                ]);
             }
             return response()->json([
                 "success" => true,
@@ -477,6 +470,7 @@ class StaffController extends Controller
 
         $hasEmptyGrades = StudentSubjects::whereIn('student_subject_id', $subjectIds)
             ->whereNull('grades')
+            ->where('isDrop', 0)
             ->exists();
 
         if ($hasEmptyGrades) {
@@ -485,14 +479,21 @@ class StaffController extends Controller
                 'message' => 'Some grades are still missing. Please complete all grades before releasing.'
             ]);
         } else {
-            StudentSubjects::whereIn('student_subject_id', $subjectIds)->update([
-                'isReleased' => true
-            ]);
+            StudentSubjects::whereIn('student_subject_id', $subjectIds)
+                ->update([
+                    'isReleased' => true
+                ]);
 
             return response()->json([
                 'success' => true,
                 'message' => 'All grades have been successfully completed and released.'
             ]);
         }
+    }
+
+    public function getCurriculum($course, $semester, $year)
+    {
+        $curriculum = Curriculum::where('course', $course)->where('semester', $semester)->where('year', $year)->get();
+        return response()->json($curriculum);
     }
 }

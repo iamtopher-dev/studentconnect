@@ -56,7 +56,23 @@ const StudentGradingPage = () => {
                 s.studentId.toLowerCase().includes(search.toLowerCase()),
         );
     }, [students, search]);
-
+    const handleDrop = (student_subject_id) => {
+        apiService
+            .get(`staff/drop-subject/${student_subject_id}`)
+            .then((resp) => {
+                console.log(resp);
+                setEditableSubjects((prev) =>
+                    prev.map((sub) =>
+                        sub.student_subject_id === student_subject_id
+                            ? { ...sub, isDrop: 1 }
+                            : sub,
+                    ),
+                );
+            })
+            .catch((e) => {
+                alert(e);
+            });
+    };
     const handleExcelUpload = (file) => {
         if (!file) return;
         setLoading(true);
@@ -168,6 +184,7 @@ const StudentGradingPage = () => {
                 grades: s.grades ?? "",
             })),
         );
+        console.log(editableSubjects);
         setEditModalOpen(true);
     };
 
@@ -366,7 +383,7 @@ const StudentGradingPage = () => {
 
             {editModalOpen && selectedStudent && (
                 <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-                    <div className="bg-white rounded-3xl w-full max-w-md sm:max-w-2xl p-5 sm:p-7 relative shadow-xl">
+                    <div className="bg-white rounded-3xl w-full max-w-md sm:max-w-3xl p-5 sm:p-7 relative shadow-xl">
                         <button
                             onClick={() => setEditModalOpen(false)}
                             className="absolute top-4 right-4 text-slate-400 hover:text-slate-600"
@@ -398,33 +415,49 @@ const StudentGradingPage = () => {
                                             key={sub.student_subject_id}
                                         >
                                             <td className="px-4 sm:px-6 py-3 text-gray-700">
-                                                <span className="text-slate-700 truncate text-xs sm:text-sm">
+                                                <span className="text-slate-700 truncate text-xs sm:text-sm truncate">
                                                     {sub.subject_name}
                                                 </span>
                                             </td>
                                             <td className="px-4 sm:px-6 py-3 text-center">
-                                                <input
-                                                    value={sub.grades}
-                                                    onChange={(e) =>
-                                                        handleGradeChange(
-                                                            sub.student_subject_id,
-                                                            e.target.value,
-                                                        )
-                                                    }
-                                                    className="w-16 sm:w-24 text-center bg-slate-100 rounded-xl py-1 sm:py-2 text-xs sm:text-sm outline-none focus:ring-2"
-                                                    style={{
-                                                        outlineColor:
-                                                            PRIMARY_COLOR,
-                                                    }}
-                                                />
+                                                {sub.isDrop ? (
+                                                    <span>Drop</span>
+                                                ) : (
+                                                    <input
+                                                        value={sub.grades}
+                                                        onChange={(e) =>
+                                                            handleGradeChange(
+                                                                sub.student_subject_id,
+                                                                e.target.value,
+                                                            )
+                                                        }
+                                                        // disabled={Boolean(
+                                                        //     sub.isDrop,
+                                                        // )}
+                                                        className="w-16 sm:w-24 text-center bg-slate-100 rounded-xl py-1 sm:py-2 text-xs sm:text-sm outline-none focus:ring-2"
+                                                        style={{
+                                                            outlineColor:
+                                                                PRIMARY_COLOR,
+                                                        }}
+                                                    />
+                                                )}
                                             </td>
                                             <td className="px-4 sm:px-6 py-3 text-right">
-                                                <div className="inline-flex gap-2 sm:gap-3">
-                                                    <button className="p-2 rounded-lg text-white  flex gap-2 bg-red-500">
-                                                        <Trash2 size={16} />
-                                                        {"Drop "}
-                                                    </button>
-                                                </div>
+                                                {!sub.isDrop && (
+                                                    <div className="inline-flex gap-2 sm:gap-3">
+                                                        <button
+                                                            onClick={() =>
+                                                                handleDrop(
+                                                                    sub.student_subject_id,
+                                                                )
+                                                            }
+                                                            className="p-2 rounded-lg text-white  flex gap-2 bg-red-500"
+                                                        >
+                                                            <Trash2 size={16} />
+                                                            {"Drop "}
+                                                        </button>
+                                                    </div>
+                                                )}
                                             </td>
                                         </tr>
                                     ))}

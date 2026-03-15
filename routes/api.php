@@ -38,7 +38,8 @@ Route::middleware(['web', 'auth:sanctum'])->group(function () {
         Route::post('staff/release-grades-students/{id}', [StaffController::class, 'releaseGradesStudents']);
         Route::post('staff/accept-student/{id}', [StaffController::class, 'acceptStudent']);
         Route::apiResource('/staff/teachers', TeacherController::class)->except(['show']);
-
+        Route::get('staff/get-curriculum/{course}/{semester}/{year}', [StaffController::class, 'getCurriculum']);
+        Route::get('staff/drop-subject/{id}', [StaffController::class, 'dropSubject']);
     });
 
     Route::middleware([RoleMiddleware::class . ':STAFF'])->group(function () {
