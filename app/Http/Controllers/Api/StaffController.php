@@ -7,13 +7,20 @@ use App\Models\Curriculum;
 use App\Models\StudentInformation;
 use App\Models\StudentSubjects;
 use App\Models\StudentUpdateRequests;
+use App\Models\Teachers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class StaffController extends Controller
 {
+    public function getTeachers()
+    {
 
+        $teachers = Teachers::all();
+
+        return response()->json($teachers);
+    }
     public function dropSubject($id)
     {
         $stundent_subject = StudentSubjects::where('student_subject_id', $id)->update([

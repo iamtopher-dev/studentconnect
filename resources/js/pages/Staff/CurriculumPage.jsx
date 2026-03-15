@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Plus, Pencil, Trash2, X } from "lucide-react";
 import apiService from "../../services/apiService";
+import Select from "@mui/material/Select";
 
 const COLLEGE_PROGRAMS = ["BSIT", "BSCPE", "BSBA"];
 const COLLEGE_YEARS = ["1st Year", "2nd Year", "3rd Year", "4th Year"];
@@ -27,6 +28,8 @@ const CurriculumPage = () => {
     const [activeProgram, setActiveProgram] = useState(COLLEGE_PROGRAMS[0]);
     const [activeYear, setActiveYear] = useState("1st Year");
     const [activeSemester, setActiveSemester] = useState("1st Semester");
+
+    const [teachers, setTeachers] = useState([]);
     const [data, setData] = useState({
         College: {
             BSIT: emptyCurriculumCollege,
@@ -60,6 +63,7 @@ const CurriculumPage = () => {
 
     useEffect(() => {
         fetchCurriculum();
+        getTeachers();
     }, []);
 
     const PROGRAMS = level === "College" ? COLLEGE_PROGRAMS : SHS_PROGRAMS;
@@ -93,6 +97,21 @@ const CurriculumPage = () => {
         } catch (error) {
             console.error("Failed to delete subject", error);
         }
+    };
+
+    const getTeachers = () => {
+        apiService
+            .get("staff/get-teachers")
+            .then((resp) => {
+                const teacherFromApi = resp.data.map((teacher) => ({
+                    value: teacher.teacher_id,
+                    label: teacher.name,
+                }));
+                setTeachers(teacherFromApi);
+            })
+            .catch((e) => {
+                alert(e);
+            });
     };
 
     if (loading) {
@@ -221,7 +240,7 @@ const CurriculumPage = () => {
                                     Subject
                                 </th>
                                 <th className="px-4 sm:px-6 py-3 text-center font-medium">
-                                   {level == "SHS" ?"Hours":"Units"} 
+                                    {level == "SHS" ? "Hours" : "Units"}
                                 </th>
                                 <th className="px-4 sm:px-6 py-3 text-right font-medium">
                                     Actions
@@ -332,7 +351,8 @@ const CurriculumPage = () => {
                                             {sub.name}
                                         </p>
                                         <p className="text-right font-medium">
-                                            {(sub.units == 0 ? "-" : sub.units)} Units
+                                            {sub.units == 0 ? "-" : sub.units}{" "}
+                                            Units
                                         </p>
                                     </div>
                                 ))}
@@ -355,6 +375,7 @@ const CurriculumPage = () => {
                         level_txt={
                             level === "College" ? "Units" : "Number of Hours"
                         }
+                        teachers={teachers}
                     />
                 )}
             </div>
@@ -363,7 +384,7 @@ const CurriculumPage = () => {
 };
 
 /* ---------------- MODAL ---------------- */
-const AddSubjectModal = ({ onClose, onSave, level_txt }) => {
+const AddSubjectModal = ({ onClose, onSave, level_txt,teachers }) => {
     const [form, setForm] = useState({ code: "", name: "", units: "" });
 
     const submit = () => {
@@ -406,6 +427,17 @@ const AddSubjectModal = ({ onClose, onSave, level_txt }) => {
                         onChange={(e) =>
                             setForm({ ...form, units: e.target.value })
                         }
+                    />
+                    <Select
+                        isMulti
+                        options={teachers}
+                        // value={formData.selectedSubjects}
+                        // onChange={handleSubjectChange}
+                        classNamePrefix="react-select"
+                        className="w-full"
+                        placeholder="Select subjects..."
+                        getOptionLabel={(option) => option.label}
+                        getOptionValue={(option) => option.value}
                     />
                 </div>
 

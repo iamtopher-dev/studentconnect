@@ -40,6 +40,7 @@ Route::middleware(['web', 'auth:sanctum'])->group(function () {
         Route::apiResource('/staff/teachers', TeacherController::class)->except(['show']);
         Route::get('staff/get-curriculum/{course}/{semester}/{year}', [StaffController::class, 'getCurriculum']);
         Route::get('staff/drop-subject/{id}', [StaffController::class, 'dropSubject']);
+        Route::get('staff/get-teachers', [StaffController::class, 'getTeachers']);
     });
 
     Route::middleware([RoleMiddleware::class . ':STAFF'])->group(function () {
