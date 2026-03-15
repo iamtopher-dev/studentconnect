@@ -16,5 +16,6 @@ class Curriculum extends Model
         "code",
         "units",
         "course",
+        "instructor",
     ];
 }

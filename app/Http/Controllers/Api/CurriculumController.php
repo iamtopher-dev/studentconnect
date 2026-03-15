@@ -11,14 +11,12 @@ class CurriculumController extends Controller
     /**
      * Display a listing of the resource.
      */
-
-
     public function index()
     {
         $curriculums = Curriculum::all();
 
         $collegePrograms = ["BSIT", "BSCPE", "BSBA"];
-        $shsPrograms = ["ICT", "ABM", "HE","IA"];
+        $shsPrograms = ["ICT", "ABM", "HE", "IA"];
 
         $emptyCollegeYears = [
             "1st Year" => ["1st Semester" => [], "2nd Semester" => []],
@@ -49,14 +47,15 @@ class CurriculumController extends Controller
             $level    = $item->curriculum_for === "COLLEGE" ? "College" : "SHS";
             $program  = $item->course;
             $year     = $item->year;
-            $semester = $item->semester;
+            $semester = $item->semester ?? "1st Semester";
 
             if (isset($result[$level][$program][$year][$semester])) {
                 $result[$level][$program][$year][$semester][] = [
-                    "id"    => $item->id,
-                    "code"  => $item->code,
-                    "name"  => $item->subject_name,
-                    "units" => $item->units,
+                    "id"         => $item->id,
+                    "code"       => $item->code,
+                    "name"       => $item->subject_name,
+                    "units"      => $item->units,
+                    "instructor" => $item->instructor,
                 ];
             }
         }
@@ -65,26 +64,19 @@ class CurriculumController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'level'    => 'required|in:College,SHS',
-            'program'  => 'required|string',
-            'year'     => 'required|string',
-            'semester' => 'nullable|required_if:level,College|string',
-            'code'     => 'required|string|max:50',
-            'name'     => 'required|string|max:255',
-            'units'    => 'required|integer',
+            'level'      => 'required|in:College,SHS',
+            'program'    => 'required|string',
+            'year'       => 'required|string',
+            'semester'   => 'nullable|required_if:level,College|string',
+            'code'       => 'required|string|max:50',
+            'name'       => 'required|string|max:255',
+            'units'      => 'required|integer',
+            'instructor' => 'required|string',
         ]);
 
         $curriculum = Curriculum::create([
@@ -94,15 +86,15 @@ class CurriculumController extends Controller
             'code'           => $validated['code'],
             'subject_name'   => $validated['name'],
             'units'          => $validated['units'],
-            'curriculum_for' => strtoupper($validated['level']), 
+            'curriculum_for' => strtoupper($validated['level']),
+            'instructor'     => $validated['instructor'],
         ]);
 
         return response()->json([
             'message' => 'New subject added successfully',
-            'data'    => $curriculum
+            'data'    => $curriculum,
         ], 201);
     }
-
 
     /**
      * Display the specified resource.
@@ -114,33 +106,38 @@ class CurriculumController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        $request->validate([
-            'field' => 'required|string|in:code,code_no,description,hours_lec,hours_lab,units,coreq,prereq,total_hours_week,teacher_id',
+        $curriculum = Curriculum::findOrFail($id);
+
+        $validated = $request->validate([
+            'level'      => 'required|in:College,SHS',
+            'program'    => 'required|string',
+            'year'       => 'required|string',
+            'semester'   => 'nullable|required_if:level,College|string',
+            'code'       => 'required|string|max:50',
+            'name'       => 'required|string|max:255',
+            'units'      => 'required|integer',
+            'instructor' => 'required|string',
         ]);
-
-        $curriculum = Curriculum::find($id);
-
-        if (!$curriculum) {
-            return response()->json(['message' => 'Curriculum not found'], 404);
-        }
 
         $curriculum->update([
-            $request->input('field') => $request->input('value'),
+            'course'         => $validated['program'],
+            'year'           => $validated['year'],
+            'semester'       => $validated['semester'] ?? null,
+            'code'           => $validated['code'],
+            'subject_name'   => $validated['name'],
+            'units'          => $validated['units'],
+            'curriculum_for' => strtoupper($validated['level']),
+            'instructor'     => $validated['instructor'],
         ]);
 
-        return response()->json(['data' => $curriculum], 200);
+        return response()->json([
+            'message' => 'Subject updated successfully',
+            'data'    => $curriculum,
+        ], 200);
     }
 
     /**
@@ -149,8 +146,9 @@ class CurriculumController extends Controller
     public function destroy(string $id)
     {
         $curriculum = Curriculum::find($id);
+
         if (!$curriculum->delete()) {
-            return response()->json(['error' => 'Row removed not successfull'], 400);
+            return response()->json(['error' => 'Row removal unsuccessful'], 400);
         }
 
         return response()->json(['message' => 'Row removed successfully'], 200);
