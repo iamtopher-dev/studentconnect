@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Plus, Pencil, Trash2, X } from "lucide-react";
 import apiService from "../../services/apiService";
-import Select from "@mui/material/Select";
+import Select from "react-select";
 
 const COLLEGE_PROGRAMS = ["BSIT", "BSCPE", "BSBA"];
 const COLLEGE_YEARS = ["1st Year", "2nd Year", "3rd Year", "4th Year"];
