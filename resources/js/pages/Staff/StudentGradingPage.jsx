@@ -421,7 +421,7 @@ const StudentGradingPage = () => {
                                             </td>
                                             <td className="px-4 sm:px-6 py-3 text-center">
                                                 {sub.isDrop ? (
-                                                    <span>Drop</span>
+                                                    <span>Dropped</span>
                                                 ) : (
                                                     <input
                                                         value={sub.grades}

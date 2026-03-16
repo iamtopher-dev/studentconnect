@@ -476,7 +476,7 @@ const IncomingStudentPage = () => {
                                     />
                                     {studentType === "TRANSFEREE" && (
                                         <InputField
-                                            label="From School"
+                                            label=" Previous School Attended"
                                             name="from_school"
                                             value={formData.from_school}
                                             onChange={handleChange}
