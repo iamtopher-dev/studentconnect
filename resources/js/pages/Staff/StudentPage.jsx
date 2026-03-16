@@ -51,7 +51,7 @@ const StudentPage = () => {
                 const apiStudents = response.data.data;
 
                 const formattedStudents = apiStudents.map((student) => {
-                    console.log();
+                    console.log(student);
                     const info = student.student_information || {};
                     const fullName = `${info.family_name || ""} ${
                         info.first_name || ""
@@ -279,6 +279,8 @@ const StudentPage = () => {
                     <table className="w-full text-sm">
                         <thead>
                             <tr className="text-gray-400 text-left">
+                                <th className="pb-4">Student Type</th>
+
                                 <th className="pb-4">Name</th>
                                 <th className="pb-4">Student Number</th>
                                 <th className="pb-4">Address</th>
@@ -294,6 +296,7 @@ const StudentPage = () => {
                         <tbody>
                             {paginatedStudents.map((s) => (
                                 <tr key={s.id}>
+                                    <td className="py-4">{s.student_type}</td>
                                     <td className="py-4">{s.fullName}</td>
                                     <td className="py-4">{s.studentId}</td>
                                     <td
