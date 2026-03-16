@@ -24,7 +24,7 @@ class StaffController extends Controller
     public function dropSubject($id)
     {
         $stundent_subject = StudentSubjects::where('student_subject_id', $id)->update([
-            'isDrop' => true
+            'remarks' => "DROP"
         ]);
         if ($stundent_subject) {
             return response()->json([
@@ -32,6 +32,19 @@ class StaffController extends Controller
             ]);
         }
     }
+    public function widthdrawSubject($id)
+    {
+
+        $stundent_subject = StudentSubjects::where('student_subject_id', $id)->update([
+            'remarks' => "WITHDRAW"
+        ]);
+        if ($stundent_subject) {
+            return response()->json([
+                'message' => "Subject drop successfully!"
+            ]);
+        }
+    }
+
     public function dashboard()
     {
         $totalStudents = User::where('role', 'STUDENT')->count();
@@ -174,7 +187,6 @@ class StaffController extends Controller
                     "school_year" => date('Y') . '-' . (date('Y') + 1),
                     "year_level" => $request['year_level'],
                     "semester" => $request['semester'],
-                    "isDrop" => false,
                     "instructor" => $curriculumSubjects->instructor
                 ]);
             }
@@ -414,7 +426,6 @@ class StaffController extends Controller
                 'school_year'   => date('Y') . '-' . (date('Y') + 1),
                 'year_level'    => $studentInformation->year_level,
                 'semester'      => $studentInformation->semester,
-                'isDrop' => false,
                 'instructor' => $subject->instructor
             ]);
         }
@@ -484,7 +495,8 @@ class StaffController extends Controller
 
         $hasEmptyGrades = StudentSubjects::whereIn('student_subject_id', $subjectIds)
             ->whereNull('grades')
-            ->where('isDrop', 0)
+            ->where('remarks', 'DROP')
+            ->where('remarks', 'INCOMPLETE')
             ->exists();
 
         if ($hasEmptyGrades) {

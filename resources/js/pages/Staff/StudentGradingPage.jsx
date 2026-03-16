@@ -64,7 +64,7 @@ const StudentGradingPage = () => {
                 setEditableSubjects((prev) =>
                     prev.map((sub) =>
                         sub.student_subject_id === student_subject_id
-                            ? { ...sub, isDrop: 1 }
+                            ? { ...sub, remarks: "DROP" }
                             : sub,
                     ),
                 );
@@ -73,6 +73,24 @@ const StudentGradingPage = () => {
                 alert(e);
             });
     };
+    const handleWithdrawn = (student_subject_id) => {
+        apiService
+            .get(`staff/withdraw-subject/${student_subject_id}`)
+            .then((resp) => {
+                console.log(resp);
+                setEditableSubjects((prev) =>
+                    prev.map((sub) =>
+                        sub.student_subject_id === student_subject_id
+                            ? { ...sub, remarks: "WITHDRAW" }
+                            : sub,
+                    ),
+                );
+            })
+            .catch((e) => {
+                alert(e);
+            });
+    };
+
     const handleExcelUpload = (file) => {
         if (!file) return;
         setLoading(true);
@@ -403,7 +421,9 @@ const StudentGradingPage = () => {
                                     <tr>
                                         <th className="px-4 sm:px-6 py-3 text-left font-medium"></th>
                                         <th className="px-4 sm:px-6 py-3 text-left font-medium"></th>
-                                        <th className="px-4 sm:px-6 py-3 text-right font-medium">
+                                        <th
+                                            className="px-4 sm:px-6 py-3 text-right font-medium"
+                                        >
                                             Actions
                                         </th>
                                     </tr>
@@ -420,8 +440,11 @@ const StudentGradingPage = () => {
                                                 </span>
                                             </td>
                                             <td className="px-4 sm:px-6 py-3 text-center">
-                                                {sub.isDrop ? (
+                                                {sub.remarks === "DROP" ? (
                                                     <span>Dropped</span>
+                                                ) : sub.remarks ===
+                                                  "WITHDRAW" ? (
+                                                    <span>Withdrawn</span>
                                                 ) : (
                                                     <input
                                                         value={sub.grades}
@@ -443,22 +466,38 @@ const StudentGradingPage = () => {
                                                 )}
                                             </td>
                                             <td className="px-4 sm:px-6 py-3 text-right">
-                                                {!sub.isDrop && (
-                                                    <div className="inline-flex gap-2 sm:gap-3">
-                                                        <button
+                                                {sub.remarks != "DROP" &&
+                                                    sub.remarks !=
+                                                        "WITHDRAW" && (
+                                                        <div className="inline-flex gap-2 sm:gap-3">
+                                                            <button
+                                                                onClick={() =>
+                                                                    handleDrop(
+                                                                        sub.student_subject_id,
+                                                                    )
+                                                                }
+                                                                className="p-2 rounded-lg text-white  flex gap-2 bg-red-500"
+                                                            >
+                                                                <Trash2
+                                                                    size={16}
+                                                                />
+                                                                {"Drop "}
+                                                            </button>
+                                                            <button
                                                             onClick={() =>
-                                                                handleDrop(
+                                                                handleWithdrawn(
                                                                     sub.student_subject_id,
                                                                 )
                                                             }
                                                             className="p-2 rounded-lg text-white  flex gap-2 bg-red-500"
                                                         >
                                                             <Trash2 size={16} />
-                                                            {"Drop "}
+                                                            {"Withdrawn "}
                                                         </button>
-                                                    </div>
-                                                )}
+                                                        </div>
+                                                    )}
                                             </td>
+                                            
                                         </tr>
                                     ))}
                                 </tbody>

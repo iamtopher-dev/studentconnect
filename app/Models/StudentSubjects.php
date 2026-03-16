@@ -18,7 +18,7 @@ class StudentSubjects extends Model
         "year_level",
         "grades",
         "isReleased",
-        "isDrop",
+        "remarks",
         "instructor"
     ];
 

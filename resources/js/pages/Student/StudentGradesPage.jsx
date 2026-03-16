@@ -311,7 +311,7 @@ const StudentGradesPage = () => {
                                                                         : ""
                                                                 }`}
                                                             >
-                                                                {subject.isDrop
+                                                                {subject.remarks === "DROP"
                                                                     ? "Dropped"
                                                                     : remark}
                                                             </td>
