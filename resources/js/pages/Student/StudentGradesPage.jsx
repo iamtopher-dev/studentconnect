@@ -192,6 +192,11 @@ const StudentGradesPage = () => {
                                         student?.student_information?.section ||
                                             "—",
                                     ],
+                                    [
+                                        "Student Type",
+                                        student?.student_information?.student_type ||
+                                            "—",
+                                    ],
                                 ].map(([label, value]) => (
                                     <div
                                         key={label}
@@ -311,9 +316,13 @@ const StudentGradesPage = () => {
                                                                         : ""
                                                                 }`}
                                                             >
-                                                                {subject.remarks === "DROP"
+                                                                {subject.remarks ===
+                                                                "DROP"
                                                                     ? "Dropped"
-                                                                    : remark}
+                                                                    : subject.remarks ===
+                                                                        "WITHDRAW"
+                                                                      ? "WITHDRAWN"
+                                                                      : remark}
                                                             </td>
                                                             <td className="px-4 py-3">
                                                                 {
