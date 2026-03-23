@@ -493,7 +493,7 @@ const StudentGradingPage = () => {
                                                                 <Trash2
                                                                     size={16}
                                                                 />
-                                                                {"Withdrawn "}
+                                                                {"Withdraw "}
                                                             </button>
                                                         </div>
                                                     )}
