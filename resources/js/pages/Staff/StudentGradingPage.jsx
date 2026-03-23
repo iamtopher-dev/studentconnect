@@ -140,21 +140,22 @@ const StudentGradingPage = () => {
                     defval: "",
                 });
 
-                const course = sheetData[2][2];
-                const section = sheetData[3][2];
-                const subjectCode = sheetData[4][2];
+                // const course = sheetData[2][2];
+                // const section = sheetData[3][2];
+                const subjectCode = sheetData[8][4];
 
                 const grades = sheetData
-                    .slice(14)
+                    .slice(18)
                     .filter((row) => row[1] && typeof row[1] === "string")
                     .map((row) => ({
                         fullName: row[1],
-                        finalGrade: row[76],
+                        finalGrade: row[12],
                     }));
+                console.log("Grades:", grades);
 
                 const payload = {
-                    course: course,
-                    section: section,
+                    // course: course,
+                    // section: section,
                     grades: grades,
                     subjectCode: subjectCode,
                 };
@@ -421,9 +422,7 @@ const StudentGradingPage = () => {
                                     <tr>
                                         <th className="px-4 sm:px-6 py-3 text-left font-medium"></th>
                                         <th className="px-4 sm:px-6 py-3 text-left font-medium"></th>
-                                        <th
-                                            className="px-4 sm:px-6 py-3 text-right font-medium"
-                                        >
+                                        <th className="px-4 sm:px-6 py-3 text-right font-medium">
                                             Actions
                                         </th>
                                     </tr>
@@ -484,20 +483,21 @@ const StudentGradingPage = () => {
                                                                 {"Drop "}
                                                             </button>
                                                             <button
-                                                            onClick={() =>
-                                                                handleWithdrawn(
-                                                                    sub.student_subject_id,
-                                                                )
-                                                            }
-                                                            className="p-2 rounded-lg text-white  flex gap-2 bg-red-500"
-                                                        >
-                                                            <Trash2 size={16} />
-                                                            {"Withdrawn "}
-                                                        </button>
+                                                                onClick={() =>
+                                                                    handleWithdrawn(
+                                                                        sub.student_subject_id,
+                                                                    )
+                                                                }
+                                                                className="p-2 rounded-lg text-white  flex gap-2 bg-red-500"
+                                                            >
+                                                                <Trash2
+                                                                    size={16}
+                                                                />
+                                                                {"Withdrawn "}
+                                                            </button>
                                                         </div>
                                                     )}
                                             </td>
-                                            
                                         </tr>
                                     ))}
                                 </tbody>

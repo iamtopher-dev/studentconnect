@@ -245,8 +245,8 @@ class StaffController extends Controller
 
     public function saveStudentGradesByExcel(Request $request)
     {
-        $course = $request->input('course');
-        $section = $request->input('section');
+        // $course = $request->input('course');
+        // $section = $request->input('section');
         $subjectCode = $request->input('subjectCode');
         $grades = $request->input('grades', []);
 
@@ -271,8 +271,8 @@ class StaffController extends Controller
                     });
                 }
             })
-                ->where('section', $section)
-                ->where('major', $course)
+                // ->where('section', $section)
+                // ->where('major', $course)
                 ->first();
 
             if ($student) {
