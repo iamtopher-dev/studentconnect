@@ -253,8 +253,9 @@ class StaffController extends Controller
         foreach ($grades as $item) {
             $fullName = $item['fullName'] ?? '';
             $finalGrade = $item['finalGrade'] ?? null;
+            $remarks = $item['remarks'] ?? null;
 
-            if (!$fullName || $finalGrade === null) {
+            if (!$fullName || $finalGrade === null || $remarks === null) {
                 continue;
             }
 
@@ -282,6 +283,7 @@ class StaffController extends Controller
                     ->where('year_level', $student->year_level)
                     ->update([
                         'grades' => round($finalGrade),
+                        'remarks' => $remarks,
                     ]);
             }
         }

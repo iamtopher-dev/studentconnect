@@ -140,6 +140,7 @@ const StudentGradingPage = () => {
                     defval: "",
                 });
 
+                console.log("SheetData:", sheetData);
                 // const course = sheetData[2][2];
                 // const section = sheetData[3][2];
                 const subjectCode = sheetData[8][4];
@@ -150,6 +151,7 @@ const StudentGradingPage = () => {
                     .map((row) => ({
                         fullName: row[1],
                         finalGrade: row[12],
+                        remarks: row[14],
                     }));
                 console.log("Grades:", grades);
 
