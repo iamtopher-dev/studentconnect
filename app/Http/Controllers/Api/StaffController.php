@@ -498,8 +498,7 @@ class StaffController extends Controller
         $hasEmptyGrades = StudentSubjects::whereIn('student_subject_id', $subjectIds)
             ->whereNull('grades')
             ->where('remarks', 'DROP')
-            ->where('remarks', 'INCOMPLETE')
-            ->where('remarks', 'INC')
+            ->where('remarks', 'WITHDRAW')
             ->exists();
 
         if ($hasEmptyGrades) {

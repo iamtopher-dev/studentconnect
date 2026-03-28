@@ -316,18 +316,16 @@ const StudentGradesPage = () => {
                                                                         : ""
                                                                 }`}
                                                             >
-                                                                {sub.remarks ===
+                                                                {subject.remarks ===
                                                                 "DROP"
-                                                                    ? "DROPPED"
-                                                                    : sub.remarks ===
+                                                                    ? "Dropped"
+                                                                    : subject.remarks ===
                                                                         "WITHDRAW"
                                                                       ? "WITHDRAWN"
-                                                                      : sub.remarks ===
-                                                                              "INC" ||
-                                                                          sub.remarks ===
-                                                                              "INCOMPLETE"
-                                                                        ? "INCOMPLETE"
-                                                                        : sub.remarks}
+                                                                      : subject.remarks ===
+                                                                          "INCOMPLETE"
+                                                                        ? "INC"
+                                                                        : remark}
                                                             </td>
                                                             <td className="px-4 py-3">
                                                                 {
