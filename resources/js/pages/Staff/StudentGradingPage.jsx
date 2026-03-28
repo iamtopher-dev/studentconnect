@@ -425,7 +425,7 @@ const StudentGradingPage = () => {
                                         <th className="px-4 sm:px-6 py-3 text-left font-medium"></th>
                                         <th className="px-4 sm:px-6 py-3 text-left font-medium"></th>
                                         <th className="px-4 sm:px-6 py-3 text-right font-medium">
-                                            Actions
+                                            Remarks
                                         </th>
                                     </tr>
                                 </thead>
@@ -441,64 +441,32 @@ const StudentGradingPage = () => {
                                                 </span>
                                             </td>
                                             <td className="px-4 sm:px-6 py-3 text-center">
-                                                {sub.remarks === "DROP" ? (
-                                                    <span>Dropped</span>
-                                                ) : sub.remarks ===
-                                                  "WITHDRAW" ? (
-                                                    <span>Withdrawn</span>
-                                                ) : (
-                                                    <input
-                                                        value={sub.grades}
-                                                        onChange={(e) =>
-                                                            handleGradeChange(
-                                                                sub.student_subject_id,
-                                                                e.target.value,
-                                                            )
-                                                        }
-                                                        // disabled={Boolean(
-                                                        //     sub.isDrop,
-                                                        // )}
-                                                        className="w-16 sm:w-24 text-center bg-slate-100 rounded-xl py-1 sm:py-2 text-xs sm:text-sm outline-none focus:ring-2"
-                                                        style={{
-                                                            outlineColor:
-                                                                PRIMARY_COLOR,
-                                                        }}
-                                                    />
-                                                )}
+                                                <input
+                                                    value={sub.grades}
+                                                    onChange={(e) =>
+                                                        handleGradeChange(
+                                                            sub.student_subject_id,
+                                                            e.target.value,
+                                                        )
+                                                    }
+                                                    // disabled={Boolean(
+                                                    //     sub.isDrop,
+                                                    // )}
+                                                    className="w-16 sm:w-24 text-center bg-slate-100 rounded-xl py-1 sm:py-2 text-xs sm:text-sm outline-none focus:ring-2"
+                                                    style={{
+                                                        outlineColor:
+                                                            PRIMARY_COLOR,
+                                                    }}
+                                                />
                                             </td>
                                             <td className="px-4 sm:px-6 py-3 text-right">
-                                                {sub.remarks != "DROP" &&
-                                                    sub.remarks !=
-                                                        "WITHDRAW" && (
-                                                        <div className="inline-flex gap-2 sm:gap-3">
-                                                            <button
-                                                                onClick={() =>
-                                                                    handleDrop(
-                                                                        sub.student_subject_id,
-                                                                    )
-                                                                }
-                                                                className="p-2 rounded-lg text-white  flex gap-2 bg-red-500"
-                                                            >
-                                                                <Trash2
-                                                                    size={16}
-                                                                />
-                                                                {"Drop "}
-                                                            </button>
-                                                            <button
-                                                                onClick={() =>
-                                                                    handleWithdrawn(
-                                                                        sub.student_subject_id,
-                                                                    )
-                                                                }
-                                                                className="p-2 rounded-lg text-white  flex gap-2 bg-red-500"
-                                                            >
-                                                                <Trash2
-                                                                    size={16}
-                                                                />
-                                                                {"Withdraw "}
-                                                            </button>
-                                                        </div>
-                                                    )}
+                                                {sub.remarks === "DROP"
+                                                    ? "DROPPED"
+                                                    : sub.remarks === "WITHDRAW"
+                                                      ? "WITHDRAWN"
+                                                      : sub.remarks === "INC" || sub.remarks === "INCOMPLETE"
+                                                        ? "INCOMPLETE"
+                                                        : sub.remarks}
                                             </td>
                                         </tr>
                                     ))}

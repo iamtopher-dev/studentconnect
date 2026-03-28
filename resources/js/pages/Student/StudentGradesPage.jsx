@@ -194,8 +194,8 @@ const StudentGradesPage = () => {
                                     ],
                                     [
                                         "Student Type",
-                                        student?.student_information?.student_type ||
-                                            "—",
+                                        student?.student_information
+                                            ?.student_type || "—",
                                     ],
                                 ].map(([label, value]) => (
                                     <div
@@ -316,13 +316,18 @@ const StudentGradesPage = () => {
                                                                         : ""
                                                                 }`}
                                                             >
-                                                                {subject.remarks ===
+                                                                {sub.remarks ===
                                                                 "DROP"
-                                                                    ? "Dropped"
-                                                                    : subject.remarks ===
+                                                                    ? "DROPPED"
+                                                                    : sub.remarks ===
                                                                         "WITHDRAW"
                                                                       ? "WITHDRAWN"
-                                                                      : remark}
+                                                                      : sub.remarks ===
+                                                                              "INC" ||
+                                                                          sub.remarks ===
+                                                                              "INCOMPLETE"
+                                                                        ? "INCOMPLETE"
+                                                                        : sub.remarks}
                                                             </td>
                                                             <td className="px-4 py-3">
                                                                 {

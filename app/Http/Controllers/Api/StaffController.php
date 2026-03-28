@@ -499,6 +499,7 @@ class StaffController extends Controller
             ->whereNull('grades')
             ->where('remarks', 'DROP')
             ->where('remarks', 'INCOMPLETE')
+            ->where('remarks', 'INC')
             ->exists();
 
         if ($hasEmptyGrades) {
